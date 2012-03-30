@@ -10,7 +10,7 @@ Pep is a lightweight plugin for kinetic drag on mobile/desktop.
 
 Pep was built out of a need for kinetic drag support for both mobile and desktop devices (click & drag). It uses the best of jQuery's animate functions along with CSS3 animations to bring full-blown kinetic drag that works on all HTML5-ready devices. 
 
-Pep has built-in support for custom start, stop, and drag events, a debugger, and the ability to custom your own kinetic easing functions from <a href='http://matthewlein.com/ceaser/'>Metthew Lein's Ceaser</a>.
+Pep has built-in support for custom start, stop, and drag events, a debugger, and the ability to customize your own kinetic easing functions from <a href='http://matthewlein.com/ceaser/'>Metthew Lein's Ceaser</a>.
 
 
 ## How to use
