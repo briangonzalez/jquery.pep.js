@@ -70,6 +70,7 @@
 
       // Non-touch device or non-pinch on touch device?
       if ( !this._isTouch() || ( this._isTouch() && event.originalEvent.hasOwnProperty('touches') && event.originalEvent.touches.length == 1 ) ){
+        event.preventDefault();
         var self      = this;
         var $this     = $(this.el);  
         $this.addClass( this.options.activeClass );
