@@ -19,6 +19,7 @@
             // get more css         ease params from [ http://matthewlein.com/ceaser/ ]
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000, 
+            constrainToWindow:      false,
             drag:                   function(){},
             stop:                   function(){},
             start:                  function(){}
@@ -99,7 +100,7 @@
           self._lifo( { time: event.timeStamp, x: curX, y: curY } );
 
           //  mouse off screen? -10 is a buffer
-          if ( curX > window.innerWidth - 10 || curX < 10 || curY > window.innerHeight - 10 || curY < 10 ){ 
+          if ( self.options.constrainToWindow && (curX > window.innerWidth - 10 || curX < 10 || curY > window.innerHeight - 10 || curY < 10) ){ 
             $(self.el).trigger( self._endTrigger ); 
             return; 
           }
