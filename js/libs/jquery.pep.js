@@ -55,7 +55,6 @@
 
         // put our target element exectly where it is...
         // but make it movable (pos absolute)
-        console.log($this.position().left);
         $this.css({ position: 'absolute', top: $this.offset().top, left: $this.offset().left}); 
         
         // build our debug div
