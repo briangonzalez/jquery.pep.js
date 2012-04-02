@@ -15,7 +15,7 @@
             debug:                  false,
             activeClass:            'active',
             multiplier:             1,
-            stopEvents:             " ", 
+            stopEvents:             "", 
             // get more css         ease params from [ http://matthewlein.com/ceaser/ ]
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000, 
@@ -87,7 +87,7 @@
         $this.css( self._cssEaseHashReset() );
 
         // dragging
-        var dragging = function(event){ 
+        $.fn.pep.dragging = function(event){ 
   
           // fire user's drag event.
           self.options.drag(event, self);
@@ -124,26 +124,25 @@
           self._log( self._moveTrigger + ", " + curX + " " + self._xDir + ", " + curY + " " + self._yDir );
           self._start = false;
         }
-        $(window).bind( this._moveTrigger, dragging ); // ... then bind out drag trigger
+        $(window).bind( this._moveTrigger, $.fn.pep.dragging ); // ... then bind out drag trigger
 
         // stop
-        var stopping = function(event){
+        $.fn.pep.stopping = function(event){
           if ( self._active ){
             self._ease();
-            $(window).unbind( self._moveTrigger, dragging );
-            $this.unbind( self._endTrigger, stopping );
+            $(window).unbind( self._moveTrigger, $.fn.pep.dragging );
+            $this.unbind( self._endTrigger, $.fn.pep.stopping );
             self._log( self._endTrigger ); 
             self._active = false;
             self._velocityQueue = [null,null,null,null,null];
-            $this.removeClass( self.options.activeClass );
+            $this.removeClass( self.options.activeClass );            
 
             // fire user's stop event.
             self.options.stop(event, self);
 
           }
         }
-        $this.bind( this._endTrigger, stopping ); // ... then bind out stop trigger
-      
+        $this.bind( this._endTrigger + " " + this.options.stopEvents, $.fn.pep.stopping ); // ... then bind out stop trigger
       }
     };
 
