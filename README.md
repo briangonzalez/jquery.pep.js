@@ -19,17 +19,37 @@ Select your jQuery element, then pep it: `$('#peppable').pep()`.
 
 Alternatively, you can pass a hash of parameters. Below are the defaults.
 
-### Parameters
+### Parameters with their defaults:
+            
+            // show the debugger
+            debug:                  false
 
-            debug:                  false,
-            activeClass:            'active',
+            // CSS class to append to peppable object
+            activeClass:            'active'
+
+            // speed up zoom.
             multiplier:             1,
-            stopEvents:             "", 
-            cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
-            cssEaseDuration:        1000, 
-            constrainToWindow:      false,
-            drag:                   function(){ /* fire on drag */ },
-            stop:                   function(){ /* fire on stop */ },
+
+            // manually fire a stop a peppable object when these events are fired (space delimited)
+            stopEvents:             ""
+
+            // get more easing functions here: http://matthewlein.com/ceaser/
+            cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)"
+
+            // how long should it take to ease to its final resting place after mouseup/touchend 
+            cssEaseDuration:        1000 
+
+            // let peppable object move outside of window                                                  
+            constrainToWindow:      false
+
+            // fired...
+            // ....while dragging
+            drag:                   function(){ /* fire on drag */ }
+
+            // ... after stopping
+            stop:                   function(){ /* fire on stop */ }
+
+            // ... after starting
             start:                  function(){ /* fire on start */ }
             
 So, for instance, you can log to the console, debug, and speed up the drag like so:
@@ -40,6 +60,17 @@ So, for instance, you can log to the console, debug, and speed up the drag like 
                 multiplier:     1.2
             };
             $('#peppable').pep(options);
-   
- 
- Check out the demo over [here](http://pep.briangonzalez.org), and view the source for me tips 'n tricks.
+
+Maybe you want to increase the ease time and change some text when you start dragging:
+            
+              var options = {
+                start:          function(){ $('#title').text('Start!'); }
+                drag:           function(){ console.log('we're dragging!'); },
+            };
+            $('#peppable').pep(options);
+
+Other helper functions:
+          
+
+
+ ## Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.

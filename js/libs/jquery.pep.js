@@ -20,6 +20,7 @@
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000, 
             constrainToWindow:      false,
+            shouldEase:             true,
             drag:                   function(){},
             stop:                   function(){},
             start:                  function(){}
@@ -129,7 +130,7 @@
         // stop
         $.fn.pep.stopping = function(event){
           if ( self._active ){
-            self._ease();
+            if (self.options.shouldEase) self._ease();
             $(window).unbind( self._moveTrigger, $.fn.pep.dragging );
             $this.unbind( self._endTrigger, $.fn.pep.stopping );
             self._log( self._endTrigger ); 
@@ -146,8 +147,20 @@
       }
     };
 
+    Pep.prototype.setMultiplier = function(val){
+      this.options.multiplier = val;
+    }
+
     Pep.prototype.forceStop = function(){
       $(this.el).trigger( this._endTrigger );
+    }
+
+    Pep.prototype.disableEase = function(){
+      this.options.shouldEase = false;
+    }
+
+    Pep.prototype.enableEase = function(){
+      this.options.shouldEase = true;
     }
 
     Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement) };
