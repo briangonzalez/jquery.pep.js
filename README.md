@@ -70,7 +70,10 @@ Maybe you want to increase the ease time and change some text when you start dra
             $('#peppable').pep(options);
 
 Other helper functions:
-          
+            
+            obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
+            obj.enableEase()                // ... enable ease
+            obj.disableEase()               // ... disable ease
+            obj.forceStop()                 // ... force the object to stop
 
-
- ## Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
+## Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
