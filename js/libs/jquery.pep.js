@@ -43,6 +43,7 @@
         this._xDir =                'up';
         this._yDir =                'up';
         this._dt =                  null;
+        this._offset =              null;
         this._velocityQueue =       [null,null,null,null,null];
         this._startTrigger =        this._isTouch() ? "touchstart"  : "mousedown";
         this._endTrigger =          this._isTouch() ? "touchend"    : "mouseup";
@@ -53,10 +54,7 @@
     Pep.prototype.init = function () {
         var self = this;
         var $this = $(this.el);
-
-        // put our target element exectly where it is...
-        // but make it movable (pos absolute)
-        $this.css({ position: 'absolute', top: $this.offset().top, left: $this.offset().left}); 
+        this._offset =  $this.offset();
         
         // build our debug div
         if (this.options.debug && !($('#debug').length > 0) ) $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>"); 
@@ -95,6 +93,12 @@
 
           var curX    = (self._isTouch() ? event.originalEvent.touches[0].pageX : event.pageX);
           var curY    = (self._isTouch() ? event.originalEvent.touches[0].pageY : event.pageY);
+
+          // put our target element exectly where it is...
+          // but make it movable (pos absolute)
+          if ($this.css('position') !== 'absolute') { 
+             $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left});
+          }
 
           // LIFO queue to help us manage velocity
           self._lifo( { time: event.timeStamp, x: curX, y: curY } );
