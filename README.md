@@ -27,7 +27,7 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // CSS class to append to peppable object
             activeClass:            'active'
 
-            // speed up zoom.
+            // speed up drag (1 == unity, < 1 == slower, > 1 == faster)
             multiplier:             1,
 
             // manually fire a stop a peppable object when these events are fired (space delimited)
@@ -52,7 +52,7 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // ... after starting
             start:                  function(){ /* fire on start */ }
             
-So, for instance, you can log to the console, debug, and speed up the drag like so:
+So, for instance, you can log to the console while dragging, debug, and speed up the drag like so:
             
             var options = {
                 debug:          true,
@@ -76,4 +76,4 @@ Other helper functions:
             obj.disableEase()               // ... disable ease
             obj.forceStop()                 // ... force the object to stop
 
-## Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
+### Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
