@@ -116,7 +116,7 @@
           var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy / self._scale)*mult : "-=" + Math.abs(dy / self._scale)*mult;
           self._x     = curX;
           self._y     = curY;
-          self._xDir  = ( dx >= 0 ) ? 'up' : 'down';
+          self._xDir  = ( dx >= 0 ) ? 'right' : 'left';
           self._yDir  = ( dy <= 0 ) ? 'up' : 'down';
 
           // fire user's start event.
