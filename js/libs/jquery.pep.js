@@ -71,7 +71,8 @@
       if ( !this._isTouch() || ( this._isTouch() && event.originalEvent.hasOwnProperty('touches') && event.originalEvent.touches.length == 1 ) ){
         event.preventDefault();
         var self      = this;
-        var $this     = $(this.el);  
+        var $this     = $(this.el);
+        if( $this.hasClass( self.options.activeClass ) ) $.fn.pep.stopping();   
         $this.addClass( this.options.activeClass );
         this._x       = self._isTouch() ? event.originalEvent.pageX : event.pageX;
         this._y       = self._isTouch() ? event.originalEvent.pageY : event.pageY;
