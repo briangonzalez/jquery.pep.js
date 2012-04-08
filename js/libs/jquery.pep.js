@@ -147,7 +147,7 @@
             self.options.stop(event, self);
 
           }
-        }
+        };
         $(window).bind( this._endTrigger + " " + this.options.stopEvents, $.fn.pep.stopping );  // ... then bind our stop trigger
       }
     };
