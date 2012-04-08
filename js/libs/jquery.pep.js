@@ -254,7 +254,7 @@
     };
 
     Pep.prototype._cssEaseHash = function(time, params){
-      var transition = ['all', time, 'ms ', params].join('');
+      var transition = ['all ', time, 'ms ', params].join('');
       return {
                     '-webkit-transition'   : transition,  /* older webkit */
                        '-moz-transition'   : transition,
