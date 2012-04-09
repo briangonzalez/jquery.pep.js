@@ -42,6 +42,9 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // let peppable object move outside of window                                                  
             constrainToWindow:      false
 
+            // bind peppable object to parent
+            boundToParent:          false
+
             // fired...
             // ....while dragging
             drag:                   function(){ /* fire on drag */ }
