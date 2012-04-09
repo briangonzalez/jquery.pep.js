@@ -15,16 +15,18 @@
             debug:                  false,
             activeClass:            'active',
             multiplier:             1,
-            stopEvents:             "", 
+            stopEvents:             "",
             // get more css         ease params from [ http://matthewlein.com/ceaser/ ]
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
-            cssEaseDuration:        1000, 
+            cssEaseDuration:        1000,
             constrainToWindow:      false,
             shouldEase:             true,
+            boundToParent:          false,
             drag:                   function(){},
             stop:                   function(){},
             start:                  function(){}
-        };
+        },
+        disable = false;
 
     // The actual plugin constructor
     function Pep( element, options ) {
@@ -47,20 +49,21 @@
         this._velocityQueue =       [null,null,null,null,null];
         this._startTrigger =        this._isTouch() ? "touchstart"  : "mousedown";
         this._endTrigger =          this._isTouch() ? "touchend"    : "mouseup";
-        this._moveTrigger =         this._isTouch() ? "touchmove"   : "mousemove"; 
+        this._moveTrigger =         this._isTouch() ? "touchmove"   : "mousemove";
+        this._positionType =        this.options.boundToParent ? 'position' : 'offset';
         this.init();
     }
 
     Pep.prototype.init = function () {
+
         var self = this;
         var $this = $(this.el);
-        this._offset =  $this.offset();
-        
+                
         // build our debug div
         if (this.options.debug && !($('#debug').length > 0) ) $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>"); 
         
         // Bind the magic
-        $this.bind( this._startTrigger, function(e){ self._do(e) } );
+        $this.bind( this._startTrigger, function(e){ self._do(e); } );
     };
 
     Pep.prototype._bindings = function(){};
@@ -87,7 +90,16 @@
         $this.css( self._cssEaseHashReset() );
 
         // dragging
-        $.fn.pep.dragging = function(event){ 
+        $.fn.pep.dragging = function(event){
+          
+          // Stop all drag events
+          if (disable) {
+            //$(self.el).trigger( self._endTrigger );
+            $.fn.pep.stopping();
+            return;
+          }
+
+          self._offset = $this[self._positionType]();
   
           // fire user's drag event.
           self.options.drag(event, self);
@@ -97,7 +109,7 @@
 
           // put our target element exectly where it is...
           // but make it movable (pos absolute)
-          if ($this.css('position') !== 'absolute') { 
+          if ($this.css('position') !== 'absolute') {
              $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left});
           }
 
@@ -105,16 +117,41 @@
           self._lifo( { time: event.timeStamp, x: curX, y: curY } );
 
           //  mouse off screen? -10 is a buffer
-          if ( self.options.constrainToWindow && (curX > window.innerWidth - 10 || curX < 10 || curY > window.innerHeight - 10 || curY < 10) ){ 
-            $(self.el).trigger( self._endTrigger ); 
-            return; 
+          if ( self.options.constrainToWindow && (curX > window.innerWidth - 10 || curX < 10 || curY > window.innerHeight - 10 || curY < 10) ){
+            $(self.el).trigger( self._endTrigger );
+            return;
           }
-          
+                    
           var dx      = ( self._start ) ? 0 : curX - self._x;
           var dy      = ( self._start ) ? 0 : curY - self._y;
           var mult    = self.options.multiplier;
           var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx / self._scale)*mult : "-=" + Math.abs(dx / self._scale)*mult;
           var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy / self._scale)*mult : "-=" + Math.abs(dy / self._scale)*mult;
+          
+          if (self.options.boundToParent) {
+            var pos     = $this.position();
+            var $parent = $this.parent();
+
+            pos.right   = $parent.width() - $this.width();
+            pos.bottom  = $parent.height() - $this.outerHeight();
+
+            if (pos.left >= pos.right && dx > 0) {
+              xOp = pos.right;
+            }
+            
+            if (pos.left <= 0 && dx <= 0) {
+              xOp = 0;
+            }
+
+            if (pos.top >= pos.bottom && dy > 0) {
+              yOp = pos.bottom;
+            }
+            
+            if (pos.top <= 0 && dy <= 0) {
+              yOp = 0;
+            }
+          }
+
           self._x     = curX;
           self._y     = curY;
           self._xDir  = ( dx >= 0 ) ? 'right' : 'left';
@@ -125,11 +162,12 @@
             self.options.start(event, self);
             self._started = true;
           }
-
+          
           $this.css({ top: yOp , left: xOp });
-          self._log( self._moveTrigger + ", " + curX + " " + self._xDir + ", " + curY + " " + self._yDir );
+          self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
           self._start = false;
-        }
+        };
+
         $(window).bind( this._moveTrigger, $.fn.pep.dragging ); // ... then bind out drag trigger
 
         // stop
@@ -138,14 +176,13 @@
             if (self.options.shouldEase) self._ease();
             $(window).unbind( self._moveTrigger, $.fn.pep.dragging );
             $this.unbind( self._endTrigger, $.fn.pep.stopping );
-            self._log( self._endTrigger ); 
+            self._log( self._endTrigger );
             self._active = false;
             self._velocityQueue = [null,null,null,null,null];
-            $this.removeClass( self.options.activeClass );            
+            $this.removeClass( self.options.activeClass );
 
             // fire user's stop event.
             self.options.stop(event, self);
-
           }
         };
         $(window).bind( this._endTrigger + " " + this.options.stopEvents, $.fn.pep.stopping );  // ... then bind our stop trigger
@@ -154,22 +191,22 @@
 
     Pep.prototype.setMultiplier = function(val){
       this.options.multiplier = val;
-    }
+    };
 
     Pep.prototype.forceStop = function(){
       $(this.el).trigger( this._endTrigger );
-    }
+    };
 
     Pep.prototype.disableEase = function(){
       this.options.shouldEase = false;
-    }
+    };
 
     Pep.prototype.enableEase = function(){
       this.options.shouldEase = true;
-    }
+    };
 
-    Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement) };
-    Pep.prototype.setScale = function(val){ this._scale = val };
+    Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement); };
+    Pep.prototype.setScale = function(val){ this._scale = val; };
 
     Pep.prototype._log = function(msg){
       if (this.options.debug){
@@ -200,7 +237,7 @@
       }
 
       // return velocity in each direction.
-      return { x: sumX, y: sumY }
+      return { x: sumX, y: sumY };
     };
 
     Pep.prototype._ease = function(){
@@ -211,48 +248,45 @@
       var x         = ( vel.x > 0 ) ? "+=" + vel.x * mult : "-=" + Math.abs(vel.x) * mult;
       var y         = ( vel.y > 0 ) ? "+=" + vel.y * mult : "-=" + Math.abs(vel.y) * mult;
 
-      // ✪  The CSS3 easing magic  ✪ 
-      $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) )
+      // ✪  The CSS3 easing magic  ✪
+      $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
       $this.css({ top: y, left: x });
     };
 
     Pep.prototype._cssEaseHash = function(time, params){
+      var transition = ['all ', time, 'ms ', params].join('');
       return {
-                    '-webkit-transition'   : 'all '+ time +'ms ' + params,                   /* older webkit */
-                    '-webkit-transition'   : 'all '+ time +'ms ' + params,
-                       '-moz-transition'   : 'all '+ time +'ms ' + params,
-                        '-ms-transition'   : 'all '+ time +'ms ' + params,
-                         '-o-transition'   : 'all '+ time +'ms ' + params,
-                            'transition'   : 'all '+ time +'ms ' + params,                     /* custom */
+                    '-webkit-transition'   : transition,  /* older webkit */
+                       '-moz-transition'   : transition,
+                        '-ms-transition'   : transition,
+                         '-o-transition'   : transition,
+                            'transition'   : transition,  /* custom */
 
-      '-webkit-transition-timing-function' : params,   /* older webkit */
-      '-webkit-transition-timing-function' : params, 
-         '-moz-transition-timing-function' : params, 
-         ' -ms-transition-timing-function' : params, 
-           '-o-transition-timing-function' : params, 
-              'transition-timing-function' : params   /* custom */ 
-            }
+      '-webkit-transition-timing-function' : params,  /* older webkit */
+         '-moz-transition-timing-function' : params,
+         ' -ms-transition-timing-function' : params,
+           '-o-transition-timing-function' : params,
+              'transition-timing-function' : params   /* custom */
+            };
     };
 
     Pep.prototype._cssEaseHashReset = function(){
       return {
-                    '-webkit-transition'   : '',                  
                     '-webkit-transition'   : '',
                        '-moz-transition'   : '',
                         '-ms-transition'   : '',
                          '-o-transition'   : '',
-                            'transition'   : '',                 
+                            'transition'   : '',
 
-      '-webkit-transition-timing-function' : '',   
-      '-webkit-transition-timing-function' : '', 
-         '-moz-transition-timing-function' : '', 
-         ' -ms-transition-timing-function' : '', 
-           '-o-transition-timing-function' : '', 
+      '-webkit-transition-timing-function' : '',
+         '-moz-transition-timing-function' : '',
+         ' -ms-transition-timing-function' : '',
+           '-o-transition-timing-function' : '',
               'transition-timing-function' : ''
-            }
+            };
     };
 
-    // A really lightweight plugin wrapper around the constructor, 
+    // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
     $.fn[pluginName] = function ( options ) {
         return this.each(function () {
@@ -260,6 +294,17 @@
                 $.data(this, 'plugin_' + pluginName, new Pep( this, options ));
             }
         });
-    }
+    };
+
+    $[pluginName] = {
+      stopAll: function () {
+        disable = true;
+        return this;
+      },
+      startAll: function () {
+        disable = false;
+        return this;
+      }
+    };
 
 })( jQuery, window, document );
