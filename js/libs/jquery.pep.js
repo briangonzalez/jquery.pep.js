@@ -15,9 +15,9 @@
             debug:                  false,
             activeClass:            'active',
             multiplier:             1,
-            stopEvents:             "",
+            stopEvents:             '',
             // get more css         ease params from [ http://matthewlein.com/ceaser/ ]
-            cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
+            cssEaseString:          'cubic-bezier(0.210, 1, 0.220, 1.000)',
             cssEaseDuration:        1000,
             constrainToWindow:      false,
             shouldEase:             true,
@@ -26,14 +26,16 @@
             stop:                   function(){},
             start:                  function(){}
         },
-        disable = false;
+        vendorPrefixes = ['-webkit-', '-moz-', '-ms-', '-o-', ''],
+        disable = false,
+        isTouch = ('ontouchstart' in document.documentElement);
 
     // The actual plugin constructor
     function Pep( element, options ) {
         this.el = element;
         this.options = $.extend( {}, defaults, options) ;
         this._defaults = defaults;
-        this._name = "pep";
+        this._name = 'pep';
         this._scale =               1;
         this._active =              false;
         this._start =               false;
@@ -47,23 +49,24 @@
         this._dt =                  null;
         this._offset =              null;
         this._velocityQueue =       [null,null,null,null,null];
-        this._startTrigger =        this._isTouch() ? "touchstart"  : "mousedown";
-        this._endTrigger =          this._isTouch() ? "touchend"    : "mouseup";
-        this._moveTrigger =         this._isTouch() ? "touchmove"   : "mousemove";
+        this._startTrigger =        isTouch ? 'touchstart'  : 'mousedown';
+        this._endTrigger =          isTouch ? 'touchend'    : 'mouseup';
+        this._moveTrigger =         isTouch ? 'touchmove'   : 'mousemove';
         this._positionType =        this.options.boundToParent ? 'position' : 'offset';
         this.init();
     }
 
     Pep.prototype.init = function () {
 
-        var self = this;
-        var $this = $(this.el);
+      var self = this;
+      var $this = $(this.el);
                 
-        // build our debug div
-        if (this.options.debug && !($('#debug').length > 0) ) $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>"); 
+      // build our debug div
+      if (this.options.debug && !($('#debug').length > 0) ) $('body').append('<div id="debug" style="position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right">debug mode</div>');
         
-        // Bind the magic
-        $this.bind( this._startTrigger, function(e){ self._do(e); } );
+      // Bind the magic
+      $this.bind( this._startTrigger, function(e){ self._do(e); } );
+      return this;
     };
 
     Pep.prototype._bindings = function(){};
@@ -71,14 +74,14 @@
     Pep.prototype._do = function(event){
 
       // Non-touch device or non-pinch on touch device?
-      if ( !this._isTouch() || ( this._isTouch() && event.originalEvent.hasOwnProperty('touches') && event.originalEvent.touches.length == 1 ) ){
+      if ( !isTouch || ( isTouch && event.originalEvent.hasOwnProperty('touches') && event.originalEvent.touches.length == 1 ) ){
         event.preventDefault();
         var self      = this;
         var $this     = $(this.el);
         if( $this.hasClass( self.options.activeClass ) ) $.fn.pep.stopping();
         $this.addClass( this.options.activeClass );
-        this._x       = self._isTouch() ? event.originalEvent.pageX : event.pageX;
-        this._y       = self._isTouch() ? event.originalEvent.pageY : event.pageY;
+        this._x       = isTouch ? event.originalEvent.pageX : event.pageX;
+        this._y       = isTouch ? event.originalEvent.pageY : event.pageY;
         this._startX  = this._x;
         this._startY  = this._y;
         this._start   = true;
@@ -104,8 +107,8 @@
           // fire user's drag event.
           self.options.drag(event, self);
 
-          var curX    = (self._isTouch() ? event.originalEvent.touches[0].pageX : event.pageX);
-          var curY    = (self._isTouch() ? event.originalEvent.touches[0].pageY : event.pageY);
+          var curX    = (isTouch ? event.originalEvent.touches[0].pageX : event.pageX);
+          var curY    = (isTouch ? event.originalEvent.touches[0].pageY : event.pageY);
 
           // put our target element exectly where it is...
           // but make it movable (pos absolute)
@@ -125,8 +128,8 @@
           var dx      = ( self._start ) ? 0 : curX - self._x;
           var dy      = ( self._start ) ? 0 : curY - self._y;
           var mult    = self.options.multiplier;
-          var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx / self._scale)*mult : "-=" + Math.abs(dx / self._scale)*mult;
-          var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy / self._scale)*mult : "-=" + Math.abs(dy / self._scale)*mult;
+          var xOp     = ( dx >= 0 ) ? '+=' + Math.abs(dx / self._scale)*mult : '-=' + Math.abs(dx / self._scale)*mult;
+          var yOp     = ( dy >= 0 ) ? '+=' + Math.abs(dy / self._scale)*mult : '-=' + Math.abs(dy / self._scale)*mult;
           
           if (self.options.boundToParent) {
             var pos     = $this.position();
@@ -164,7 +167,7 @@
           }
           
           $this.css({ top: yOp , left: xOp });
-          self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
+          self._log( [self._moveTrigger, ', ', curX, ' ', self._xDir, ', ', curY, ' ', self._yDir].join('') );
           self._start = false;
         };
 
@@ -185,35 +188,40 @@
             self.options.stop(event, self);
           }
         };
-        $(window).bind( this._endTrigger + " " + this.options.stopEvents, $.fn.pep.stopping );  // ... then bind our stop trigger
+        $(window).bind( [this._endTrigger, ' ', this.options.stopEvents].join(''), $.fn.pep.stopping );  // ... then bind our stop trigger
       }
     };
 
     Pep.prototype.setMultiplier = function(val){
       this.options.multiplier = val;
+      return this;
     };
 
     Pep.prototype.forceStop = function(){
       $(this.el).trigger( this._endTrigger );
+      return this;
     };
 
     Pep.prototype.disableEase = function(){
       this.options.shouldEase = false;
+      return this;
     };
 
     Pep.prototype.enableEase = function(){
       this.options.shouldEase = true;
+      return this;
     };
 
-    Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement); };
-    Pep.prototype.setScale = function(val){ this._scale = val; };
+    Pep.prototype._isTouch = function(){ return isTouch; };
+    Pep.prototype.setScale = function(val){ this._scale = val; return this; };
 
     Pep.prototype._log = function(msg){
       if (this.options.debug){
-        if ( $('#msg').length == 0 ) $('#debug').append("<div id='msg'></div><div id='velocity'></div>");
-        $('#msg').html(msg);
+        var $msg = $('#msg');
+        if ( $msg.length == 0 ) $('#debug').append('<div id="msg"></div><div id="velocity"></div>');
+        $msg.html(msg);
         var vel = this._velocity();
-        $('#velocity').html( "velocity: " + vel.x + ", " + vel.y + " " + "dt: " + this._dt );
+        $('#velocity').html( ['velocity: ', vel.x, ', ', vel.y, ' ', 'dt: ', this._dt].join('') );
       }
     };
 
@@ -226,13 +234,15 @@
     };
 
     Pep.prototype._velocity = function(){
-      var sumX = 0;
-      var sumY = 0;
-      for ( var i = 0; i < this._velocityQueue.length -1; i++  ){
-        if ( this._velocityQueue[i] ){
-          sumX        = sumX + (this._velocityQueue[i+1].x - this._velocityQueue[i].x);
-          sumY        = sumY + (this._velocityQueue[i+1].y - this._velocityQueue[i].y);
-          this._dt    = ( this._velocityQueue[i+1].time - this._velocityQueue[i].time );
+      var sumX = 0, sumY = 0, vQ, vQInc;
+      for ( var i = 0, len = this._velocityQueue.length-1; i < len; i++  ){
+        vQ = this._velocityQueue[i];
+        vQInc = this._velocityQueue[i+1];
+
+        if ( vQ ){
+          sumX        = sumX + (vQInc.x - vQ.x);
+          sumY        = sumY + (vQInc.y - vQ.y);
+          this._dt    = ( vQInc.time - vQ.time );
         }
       }
 
@@ -245,8 +255,8 @@
       var vel       = this._velocity();
       var dt        = this._dt;
       var mult      = 1;
-      var x         = ( vel.x > 0 ) ? "+=" + vel.x * mult : "-=" + Math.abs(vel.x) * mult;
-      var y         = ( vel.y > 0 ) ? "+=" + vel.y * mult : "-=" + Math.abs(vel.y) * mult;
+      var x         = ( vel.x > 0 ) ? '+=' + vel.x * mult : '-=' + Math.abs(vel.x) * mult;
+      var y         = ( vel.y > 0 ) ? '+=' + vel.y * mult : '-=' + Math.abs(vel.y) * mult;
 
       // ✪  The CSS3 easing magic  ✪
       $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
@@ -254,36 +264,23 @@
     };
 
     Pep.prototype._cssEaseHash = function(time, params){
-      var transition = ['all ', time, 'ms ', params].join('');
-      return {
-                    '-webkit-transition'   : transition,  /* older webkit */
-                       '-moz-transition'   : transition,
-                        '-ms-transition'   : transition,
-                         '-o-transition'   : transition,
-                            'transition'   : transition,  /* custom */
-
-      '-webkit-transition-timing-function' : params,  /* older webkit */
-         '-moz-transition-timing-function' : params,
-         ' -ms-transition-timing-function' : params,
-           '-o-transition-timing-function' : params,
-              'transition-timing-function' : params   /* custom */
-            };
+      return this._setCssEaseHash(time, params);
     };
 
     Pep.prototype._cssEaseHashReset = function(){
-      return {
-                    '-webkit-transition'   : '',
-                       '-moz-transition'   : '',
-                        '-ms-transition'   : '',
-                         '-o-transition'   : '',
-                            'transition'   : '',
+      return this._setCssEaseHash();
+    };
 
-      '-webkit-transition-timing-function' : '',
-         '-moz-transition-timing-function' : '',
-         ' -ms-transition-timing-function' : '',
-           '-o-transition-timing-function' : '',
-              'transition-timing-function' : ''
-            };
+    Pep.prototype._setCssEaseHash = function (time, params) {
+      var transition, obj = {}, prefix;
+      params = params || '';
+      transition = params ? ['all ', time, 'ms ', params].join('') : '';
+      for (var i = 0, len = vendorPrefixes.length; i < len; i++) {
+        prefix = vendorPrefixes[i];
+        obj[prefix+'transition'] = transition;
+        obj[prefix+'transition-timing-function'] = params;
+      }
+      return obj;
     };
 
     // A really lightweight plugin wrapper around the constructor,
