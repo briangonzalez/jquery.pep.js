@@ -64,11 +64,12 @@ So, for instance, you can log to the console while dragging, debug, and speed up
             };
             $('#peppable').pep(options);
 
-Maybe you want to increase the ease time and change some text when you start dragging:
+Maybe you want to increase the ease time, change some text when you start dragging and upon ease completion:
             
               var options = {
-                start:          function(){ $('#title').text('Start!'); }
+                start:          function(){ $('#title').text('Start!'); },
                 drag:           function(){ console.log('we're dragging!'); },
+                rest:           function(){ console.log('ease completed!'); }
             };
             $('#peppable').pep(options);
 
@@ -79,4 +80,4 @@ Other helper functions:
             obj.disableEase()               // ... disable ease
             obj.forceStop()                 // ... force the object to stop
 
-### Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
+_Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks._

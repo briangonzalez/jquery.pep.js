@@ -23,8 +23,9 @@
             shouldEase:             true,
             boundToParent:          false,
             drag:                   function(){},
+            start:                  function(){},
             stop:                   function(){},
-            start:                  function(){}
+            rest:                   function(){}
         },
         disable = false;
 
@@ -174,6 +175,7 @@
         $.fn.pep.stopping = function(event){
           if ( self._active ){
             if (self.options.shouldEase) self._ease();
+            self._doRest(event, self);
             $(window).unbind( self._moveTrigger, $.fn.pep.dragging );
             $this.unbind( self._endTrigger, $.fn.pep.stopping );
             self._log( self._endTrigger );
@@ -285,6 +287,11 @@
               'transition-timing-function' : ''
             };
     };
+
+    Pep.prototype._doRest = function(event, obj){
+      var self = this;
+      this.timeout = setTimeout( function(){ self.options.rest(event, obj); }, self.options.cssEaseDuration );
+    }
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
