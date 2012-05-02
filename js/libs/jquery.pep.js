@@ -1,7 +1,10 @@
-/***************************************************
- * Pep! (jquery.pep.js)
+/*******************************************************************
+ * Pep! (jquery.pep.js) 
+ * [ Version 0.1 ]
+ * ---------------------------------------------------------- 
  * Copyright 2012, Brian Gonzalez
  * Dual licensed under the MIT or GPL Version 2 licenses.
+ *  
  *
  *    Dependencies:
  *        - jQuery
@@ -20,8 +23,8 @@
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000,
             constrainToWindow:      false,
+            constrainToParent:      false,          // EXPERIMENTAL! use with caution. you've been warned.
             shouldEase:             true,
-            boundToParent:          false,
             drag:                   function(){},
             start:                  function(){},
             stop:                   function(){},
@@ -60,7 +63,7 @@
         var self = this;
         var $this = $(this.el);
                 
-        // build our debug div
+        // Build our debug div
         if (this.options.debug && !($('#debug').length > 0) ) $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>"); 
         
         // Bind the magic
@@ -95,12 +98,12 @@
           
           // Stop all drag events
           if (disable) {
-            //$(self.el).trigger( self._endTrigger );
             $.fn.pep.stopping();
             return;
           }
 
           self._offset = $this[self._positionType]();
+          $this.css({ top: self._offset.top, left: self._offset.left });
   
           // fire user's drag event.
           self.options.drag(event, self);

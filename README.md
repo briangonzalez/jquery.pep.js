@@ -39,11 +39,12 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // how long should it take to ease to its final resting place after mouseup/touchend 
             cssEaseDuration:        1000 
 
-            // let peppable object move outside of window                                                  
+            // let peppable object move outside of window?                                                  
             constrainToWindow:      false
 
-            // bind peppable object to parent
-            boundToParent:          false
+            // let peppable object move outside of parent?
+            // EXPERIMENTAL! use with caution. you've been warned.
+            constrainToParent:          false
 
             // fired...
             // ....while dragging
