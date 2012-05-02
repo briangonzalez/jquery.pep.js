@@ -132,7 +132,7 @@
           var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx / self._scale)*mult : "-=" + Math.abs(dx / self._scale)*mult;
           var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy / self._scale)*mult : "-=" + Math.abs(dy / self._scale)*mult;
           
-          if (self.options.boundToParent) {
+          if (self.options.constrainToParent) {
             var pos     = $this.position();
             var $parent = $this.parent();
 
