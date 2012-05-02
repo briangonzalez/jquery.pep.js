@@ -54,7 +54,7 @@
         this._startTrigger =        this._isTouch() ? "touchstart"  : "mousedown";
         this._endTrigger =          this._isTouch() ? "touchend"    : "mouseup";
         this._moveTrigger =         this._isTouch() ? "touchmove"   : "mousemove";
-        this._positionType =        this.options.boundToParent ? 'position' : 'offset';
+        this._positionType =        this.options.constrainToParent ? 'position' : 'offset';
         this.init();
     }
 
