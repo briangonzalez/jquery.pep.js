@@ -1,6 +1,6 @@
 /*******************************************************************
  * Pep! (jquery.pep.js) 
- * [ Version 0.1 ]
+ * [ Version 0.2 ]
  * ---------------------------------------------------------- 
  * Copyright 2012, Brian Gonzalez
  * Dual licensed under the MIT or GPL Version 2 licenses.
