@@ -57,7 +57,7 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             start:                  function(ev,obj){ /* fire on start */ }
             
             // ... once item has come to rest
-            rest:                   function(ev,obj){ /* fire on start */ }
+            rest:                   function(ev,obj){ /* fire on rest */ }
             
 So, for instance, you can log to the console while dragging, debug, and speed up the drag like so:
             
