@@ -79,7 +79,6 @@
         event.preventDefault();
         var self              = this;
         var $this             = $(this.el);
-        if( $this.hasClass( self.options.activeClass ) ) _doStop();   
         $this.addClass( this.options.activeClass );
         this._x               = self._isTouch() ? event.originalEvent.pageX : event.pageX;
         this._y               = self._isTouch() ? event.originalEvent.pageY : event.pageY;
