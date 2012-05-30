@@ -1,6 +1,6 @@
 /*******************************************************************
  * Pep! (jquery.pep.js) 
- * [ Version 0.2 ]
+ * [ Version 0.21 ]
  * ---------------------------------------------------------- 
  * Copyright 2012, Brian Gonzalez
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -107,7 +107,6 @@
             self._log( self._endTrigger );
             self._active = false;
             self._velocityQueue = [null,null,null,null,null];
-            $this.removeClass( self.options.activeClass );
 
             // fire user's stop event.
             self.options.stop(event, self);
@@ -142,7 +141,7 @@
           // put our target element exectly where it is...
           // but make it movable (pos absolute)
           self._offset = $this[self._positionType]();
-          $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left});
+          $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left, zIndex: 1});
 
           // remove `relative` parent if !constrainToParent
           if ( !self.options.constrainToParent ) 
@@ -320,7 +319,11 @@
 
     Pep.prototype._doRest = function(event, obj){
       var self = this;
-      this.timeout = setTimeout( function(){ self.options.rest(event, obj); }, self.options.cssEaseDuration );
+
+      this.timeout = setTimeout( function(){ 
+                                  self.options.rest(event, obj);
+                                  $(self.el).removeClass( self.options.activeClass ); 
+                                }, self.options.cssEaseDuration );
     };
 
     Pep.prototype._buildDebugDiv = function() {
