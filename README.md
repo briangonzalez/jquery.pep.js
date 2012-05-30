@@ -39,33 +39,41 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // how long should it take to ease to its final resting place after mouseup/touchend 
             cssEaseDuration:        1000 
 
-            // let peppable object move outside of window                                                  
+            // let peppable object move outside of window?                                                  
             constrainToWindow:      false
+
+            // let peppable object move outside of parent?
+            // EXPERIMENTAL! use with caution. you've been warned.
+            constrainToParent:          false
 
             // fired...
             // ....while dragging
-            drag:                   function(){ /* fire on drag */ }
+            drag:                   function(ev,obj){ /* fire on drag */ }
 
             // ... after stopping
-            stop:                   function(){ /* fire on stop */ }
+            stop:                   function(ev,obj){ /* fire on stop */ }
 
             // ... after starting
-            start:                  function(){ /* fire on start */ }
+            start:                  function(ev,obj){ /* fire on start */ }
+            
+            // ... once item has come to rest
+            rest:                   function(ev,obj){ /* fire on rest */ }
             
 So, for instance, you can log to the console while dragging, debug, and speed up the drag like so:
             
             var options = {
                 debug:          true,
-                drag:           function(){ console.log('we're dragging!') },
+                drag:           function(ev,obj){ console.log('we're dragging!') },
                 multiplier:     1.2
             };
             $('#peppable').pep(options);
 
-Maybe you want to increase the ease time and change some text when you start dragging:
+Maybe you want to increase the ease time, change some text when you start dragging and upon ease completion:
             
               var options = {
-                start:          function(){ $('#title').text('Start!'); }
-                drag:           function(){ console.log('we're dragging!'); },
+                start:          function(ev,obj){ $('#title').text('Start!'); },
+                drag:           function(ev,obj){ console.log('we're dragging!'); },
+                rest:           function(ev,obj){ console.log('ease completed!'); }
             };
             $('#peppable').pep(options);
 
@@ -76,4 +84,4 @@ Other helper functions:
             obj.disableEase()               // ... disable ease
             obj.forceStop()                 // ... force the object to stop
 
-### Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks.
+_Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks._
