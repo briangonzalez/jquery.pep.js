@@ -186,19 +186,19 @@
           self._start = false;
         };
 
-        this._container.bind( this._moveTrigger, _doDrag );
+        // this._container.bind( this._moveTrigger, _doDrag );
 
         var storeMoveEvent = function(event){
           self._moveEvent = event;
         };
 
-        //$(window).bind( this._moveTrigger, storeMoveEvent ); // ... then bind our drag trigger
+        this._container.bind( this._moveTrigger, storeMoveEvent ); // ... then bind our drag trigger
 
-        // (function watchMoveLoop(){
-        //   if ( !self._active ) return;
-        //   _pepRequestAnimFrame(watchMoveLoop);
-        //   if (self._moveEvent !== null ) dragging(self._moveEvent);
-        // })($, self, dragging);
+        (function watchMoveLoop(){
+          if ( !self._active ) return;
+          _pepRequestAnimFrame(watchMoveLoop);
+          if (self._moveEvent !== null ) _doDrag(self._moveEvent);
+        })($, self, _doDrag);
 
 
       }
@@ -343,8 +343,11 @@
       var upperXLimit       = dimHash.parent.width  - dimHash.self.width;
       var upperYLimit       = dimHash.parent.height - dimHash.self.height;
 
+      // is our object moving near our lower X & Y limits?
       if (posX <= 0 && dx < 0 ){  $this.css({ left : 0 }); return true; }
       if (posY <= 0 && dy < 0){   $this.css({ top : 0 }); return true; }
+
+      // is our object moving near our upper X & Y limits?
       if (posX >= upperXLimit && dx > 0){   $this.css({ left : upperXLimit  }); return true; }
       if (posY >= upperYLimit && dy > 0){   $this.css({ top : upperYLimit   }); return true; }
     };
