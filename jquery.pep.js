@@ -64,8 +64,8 @@
         var self = this;
         var $this = $(this.el);
                 
-        // Build our debug div
-        if (this.options.debug && !($('#debug').length > 0) ) $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>"); 
+        if (this.options.debug && !($('#debug').length > 0) )
+          this._buildDebugDiv();
         
         // Bind the magic
         $this.bind( this._startTrigger, function(e){ self._do(e); } );
@@ -79,7 +79,7 @@
         event.preventDefault();
         var self              = this;
         var $this             = $(this.el);
-        if( $this.hasClass( self.options.activeClass ) ) stopping();   
+        if( $this.hasClass( self.options.activeClass ) ) _doStop();   
         $this.addClass( this.options.activeClass );
         this._x               = self._isTouch() ? event.originalEvent.pageX : event.pageX;
         this._y               = self._isTouch() ? event.originalEvent.pageY : event.pageY;
@@ -89,18 +89,21 @@
         this._active          = true;
         this._started         = false;
         this._moveEvent       = null;
+        this._container       = this.options.constrainToParent ? $this.parent() : $(window);
         self._log( this._startTrigger );
 
         // remove CSS3 animation
         $this.css( self._cssEaseHashReset() );
 
+        // ----------------------------------------------
         // stopping -------------------------------------
-        var stopping = function(event){
+        var _doStop = function(event){
+          console.log('stop');
           if ( self._active ){
             if (self.options.shouldEase) self._ease();
             self._doRest(event, self);
-            $(window).unbind( self._moveTrigger, dragging );
-            $this.unbind( self._endTrigger, stopping );
+            self._container.unbind( self._moveTrigger, _doDrag );
+            $(window).unbind( self._endTrigger, _doStop );
             self._log( self._endTrigger );
             self._active = false;
             self._velocityQueue = [null,null,null,null,null];
@@ -110,19 +113,18 @@
             self.options.stop(event, self);
           }
         };
-        $(window).bind( this._endTrigger + " " + this.options.stopEvents, stopping );  // ... then bind our stop trigger
+        $(window).bind( this._endTrigger + " " + this.options.stopEvents, _doStop );  // ... then bind our stop trigger
 
+
+        // -------------------------------------------------
         // dragging ----------------------------------------
-        var dragging = function(event){
+        var _doDrag = function(event){
 
           // Stop all drag events
           if (disable) {
-            stopping();
+            _doStop();
             return;
           }
-
-          self._offset = $this[self._positionType]();
-          $this.css({ top: self._offset.top, left: self._offset.left });
   
           // fire user's drag event.
           self.options.drag(event, self);
@@ -130,11 +132,21 @@
           var curX    = (self._isTouch() ? event.originalEvent.touches[0].pageX : event.pageX);
           var curY    = (self._isTouch() ? event.originalEvent.touches[0].pageY : event.pageY);
 
+
+          // make `relative` parent if constrainToParent
+          if ( self.options.constrainToParent ){
+            self._handleParentRelative();
+            $this.css({ position: 'absolute' });
+          }
+
           // put our target element exectly where it is...
           // but make it movable (pos absolute)
-          if ($this.css('position') !== 'absolute') {
-             $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left});
-          }
+          self._offset = $this[self._positionType]();
+          $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left});
+
+          // remove `relative` parent if !constrainToParent
+          if ( !self.options.constrainToParent ) 
+            self._handleParentRelative();
 
           // Last in, first out (LIFO) queue to help us manage velocity
           self._lifo( { time: event.timeStamp, x: curX, y: curY } );
@@ -151,28 +163,10 @@
           var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx / self._scale)*mult : "-=" + Math.abs(dx / self._scale)*mult;
           var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy / self._scale)*mult : "-=" + Math.abs(dy / self._scale)*mult;
           
+          //  If `constrainToParent` option is set, return if
+          //  we hit the edge and we're moving in the direction
           if (self.options.constrainToParent) {
-            var pos     = $this.position();
-            var $parent = $this.parent();
-
-            pos.right   = $parent.width() - $this.width();
-            pos.bottom  = $parent.height() - $this.outerHeight();
-
-            if (pos.left >= pos.right && dx > 0) {
-              xOp = pos.right;
-            }
-            
-            if (pos.left <= 0 && dx <= 0) {
-              xOp = 0;
-            }
-
-            if (pos.top >= pos.bottom && dy > 0) {
-              yOp = pos.bottom;
-            }
-            
-            if (pos.top <= 0 && dy <= 0) {
-              yOp = 0;
-            }
+            if ( self._handleConstrainToParent(dx, dy) ) return;
           }
 
           self._x     = curX;
@@ -185,23 +179,26 @@
             self.options.start(event, self);
             self._started = true;
           }
-          
-          $this.css({ top: yOp , left: xOp });
+            
+          $this.css({ top: yOp , left: xOp }); // move it....
+
           self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
           self._start = false;
         };
+
+        this._container.bind( this._moveTrigger, _doDrag );
 
         var storeMoveEvent = function(event){
           self._moveEvent = event;
         };
 
-        $(window).bind( this._moveTrigger, storeMoveEvent ); // ... then bind our drag trigger
+        //$(window).bind( this._moveTrigger, storeMoveEvent ); // ... then bind our drag trigger
 
-        (function watchMoveLoop(){
-          if ( !self._active ) return;
-          _pepRequestAnimFrame(watchMoveLoop);
-          if (self._moveEvent !== null ) dragging(self._moveEvent);
-        })($, self, dragging);
+        // (function watchMoveLoop(){
+        //   if ( !self._active ) return;
+        //   _pepRequestAnimFrame(watchMoveLoop);
+        //   if (self._moveEvent !== null ) dragging(self._moveEvent);
+        // })($, self, dragging);
 
 
       }
@@ -223,8 +220,9 @@
       this.options.shouldEase = true;
     };
 
-    Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement); };
     Pep.prototype.setScale = function(val){ this._scale = val; };
+
+    Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement); };
 
     Pep.prototype._log = function(msg){
       if (this.options.debug){
@@ -258,24 +256,27 @@
       return { x: sumX, y: sumY };
     };
 
-    window._pepRequestAnimFrame = (function(callback) {
-      return  window.requestAnimationFrame       || 
-              window.webkitRequestAnimationFrame || 
-              window.mozRequestAnimationFrame    || 
-              window.oRequestAnimationFrame      || 
-              window.msRequestAnimationFrame     || 
-              function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
-
     Pep.prototype._ease = function(){
       $this         = $(this.el);
+      var pos       = $this.position();
       var vel       = this._velocity();
       var dt        = this._dt;
       var mult      = 1;
+
+      var dimHash           = this._dimensionHash();
+      var upperXLimit       = dimHash.parent.width  - dimHash.self.width;
+      var upperYLimit       = dimHash.parent.height - dimHash.self.height;
+
       var x         = ( vel.x > 0 ) ? "+=" + vel.x * mult : "-=" + Math.abs(vel.x) * mult;
       var y         = ( vel.y > 0 ) ? "+=" + vel.y * mult : "-=" + Math.abs(vel.y) * mult;
+
+      if ( this.options.constrainToParent ){
+        x         = ( pos.left + vel.x < 0 ) ? 0 : x;
+        y         = ( pos.top  + vel.y < 0 ) ? 0 : y;
+
+        x         = ( pos.left + vel.x > upperXLimit ) ? upperXLimit : x;
+        y         = ( pos.top  + vel.y > upperYLimit ) ? upperYLimit : y;
+      }
 
       // ✪  The CSS3 easing magic  ✪
       $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
@@ -318,7 +319,49 @@
     Pep.prototype._doRest = function(event, obj){
       var self = this;
       this.timeout = setTimeout( function(){ self.options.rest(event, obj); }, self.options.cssEaseDuration );
-    }
+    };
+
+    Pep.prototype._buildDebugDiv = function() {
+      $('body').append("<div id='debug' style='position: fixed; bottom: 0; right: 0; z-index: 10000; text-align: right'>debug mode</div>");   
+    };
+
+    Pep.prototype._handleParentRelative = function() {
+      if (this.options.constrainToParent){
+        $(this.el).parent().css({ position: 'relative' });
+      }
+      else{
+        $(this.el).parent().css({ position: 'static' });
+      }
+    };
+
+    Pep.prototype._handleConstrainToParent = function(dx, dy) {
+      var $this             = $(this.el);
+      var pos               = $this.position();
+      var posX              = pos.left;
+      var posY              = pos.top;
+      var dimHash           = this._dimensionHash();
+      var upperXLimit       = dimHash.parent.width  - dimHash.self.width;
+      var upperYLimit       = dimHash.parent.height - dimHash.self.height;
+
+      if (posX <= 0 && dx < 0 ){  $this.css({ left : 0 }); return true; }
+      if (posY <= 0 && dy < 0){   $this.css({ top : 0 }); return true; }
+      if (posX >= upperXLimit && dx > 0){   $this.css({ left : upperXLimit  }); return true; }
+      if (posY >= upperYLimit && dy > 0){   $this.css({ top : upperYLimit   }); return true; }
+    };
+
+    Pep.prototype._dimensionHash = function() {
+      var $this             = $(this.el);
+
+      var hash = {  self : { 
+                                width:  $this.outerWidth(),
+                                height: $this.outerHeight() } ,
+                    parent : {  width:  $this.parent().width(),  
+                                height: $this.parent().height() } 
+                                                                  }
+
+      return hash;
+
+    };
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
@@ -342,3 +385,20 @@
     };
 
 })( jQuery, window, document );
+
+
+//
+//      requestAnimationFrame Polyfill
+//        More info: 
+//        http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+//
+window._pepRequestAnimFrame = (function(callback) {
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
