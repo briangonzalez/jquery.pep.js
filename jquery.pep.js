@@ -166,7 +166,9 @@
           //  If `constrainToParent` option is set, return if
           //  we hit the edge and we're moving in the direction
           if (self.options.constrainToParent) {
-            if ( self._handleConstrainToParent(dx, dy) ) return;
+            var hash = self._handleConstrainToParent(dx, dy);
+            xOp = (hash.x !== false) ? hash.x : xOp;
+            yOp = (hash.y !== false) ? hash.y : yOp;
           }
 
           self._x     = curX;
@@ -342,14 +344,18 @@
       var dimHash           = this._dimensionHash();
       var upperXLimit       = dimHash.parent.width  - dimHash.self.width;
       var upperYLimit       = dimHash.parent.height - dimHash.self.height;
+      var hash              = { x: false, y: false };
 
       // is our object moving near our lower X & Y limits?
-      if (posX <= 0 && dx < 0 ){  $this.css({ left : 0 }); return true; }
-      if (posY <= 0 && dy < 0){   $this.css({ top : 0 }); return true; }
+      if (posX <= 0 && dx < 0 )   hash.x = 0;
+      if (posY <= 0 && dy < 0)    hash.y = 0;
 
       // is our object moving near our upper X & Y limits?
-      if (posX >= upperXLimit && dx > 0){   $this.css({ left : upperXLimit  }); return true; }
-      if (posY >= upperYLimit && dy > 0){   $this.css({ top : upperYLimit   }); return true; }
+      if (posX >= upperXLimit && dx > 0)  hash.x = upperXLimit;
+      if (posY >= upperYLimit && dy > 0)  hash.y = upperYLimit;
+
+      return hash;
+
     };
 
     Pep.prototype._dimensionHash = function() {
