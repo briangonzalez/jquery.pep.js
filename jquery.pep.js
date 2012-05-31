@@ -97,7 +97,6 @@
         // ----------------------------------------------
         // stopping -------------------------------------
         var _doStop = function(event){
-          console.log('stop');
           if ( self._active ){
             if (self.options.shouldEase) self._ease();
             self._doRest(event, self);
