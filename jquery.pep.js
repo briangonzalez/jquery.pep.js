@@ -23,7 +23,7 @@
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000,
             constrainToWindow:      false,
-            constrainToParent:      false,          // EXPERIMENTAL! use with caution. you've been warned.
+            constrainToParent:      false, 
             shouldEase:             true,
             drag:                   function(){},
             start:                  function(){},
