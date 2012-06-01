@@ -4,7 +4,7 @@ _put a little pep in your step_
 
 =====
 
-[DEMO](http://pep.briangonzalez.org)
+[DEMO](http://pep.briangonzalez.org/demo)
 
 Pep is a lightweight plugin for kinetic drag on mobile/desktop.
 
@@ -43,7 +43,6 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             constrainToWindow:      false
 
             // let peppable object move outside of parent?
-            // EXPERIMENTAL! use with caution. you've been warned.
             constrainToParent:          false
 
             // fired...
@@ -83,5 +82,6 @@ Other helper functions:
             obj.enableEase()                // ... enable ease
             obj.disableEase()               // ... disable ease
             obj.forceStop()                 // ... force the object to stop
+            
 
-_Check out the demo over [here](http://pep.briangonzalez.org), and view the source for more tips 'n tricks._
+_Check out the demo over [here](http://pep.briangonzalez.org/demo/), and view the source for more tips 'n tricks._
