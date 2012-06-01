@@ -185,8 +185,6 @@
           self._start = false;
         };
 
-        // this._container.bind( this._moveTrigger, _doDrag );
-
         var storeMoveEvent = function(event){
           self._moveEvent = event;
         };
