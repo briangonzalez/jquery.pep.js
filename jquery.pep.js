@@ -287,7 +287,17 @@
 
       // ✪  The CSS3 easing magic  ✪
       $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
-      $this.css({ top: y, left: x });
+
+      // move it..........
+      if ( this.options.axis  === 'x' ){
+        $this.css({ left: x }); 
+      } 
+      else if ( this.options.axis  === 'y' ){
+        $this.css({ top: y }); 
+      } else{
+        $this.css({ top: y , left: x });
+      }
+
     };
 
     Pep.prototype._cssEaseHash = function(time, params){
