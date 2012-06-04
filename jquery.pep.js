@@ -179,16 +179,9 @@
             self.options.start(event, self);
             self._started = true;
           }
-          
-          // move it..........
-          if ( self.options.axis  === 'x' ){
-            $this.css({ left: xOp }); 
-          } 
-          else if ( self.options.axis  === 'y' ){
-            $this.css({ top: yOp }); 
-          } else{
-            $this.css({ top: yOp , left: xOp });
-          }
+
+          // move it ....
+          self._moveTo(xOp, yOp);
           
 
           self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
@@ -289,6 +282,13 @@
       $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
 
       // move it..........
+      this._moveTo(x, y);
+
+    };
+
+    Pep.prototype._moveTo = function(x, y ){
+      var $this = $(this.el);
+
       if ( this.options.axis  === 'x' ){
         $this.css({ left: x }); 
       } 
@@ -297,7 +297,6 @@
       } else{
         $this.css({ top: y , left: x });
       }
-
     };
 
     Pep.prototype._cssEaseHash = function(time, params){
