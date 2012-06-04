@@ -181,15 +181,7 @@
           }
           
           // move it..........
-          if ( self.options.axis  === 'x' ){
-            $this.css({ left: xOp }); 
-          } 
-          else if ( self.options.axis  === 'y' ){
-            $this.css({ top: yOp }); 
-          } else{
-            $this.css({ top: yOp , left: xOp });
-          }
-          
+          this._moveTo( xOp, yOp );
 
           self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
           self._start = false;
@@ -288,7 +280,12 @@
       // ✪  The CSS3 easing magic  ✪
       $this.css( this._cssEaseHash( this.options.cssEaseDuration, this.options.cssEaseString ) );
 
-      // move it..........
+      // move it..........  
+      this._moveTo( x, y );
+
+    };
+
+    Pep.prototype._moveTo = function(x, y){
       if ( this.options.axis  === 'x' ){
         $this.css({ left: x }); 
       } 
@@ -297,8 +294,7 @@
       } else{
         $this.css({ top: y , left: x });
       }
-
-    };
+    }
 
     Pep.prototype._cssEaseHash = function(time, params){
       var transition = ['all ', time, 'ms ', params].join('');
