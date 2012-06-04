@@ -23,7 +23,8 @@
             cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)",
             cssEaseDuration:        1000,
             constrainToWindow:      false,
-            constrainToParent:      false, 
+            constrainToParent:      false,
+            axis:                   null, 
             shouldEase:             true,
             drag:                   function(){},
             start:                  function(){},
@@ -178,8 +179,17 @@
             self.options.start(event, self);
             self._started = true;
           }
-            
-          $this.css({ top: yOp , left: xOp }); // move it....
+          
+          // move it..........
+          if ( self.options.axis  === 'x' ){
+            $this.css({ left: xOp }); 
+          } 
+          else if ( self.options.axis  === 'y' ){
+            $this.css({ top: yOp }); 
+          } else{
+            $this.css({ top: yOp , left: xOp });
+          }
+          
 
           self._log( [self._moveTrigger, ", ", curX, " ", self._xDir, ", ", curY, " ", self._yDir].join('') );
           self._start = false;

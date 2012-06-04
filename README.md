@@ -45,6 +45,9 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
             // let peppable object move outside of parent?
             constrainToParent:          false
 
+            // move along single axis? Valid values: 'x' or 'y'
+            axis: ''
+
             // fired...
             // ....while dragging
             drag:                   function(ev,obj){ /* fire on drag */ }
