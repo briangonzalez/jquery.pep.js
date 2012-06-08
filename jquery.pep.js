@@ -89,7 +89,7 @@
         this._active          = true;
         this._started         = false;
         this._moveEvent       = null;
-        this._container       = this.options.constrainToParent ? $this.parent() : $(window);
+        this._container       = this.options.constrainToParent ? $this.parent() : $(document);
         self._log( this._startTrigger );
 
         // remove CSS3 animation
@@ -102,7 +102,7 @@
             if (self.options.shouldEase) self._ease();
             self._doRest(event, self);
             self._container.unbind( self._moveTrigger, _doDrag );
-            $(window).unbind( self._endTrigger, _doStop );
+            $(document).unbind( self._endTrigger, _doStop );
             self._log( self._endTrigger );
             self._active = false;
             self._velocityQueue = [null,null,null,null,null];
@@ -111,7 +111,7 @@
             self.options.stop(event, self);
           }
         };
-        $(window).bind( this._endTrigger + " " + this.options.stopEvents, _doStop );  // ... then bind our stop trigger
+        $(document).bind( this._endTrigger + " " + this.options.stopEvents, _doStop );  // ... then bind our stop trigger
 
 
         // -------------------------------------------------
