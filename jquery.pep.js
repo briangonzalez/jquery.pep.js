@@ -67,6 +67,9 @@
                 
         if (this.options.debug && !($('#debug').length > 0) )
           this._buildDebugDiv();
+
+        // place object right where it is, but make it movable
+        this._manageInitialPosition();
         
         // Bind the magic
         $this.bind( this._startTrigger, function(e){ self._do(e); } );
@@ -90,7 +93,7 @@
         this._started         = false;
         this._moveEvent       = null;
         this._container       = this.options.constrainToParent ? $this.parent() : $(document);
-        self._log( this._startTrigger );
+        this._log( this._startTrigger );
 
         // remove CSS3 animation
         $this.css( self._cssEaseHashReset() );
@@ -113,7 +116,6 @@
         };
         $(document).bind( this._endTrigger + " " + this.options.stopEvents, _doStop );  // ... then bind our stop trigger
 
-
         // -------------------------------------------------
         // dragging ----------------------------------------
         var _doDrag = function(event){
@@ -130,26 +132,10 @@
           var curX    = (self._isTouch() ? event.originalEvent.touches[0].pageX : event.pageX);
           var curY    = (self._isTouch() ? event.originalEvent.touches[0].pageY : event.pageY);
 
-
-          // make `relative` parent if constrainToParent
-          if ( self.options.constrainToParent ){
-            self._handleParentRelative();
-            $this.css({ position: 'absolute' });
-          }
-
-          // put our target element exectly where it is...
-          // but make it movable (pos absolute)
-          self._offset = $this[self._positionType]();
-          $this.css({ position: 'absolute', top: self._offset.top, left: self._offset.left, zIndex: 1});
-
-          // remove `relative` parent if !constrainToParent
-          if ( !self.options.constrainToParent ) 
-            self._handleParentRelative();
-
           // Last in, first out (LIFO) queue to help us manage velocity
           self._lifo( { time: event.timeStamp, x: curX, y: curY } );
 
-          //  mouse off screen? -10 is a buffer
+          //  mouse off screen? -10 is a buffer.
           if ( self.options.constrainToWindow && (curX > window.innerWidth - 10 || curX < 10 || curY > window.innerHeight - 10 || curY < 10) ){
             $(self.el).trigger( self._endTrigger );
             return;
@@ -221,6 +207,25 @@
     };
 
     Pep.prototype.setScale = function(val){ this._scale = val; };
+
+    Pep.prototype._manageInitialPosition = function() {
+      var $this = $(this.el);
+
+      // make `relative` parent if constrainToParent
+      if ( this.options.constrainToParent ){
+        this._handleParentRelative();
+        $this.css({ position: 'absolute' });
+      }
+
+      // put our target element exectly where it is...
+      // but make it movable (pos absolute)
+      this._offset = $this[this._positionType]();
+      $this.css({ position: 'absolute', top: this._offset.top, left: this._offset.left, zIndex: 1});
+
+      // // remove `relative` parent if !constrainToParent
+      if ( !this.options.constrainToParent ) 
+        this._handleParentRelative();
+    };
 
     Pep.prototype._isTouch = function(){ return ('ontouchstart' in document.documentElement); };
 
