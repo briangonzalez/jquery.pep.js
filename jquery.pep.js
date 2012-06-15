@@ -190,10 +190,6 @@
       }
     };
 
-    Pep.prototype.setMultiplier = function(val){
-      this.options.multiplier = val;
-    };
-
     Pep.prototype.forceStop = function(){
       $(this.el).trigger( this._endTrigger );
     };
@@ -206,7 +202,9 @@
       this.options.shouldEase = true;
     };
 
-    Pep.prototype.setScale = function(val){ this._scale = val; };
+    Pep.prototype.setScale = function(val){ this._scale = val };
+
+    Pep.prototype.setMultiplier = function(val){ this.options.multiplier = val };
 
     Pep.prototype._manageInitialPosition = function() {
       var $this = $(this.el);

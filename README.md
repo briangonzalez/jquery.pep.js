@@ -82,6 +82,7 @@ Maybe you want to increase the ease time, change some text when you start draggi
 Other helper functions:
             
             obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
+            obj.setScale(val)               // ... increase or decrease pep object's current scale (i.e. in your css:  transform: scale(x) )
             obj.enableEase()                // ... enable ease
             obj.disableEase()               // ... disable ease
             obj.forceStop()                 // ... force the object to stop
