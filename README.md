@@ -4,7 +4,7 @@ _put a little pep in your step_
 
 =====
 
-[DEMO](http://pep.briangonzalez.org/demo)
+##[DEMO](http://pep.briangonzalez.org/demo)
 
 Pep is a lightweight plugin for kinetic drag on mobile/desktop.
 
