@@ -88,4 +88,4 @@ Other helper functions:
             obj.forceStop()                 // ... force the object to stop
             
 
-_Check out the demo over [here](http://pep.briangonzalez.org/demo/), and view the source for more tips 'n tricks._
+_Check out the demos over [here](http://pep.briangonzalez.org/demo/), and view the source for more tips 'n tricks._
