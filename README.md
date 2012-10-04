@@ -1,6 +1,6 @@
-# jquery.pep.js
+![pep title](https://raw.github.com/briangonzalez/jquery.pep.js/master/title.png)
 
-_put a little pep in your step_
+*put a little pep in your step*
 
 =====
 
