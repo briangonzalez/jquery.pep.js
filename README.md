@@ -1,4 +1,4 @@
-# pep.jquery.js
+# jquery.pep.js
 
 _put a little pep in your step_
 
@@ -15,77 +15,77 @@ Pep has built-in support for custom start, stop, and drag events, a debugger, an
 
 ## How to use
 
-Select your jQuery element, then pep it: `$('#peppable').pep()`. 
+Select your jQuery element, then pepify it: `$('#peppable').pep()`. 
 
 Alternatively, you can pass a hash of parameters. Below are the defaults.
 
 ### Parameters with their defaults:
             
-            // show the debugger
-            debug:                  false
+    // show the debugger
+    debug:                  false
 
-            // CSS class to append to peppable object
-            activeClass:            'active'
+    // CSS class to append to peppable object
+    activeClass:            'active'
 
-            // speed up drag (1 == unity, < 1 == slower, > 1 == faster)
-            multiplier:             1,
+    // speed up drag (1 == unity, < 1 == slower, > 1 == faster)
+    multiplier:             1,
 
-            // manually fire a stop a peppable object when these events are fired (space delimited)
-            stopEvents:             ""
+    // manually fire a stop a peppable object when these events are fired (space delimited)
+    stopEvents:             ""
 
-            // get more easing functions here: http://matthewlein.com/ceaser/
-            cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)"
+    // get more easing functions here: http://matthewlein.com/ceaser/
+    cssEaseString:          "cubic-bezier(0.210, 1, 0.220, 1.000)"
 
-            // how long should it take to ease to its final resting place after mouseup/touchend 
-            cssEaseDuration:        1000 
+    // how long should it take to ease to its final resting place after mouseup/touchend 
+    cssEaseDuration:        1000 
 
-            // let peppable object move outside of window?                                                  
-            constrainToWindow:      false
+    // let peppable object move outside of window?                                                  
+    constrainToWindow:      false
 
-            // let peppable object move outside of parent?
-            constrainToParent:          false
+    // let peppable object move outside of parent?
+    constrainToParent:          false
 
-            // move along single axis? Valid values: 'x' or 'y'
-            axis: ''
+    // move along single axis? Valid values: 'x' or 'y'
+    axis: ''
 
-            // fired...
-            // ....while dragging
-            drag:                   function(ev,obj){ /* fire on drag */ }
+    // fired...
+    // ....while dragging
+    drag:                   function(ev,obj){ /* fired on drag */ }
 
-            // ... after stopping
-            stop:                   function(ev,obj){ /* fire on stop */ }
+    // ... after stopping
+    stop:                   function(ev,obj){ /* fired on stop */ }
 
-            // ... after starting
-            start:                  function(ev,obj){ /* fire on start */ }
-            
-            // ... once item has come to rest
-            rest:                   function(ev,obj){ /* fire on rest */ }
+    // ... after starting
+    start:                  function(ev,obj){ /* fired on start */ }
+
+    // ... once item has come to rest
+    rest:                   function(ev,obj){ /* fired on rest */ }
             
 So, for instance, you can log to the console while dragging, debug, and speed up the drag like so:
             
-            var options = {
-                debug:          true,
-                drag:           function(ev,obj){ console.log('we're dragging!') },
-                multiplier:     1.2
-            };
-            $('#peppable').pep(options);
+    var options = {
+      debug:          true,
+      drag:           function(ev,obj){ console.log('we're dragging!') },
+      multiplier:     1.2
+    };
+    $('#peppable').pep(options);
 
 Maybe you want to increase the ease time, change some text when you start dragging and upon ease completion:
             
-              var options = {
-                start:          function(ev,obj){ $('#title').text('Start!'); },
-                drag:           function(ev,obj){ console.log('we're dragging!'); },
-                rest:           function(ev,obj){ console.log('ease completed!'); }
-            };
-            $('#peppable').pep(options);
+    var options = {
+      start:          function(ev,obj){ $('#title').text('Start!'); },
+      drag:           function(ev,obj){ console.log('we're dragging!'); },
+      rest:           function(ev,obj){ console.log('ease completed!'); }
+    };
+    $('#peppable').pep(options);
 
 Other helper functions:
             
-            obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
-            obj.setScale(val)               // ... increase or decrease pep object's current scale (i.e. in your css:  transform: scale(x) )
-            obj.enableEase()                // ... enable ease
-            obj.disableEase()               // ... disable ease
-            obj.forceStop()                 // ... force the object to stop
+    obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
+    obj.setScale(val)               // ... increase or decrease pep object's current scale (i.e. in your css:  transform: scale(x) )
+    obj.enableEase()                // ... enable ease
+    obj.disableEase()               // ... disable ease
+    obj.forceStop()                 // ... force the object to stop
             
 
 _Check out the demos over [here](http://pep.briangonzalez.org/demo/), and view the source for more tips 'n tricks._
