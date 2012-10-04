@@ -60,7 +60,8 @@ Alternatively, you can pass a hash of parameters. Below are the defaults.
 
     // ... once item has come to rest
     rest:                   function(ev,obj){ /* fired on rest */ }
-            
+
+## Example #1
 So, for instance, you can log to the console while dragging, debug, and speed up the drag like so:
             
     var options = {
@@ -70,6 +71,7 @@ So, for instance, you can log to the console while dragging, debug, and speed up
     };
     $('#peppable').pep(options);
 
+## Example #2
 Maybe you want to increase the ease time, change some text when you start dragging and upon ease completion:
             
     var options = {
@@ -79,7 +81,7 @@ Maybe you want to increase the ease time, change some text when you start draggi
     };
     $('#peppable').pep(options);
 
-Other helper functions:
+## Other helper functions
             
     obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
     obj.setScale(val)               // ... increase or decrease pep object's current scale (i.e. in your css:  transform: scale(x) )
