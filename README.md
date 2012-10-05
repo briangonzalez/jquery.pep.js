@@ -82,6 +82,8 @@ Maybe you want to increase the ease time, change some text when you start draggi
     $('#peppable').pep(options);
 
 ## Other helper functions
+
+_Note, these must be called inside `start`, `drag`, `stop`, or `rest` on our `obj`_
             
     obj.setMultiplier(val)          // programmatically increase or decrease the multiplier
     obj.setScale(val)               // ... increase or decrease pep object's current scale (i.e. in your css:  transform: scale(x) )
