@@ -201,9 +201,6 @@
     var ev = this.moveEvent;
     if ( typeof(ev) === 'undefined' ) return;
 
-    // fire user's drag event.
-    this.options.drag(ev, this);
-
     // get our move event's x & y
     var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
     var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
@@ -224,6 +221,14 @@
 
     this.ev.x = curX;
     this.ev.y = curY;
+
+    if (dx === 0 && dy === 0){
+      this.log({ type: 'event', event: '** stopped **' });
+      return;
+    }
+
+    // fire user's drag event.
+    this.options.drag(ev, this);
 
     // log the move trigger & event position
     this.log({ type: 'event', event: ev.type });
