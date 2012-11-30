@@ -376,8 +376,6 @@
       // call users rest event.
       self.options.rest(ev, self);
 
-      self.removeCSSEasing();
-
       // remove active class 
       self.$el.removeClass( self.options.activeClass ); 
                                 

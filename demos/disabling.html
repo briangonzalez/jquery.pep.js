@@ -14,8 +14,9 @@
     <script type="text/javascript">
       $(document).ready(function(){
 
-        $('.toggle').click(function(ev){
+        $('.toggle').bind("click touchstart", function(ev){
           $(this).parent().toggleClass('disabled').data('plugin_pep').toggle();
+          ev.preventDefault();
         });
 
         $('.pep').pep({ debug: true });
