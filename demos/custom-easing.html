@@ -13,12 +13,15 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.pep').pep({ debug: true });
+        $('.pep').pep({ 
+          cssEaseString: 'cubic-bezier(0.680, -0.550, 0.265, 1.550)',
+          debug: true 
+        });
       });
     </script>
 
     <style type="text/css">
-      .pep{ width: 200px; height: 200px; background: blue; }
+      .pep{ width: 200px; height: 200px; background: #ddd; padding: 30px; }
     </style>
 
 
@@ -27,7 +30,9 @@
 
   <body>
 
-    <div class="pep"></div>
+    <div class="pep">
+      <a href="http://matthewlein.com/ceaser/">Get more easing functions</a>
+    </div>
 
   </body>
 
