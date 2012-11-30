@@ -222,6 +222,7 @@
     this.ev.x = curX;
     this.ev.y = curY;
 
+    // no movement in either direction -- so return
     if (dx === 0 && dy === 0){
       this.log({ type: 'event', event: '** stopped **' });
       return;

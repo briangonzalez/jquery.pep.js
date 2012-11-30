@@ -1,4 +1,4 @@
-/*! jquery.pep - v0.3.0 - 2012-11-29
+/*! jquery.pep - v0.3.0 - 2012-11-30
 * pep.briangonzalez.org
 * Copyright (c) 2012 Brian Gonzalez; Licensed MIT */
 
@@ -83,6 +83,7 @@
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.velocityQueue  = new Array(5);
+    this.disabled       = false;
 
     this.init();
   }
@@ -139,7 +140,7 @@
     var self = this;
 
     // only continue chugging if our start event is a valid move event. 
-    if ( this.isValidMoveEvent(ev) ){
+    if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
             // log it
             this.log({ type: 'event', event: ev.type });
@@ -149,9 +150,7 @@
 
             // add active class and reset css animation, if necessary
             this.$el.addClass( this.options.activeClass );
-
-            if ( this.cssAnimationsSupported() )
-              this.$el.css( self.getCSSEaseHash(true) );
+            this.removeCSSEasing();
 
             // store x & y values for later use
             this.ev.x = this.isTouch() ? ev.originalEvent.pageX : ev.pageX;
@@ -186,9 +185,6 @@
     var ev = this.moveEvent;
     if ( typeof(ev) === 'undefined' ) return;
 
-    // fire user's drag event.
-    this.options.drag(ev, this);
-
     // get our move event's x & y
     var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
     var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
@@ -209,6 +205,15 @@
 
     this.ev.x = curX;
     this.ev.y = curY;
+
+    // no movement in either direction -- so return
+    if (dx === 0 && dy === 0){
+      this.log({ type: 'event', event: '** stopped **' });
+      return;
+    }
+
+    // fire user's drag event.
+    this.options.drag(ev, this);
 
     // log the move trigger & event position
     this.log({ type: 'event', event: ev.type });
@@ -427,6 +432,13 @@
 
   };
 
+  //  removeCSSEasing();
+  //    remove CSS easing properties, if necessary
+  Pep.prototype.removeCSSEasing = function() {
+    if ( this.cssAnimationsSupported() )
+      this.$el.css( this.getCSSEaseHash(true) );
+  };
+
   //  disableSelect();
   //    add the property which causes the object
   //    to no be selected user drags over text areas
@@ -596,29 +608,31 @@
   //    for extra info about the object currently moving
   Pep.prototype.buildDebugDiv = function() {
 
-    // Build the debugDiv and it's inner HTML
-    var $debugDiv = $('<div></div>')
-    $debugDiv
-      .attr('id', 'pep-debug')
-      .append("<div style='font-weight:bold; background: red; color: white;'>DEBUG MODE</div>")
-      .append("<div id='pep-debug-event'>no event</div>")
-      .append("<div id='pep-debug-ev-coords'>event coords: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
-      .append("<div id='pep-debug-pos-coords'>position coords: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
-      .append("<div id='pep-debug-velocity'>velocity: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
-      .append("<div id='pep-debug-delta'>&Delta; movement: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
-      .css({
-        position:   'fixed',
-        bottom:     5,
-        right:      5,
-        zIndex:     99999,    
-        textAlign:  'right',
-        fontFamily: 'Arial, sans',
-        fontSize:   10,
-        border:     '1px solid #DDD',
-        padding:    '3px',
-        background: 'white',
-        color:      '#333'
-      });
+    // Build the debugDiv and it's inner HTML -- if necessary
+    if ( $('#pep-debug').length === 0 ){
+      var $debugDiv = $('<div></div>')
+      $debugDiv
+        .attr('id', 'pep-debug')
+        .append("<div style='font-weight:bold; background: red; color: white;'>DEBUG MODE</div>")
+        .append("<div id='pep-debug-event'>no event</div>")
+        .append("<div id='pep-debug-ev-coords'>event coords: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
+        .append("<div id='pep-debug-pos-coords'>position coords: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
+        .append("<div id='pep-debug-velocity'>velocity: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
+        .append("<div id='pep-debug-delta'>&Delta; movement: <span class='pep-x'>-</span>, <span class='pep-y'>-</span></div>")
+        .css({
+          position:   'fixed',
+          bottom:     5,
+          right:      5,
+          zIndex:     99999,    
+          textAlign:  'right',
+          fontFamily: 'Arial, sans',
+          fontSize:   10,
+          border:     '1px solid #DDD',
+          padding:    '3px',
+          background: 'white',
+          color:      '#333'
+        });
+    }
 
     var self = this;
     setTimeout(function(){
@@ -683,15 +697,41 @@
     }
   });
 
+  // toggle()
+  //  toggle the pep object
+  Pep.prototype.toggle = function(on) {
+    if ( typeof(on) === "undefined"){
+      this.disabled = !this.disabled;
+    }
+    else {
+      this.disabled = !on;
+    }   
+  };
+
   //  wrap it 
   //    A really lightweight plugin wrapper around the constructor, 
   //    preventing against multiple instantiations.
   $.fn[pluginName] = function ( options ) {
     return this.each(function () {
       if (!$.data(this, 'plugin_' + pluginName)) {
-        $.data(this, 'plugin_' + pluginName, new Pep( this, options ));
+        var pepObj = new Pep( this, options );
+        $.data(this, 'plugin_' + pluginName, pepObj);
+        $.pep.peps.push(pepObj)
       }
     });
+  };
+
+  //  The   _   ___ ___ 
+  //       /_\ | _ \_ _|
+  //      / _ \|  _/| | 
+  //     /_/ \_\_| |___|
+  //
+  $.pep = {}
+  $.pep.peps = [];
+  $.pep.toggleAll = function(on){
+    $.each(this.peps, function(index, pepObj){
+      pepObj.toggle(on);
+    }); 
   };
 
 }(jQuery, window));
