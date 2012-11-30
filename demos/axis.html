@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - constrained to axis</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep.x').pep({ axis: 'x', debug: true });
+        $('.pep.y').pep({ axis: 'y', debug: true });
+        $('.pep.noease').pep({ axis: 'y', shouldEase: false, debug: true });
+      });
+    </script>
+
+    <style type="text/css">
+      body{ padding: 0; margin: 0; }
+      .pep      { width: 100px; height: 100px; background: rgb(243, 200, 200); color: white; opacity: 0.8;}
+      .x        { position: absolute; top: 40px; left: 10px; background: rgb(120, 200, 200); opacity: 0.8;}
+      .y        { position: absolute; top: 60px; left: 30px; background: rgb(243, 120, 200); opacity: 0.8;}
+      .noease   { position: absolute; top: 80px; left: 50px; background: rgb(243, 80, 100);  opacity: 0.8;}
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep x">X</div>
+    <div class="pep y">Y</div>
+    <div class="pep noease">Y </br> ease disabled</div>
+  </body>
+
+
+</html>

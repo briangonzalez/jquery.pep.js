@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo  - using minified version</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.min.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep();
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 200px; height: 200px; background: blue; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+
+    <div class="pep"></div>
+
+  </body>
+
+
+</html>

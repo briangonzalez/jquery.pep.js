@@ -1,0 +1,29 @@
+{
+  "name": "jquery.pep",
+  "title": "jquery.pep",
+  "description": "A lightweight plugin for kinetic-drag on mobile/desktop.",
+  "version": "0.3.0",
+  "homepage": "pep.briangonzalez.org",
+  "author": {
+    "name": "Brian Gonzalez",
+    "email": "me@briangonzalez.org",
+    "url": "briangonzalez.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:briangonzalez/jquery.pep.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/briangonzalez/jquery.pep.js/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "pep.briangonzalez.org/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": ["drag", "touch", "mobile", "kinetic", "inertia"]
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - constrained objects</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.peppable').pep({ constrainToParent: true });
+        $('.peppable2').pep({ constrainToWindow: true });
+        $('.peppable3').pep({ constrainToWindow: true, useCSSTransforms: true });
+      });
+    </script>
+
+    <style type="text/css">
+      body{ padding: 0; margin: 0; }
+      #parent{ border: 5px solid #666; width: 800px; height: 500px; margin: 30px; }
+      .pep{ width: 200px; height: 200px; background: rgb(243, 200, 200); color: white; }
+
+      .peppable2{ position: absolute; top: 40px; left: 300px; background: rgb(120, 200, 200); }
+      .peppable3{ position: absolute; top: 40px; left: 600px; background: rgb(243, 120, 200); }
+    </style>
+
+
+  </head>
+
+
+  <body>
+
+    <div id="parent">
+      <div class="pep peppable">constrained to parent</div>
+    </div>
+
+    <div class="pep peppable2">constrained to window</div>
+    <div class="pep peppable3">constrained to window, css transform movement</div>
+  </body>
+
+
+</html>

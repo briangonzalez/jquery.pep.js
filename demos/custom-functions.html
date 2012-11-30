@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep custom functions</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+
+        function randomColor(){ 
+          return '#'+Math.floor(Math.random()*16777215).toString(16); 
+        }
+
+        // I scale during movement based on my velocity
+        $('.pep1').pep({
+          drag: function(ev, obj){
+            obj.$el.css({ background: randomColor() });
+            var vel = obj.velocity();
+            var scale = Math.abs(vel.x + vel.y)/100 ;
+            scale = (scale < 0.1) ? 0.1 : scale;
+            obj.$el.css({ 
+              "-webkit-transform": "scale("+ scale +")",
+                 "-moz-transform": "scale("+ scale +")",
+                  "-ms-transform": "scale("+ scale +")",
+                   "-o-transform": "scale("+ scale +")",
+                      "transform": "scale("+ scale +")" 
+            }) 
+          },
+          rest: function(ev, obj){
+            obj.$el.css({ 
+              "-webkit-transform": "scale(1)",
+                 "-moz-transform": "scale(1)",
+                  "-ms-transform": "scale(1)",
+                   "-o-transform": "scale(1)",
+                      "transform": "scale(1)" 
+            }) 
+          }
+        });
+
+        //I tip based on my velocity in the x direction
+        $('.pep2').pep({
+          drag: function(ev, obj){
+            var vel = obj.velocity();
+            var rot = (vel.x)/5;
+            obj.$el.css({ 
+              "-webkit-transform": "rotate("+ rot +"deg)",
+                 "-moz-transform": "rotate("+ rot +"deg)",
+                  "-ms-transform": "rotate("+ rot +"deg)",
+                   "-o-transform": "rotate("+ rot +"deg)",
+                      "transform": "rotate("+ rot +"deg)" 
+            }); 
+          },
+          rest: function(ev, obj){
+          }
+        });
+
+        // I perk up when I move, I become  angry when I am left alone.
+        var active = false;
+        
+        // blink down
+        setInterval(function(){ if (!active) return; $('.pep3').html("_     _ </br>() </br> \\_____/").delay(100); }, 300);
+
+        // blink up
+        setInterval(function(){ if (!active) return; $('.pep3').html("[]     [] </br>() </br> \\_____/"); }, 500);
+
+        $('.pep3').pep({
+          start: function(ev, obj){
+            active = true;
+            obj.$el.html("[]     [] </br>() </br> \\_____/").css({ fontSize: 50, textAlign: "center" });
+          },
+          rest: function(ev, obj){
+            active = false;
+            obj.$el.html("-     - </br>[] </br> ._____. </br>");
+          }
+        });
+
+
+      // I change color on start, rotate on end.
+      var rotate = 0
+      $('.pep4').pep({
+          start: function(ev, obj){   
+            $('body').css({background: '#333'});        
+            obj.$el.css({ 
+              "-webkit-filter": "blur(100px)",
+                 "-moz-filter": "blur(100px)",
+                  "-ms-filter": "blur(100px)",
+                   "-o-filter": "blur(100px)",
+                      "filter": "blur(100px)" 
+            })
+          },
+          stop: function(ev, obj){
+            $('body').css({background: 'white'});  
+            rotate += 1080;
+            obj.$el.css({ 
+              "-webkit-filter": "blur(0px)",
+                 "-moz-filter": "blur(0px)",
+                  "-ms-filter": "blur(0px)",
+                   "-o-filter": "blur(0px)",
+                      "filter": "blur(0px)" 
+            })
+          }
+        });
+
+
+      });  <!-- doc ready -->
+
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 200px; height: 200px; color: white; opacity: 0.8 }
+
+      .pep1{ background: blue;   position: absolute; top: 0; left: 0px;}
+      .pep2{ background: red;    position: absolute; top: 20px; left: 150px;}
+      .pep3{ background: green;  position: absolute; top: 40px; left: 300px;}
+      .pep4{ background: yellow; position: absolute; top: 60px; left: 450px; color: black; z-index: 9999999;}
+
+      .bigspace{ display: inline-block; width: 100px; }
+    </style>
+
+
+  </head>
+
+  <body>
+
+    <div class="pep pep1">I scale during movement based on my velocity. I use the custom drag & rest functions.</div>
+    <div class="pep pep2">I tip based on my velocity in the x direction. I use the custom drag function.</div>
+    <div class="pep pep3">I perk up when I move, I become  angry when I am left alone. I use custom start & rest functions.</div>
+    <div class="pep pep4">I become a flashlight. I use custom start & stop functions.</div>
+
+  </body>
+
+
+</html>
