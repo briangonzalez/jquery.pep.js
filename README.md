@@ -21,7 +21,7 @@ jQuery(function($) {
 ```
 
 ## Documentation
-_(Coming soon)_
+_(Coming soonish)_
 
 ## Examples
 _(Coming soon)_
