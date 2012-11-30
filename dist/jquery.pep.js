@@ -29,7 +29,7 @@
     stopEvents:               '',                                           // space delimited set of events which programmatically cause the object to stop
       
     hardwareAccelerate:       true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
-    useCSSTransforms:         false,                                        // EXPERIMENTAL: use CSS transforms as opposed to top/left
+    useCSSTranslation:        false,                                        // EXPERIMENTAL: use CSS transform translations as opposed to top/left
     disableSelect:            true,                                         // apply `user-select: none` (CSS) to the object
     
     cssEaseString:            "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   // get more css ease params from [ http://matthewlein.com/ceaser/ ]
@@ -218,7 +218,7 @@
     var hash = this.handleConstraint(dx, dy);
 
     // if using not using CSS transforms, move object via absolute position
-    if ( !this.shouldUseCSSTransforms() ){  
+    if ( !this.shouldUseCSSTranslation() ){  
       var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx)*this.options.multiplier : "-=" + Math.abs(dx)*this.options.multiplier;
       var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy)*this.options.multiplier : "-=" + Math.abs(dy)*this.options.multiplier;
 
@@ -514,24 +514,24 @@
     }
   };
 
-  //  shouldUseCSSTransforms();
+  //  shouldUseCSSTranslation();
   //    return true if we should use CSS transforms for move the object
-  Pep.prototype.shouldUseCSSTransforms = function() {
+  Pep.prototype.shouldUseCSSTranslation = function() {
 
-    if ( typeof(this.useCSSTransforms) !== "undefined" )
-      return this.useCSSTransforms;
+    if ( typeof(this.useCSSTranslation) !== "undefined" )
+      return this.useCSSTranslation;
 
-    var useCSSTransforms = false;
+    var useCSSTranslation = false;
 
-    if ( !this.options.useCSSTransforms || ( typeof(Modernizr) !== "undefined" && !Modernizr.csstransforms)){
-      useCSSTransforms = false;
+    if ( !this.options.useCSSTranslation || ( typeof(Modernizr) !== "undefined" && !Modernizr.csstransforms)){
+      useCSSTranslation = false;
     } 
     else{
-      useCSSTransforms = true;
+      useCSSTranslation = true;
     }
 
-    this.useCSSTransforms = useCSSTransforms;
-    return useCSSTransforms;
+    this.useCSSTranslation = useCSSTranslation;
+    return useCSSTranslation;
   };
 
   //  cssAnimationsSupported():
