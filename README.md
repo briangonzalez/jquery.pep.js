@@ -59,14 +59,14 @@ Pep has been tested in the latest:
   - Chrome 
   - Safari
   - Opera
-  - IE
+  - Internet Explorer
 
 As well as:
 
-  - IE 6 [impossible!](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
-  - IE 7 [you're insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
-  - IE 8 [I don't believe!](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
-  - IE 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
+  - Internet Explorer 6 [impossible!](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
+  - Internet Explorer 7 [you're insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
+  - Internet Explorer 8 [I don't believe!](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
+  - Internet Explorer 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
 
 ## Release History
   - 12/02/12  -   Complete rewrite with 
