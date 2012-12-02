@@ -1,6 +1,6 @@
 ![pep title](https://raw.github.com/briangonzalez/jquery.pep.js/master/title.png)
 -----
-*put a little pep in your step*  - http://pep.briangonzalez.org
+*kinetic drag for mobile & desktop*  - http://pep.briangonzalez.org
 
 ## Getting Started
 In your web page:
@@ -51,6 +51,22 @@ Checkout the examples in the `demos` folder, which cover a wide array of test ca
 
 ## On the web
 Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzalez](https://twitter.com/brianmgonzalez).
+
+## Support
+Pep has been tested in the latest:
+
+  - Firefox
+  - Chrome 
+  - Safari
+  - Opera
+  - IE
+
+As well as:
+
+  - IE 6 [impossible](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
+  - IE 7 [think I'm insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
+  - IE 8 [don't believe me?](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
+  - IE 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
 
 ## Release History
   - 12/02/12  -   Complete rewrite with 
