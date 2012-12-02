@@ -1,8 +1,6 @@
 ![pep title](https://raw.github.com/briangonzalez/jquery.pep.js/master/title.png)
 -----
-http://pep.briangonzalez.org
-
-*put a little pep in your step*
+*put a little pep in your step*  - http://pep.briangonzalez.org
 
 ## Getting Started
 In your web page:
