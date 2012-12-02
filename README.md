@@ -1,4 +1,5 @@
 ![pep title](https://raw.github.com/briangonzalez/jquery.pep.js/master/title.png)
+http://pep.briangonzalez.org
 *put a little pep in your step*
 
 ## Getting Started
@@ -42,11 +43,14 @@ Pep has many options. Here they are in their entirety, with their defaults.
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
   }
+  $('#pep').pep(defaults)
 ```
 
 ## Examples
-Checkout the examples in the `demos` folder, which cover a wide array of test cases and options.
+Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/demo
+
+## On the web
 
 ## Release History
-12/02/12  -   Complete rewrite with 
-05/30/12  -   Initial version
+  - 12/02/12  -   Complete rewrite with 
+  - 05/30/12  -   Initial version
