@@ -63,9 +63,9 @@ Pep has been tested in the latest:
 
 As well as:
 
-  - IE 6 [impossible](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
-  - IE 7 [think I'm insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
-  - IE 8 [don't believe me?](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
+  - IE 6 [impossible!](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
+  - IE 7 [you're insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
+  - IE 8 [I don't believe!](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
   - IE 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
 
 ## Release History
