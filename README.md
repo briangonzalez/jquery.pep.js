@@ -50,6 +50,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
 Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/demo
 
 ## On the web
+Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzalez](https://twitter.com/brianmgonzalez).
 
 ## Release History
   - 12/02/12  -   Complete rewrite with 
