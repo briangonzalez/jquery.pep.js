@@ -429,22 +429,25 @@
   //    via `position: absolute`
   Pep.prototype.placeObject = function() {
 
-  // make `relative` parent if necessary
-  if ( this.options.constrainToParent ) {
-    this.$container.css({ position: 'relative' });
-  } else {
-    this.$container.css({ position: 'static' });
-  }
+    // make `relative` parent if necessary
+    if ( this.options.constrainToParent ) {
+      this.$container.css({ position: 'relative' });
+    } else {
+      this.$container.css({ position: 'static' });
+    }
 
-  var positionType = this.options.constrainToParent ? 'position' : 'offset';
-  this.offset = this.$el[positionType]();
-  this.$el.css({ 
-    position:   'absolute', 
-    top:        this.offset.top, 
-    left:       this.offset.left, 
-    zIndex:     1
-  });
+    // position type is based on constrainToParent or relative parent
+    var isRelativeParent = this.$el.parent().css('position') === 'relative';
+    var positionType = (this.options.constrainToParent || isRelativeParent ) ? 
+        'position' : 'offset';
+    var pos = this.$el[positionType]();
 
+    this.$el.css({ 
+      position:   'absolute', 
+      top:        pos.top, 
+      left:       pos.left, 
+      zIndex:     1
+    });
   };
 
   //  removeCSSEasing();
