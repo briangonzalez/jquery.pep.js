@@ -46,6 +46,20 @@ Pep has many options. Here they are in their entirety, with their defaults.
   $('#pep').pep(defaults)
 ```
 
+## API
+```javascript
+// Toggle functionality of all Pep objects on the page
+$.pep.toggleAll()
+
+// Explicitly disable all Pep objects on the page
+$.pep.toggleAll(false)
+
+// Explicitly enable all Pep objects on the page
+$.pep.toggleAll(true)
+
+````
+
+
 ## Examples
 Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/demo
 
