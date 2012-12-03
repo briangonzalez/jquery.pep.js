@@ -15,7 +15,7 @@ jQuery(function($) {
 </script>
 ```
 
-## Documentation
+## Usage
 Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
   var defaults = {                                                               
