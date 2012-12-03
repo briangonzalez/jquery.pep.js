@@ -1,4 +1,4 @@
-/*! jquery.pep - v0.3.0 - 2012-12-02
+/*! jquery.pep - v0.3.0 - 2012-12-03
 * pep.briangonzalez.org
 * Copyright (c) 2012 Brian Gonzalez; Licensed MIT */
 
@@ -82,6 +82,7 @@
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.velocityQueue  = new Array(5);
+    this.scale          = 1;
     this.disabled       = false;
 
     this.init();
@@ -223,8 +224,8 @@
 
     // if using not using CSS transforms, move object via absolute position
     if ( !this.shouldUseCSSTranslation() ){  
-      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx)*this.options.multiplier : "-=" + Math.abs(dx)*this.options.multiplier;
-      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy)*this.options.multiplier : "-=" + Math.abs(dy)*this.options.multiplier;
+      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
       if ( this.options.constrainToParent || this.options.constrainToWindow ) {
         xOp = (hash.x !== false) ? hash.x : xOp;
@@ -413,22 +414,28 @@
   //    via `position: absolute`
   Pep.prototype.placeObject = function() {
 
-  // make `relative` parent if necessary
-  if ( this.options.constrainToParent ) {
-    this.$container.css({ position: 'relative' });
-  } else {
-    this.$container.css({ position: 'static' });
-  }
+    // make `relative` parent if necessary
+    if ( this.options.constrainToParent ) {
+      this.$container.css({ position: 'relative' });
+    } else {
+      this.$container.css({ position: 'static' });
+    }
 
-  var positionType = this.options.constrainToParent ? 'position' : 'offset';
-  this.offset = this.$el[positionType]();
-  this.$el.css({ 
-    position:   'absolute', 
-    top:        this.offset.top, 
-    left:       this.offset.left, 
-    zIndex:     1
-  });
+    var positionType = this.options.constrainToParent ? 'position' : 'offset';
+    this.offset = this.$el[positionType]();
+    this.$el.css({ 
+      position:   'absolute', 
+      top:        this.offset.top, 
+      left:       this.offset.left, 
+      zIndex:     1
+    });
 
+  };
+
+  //  setScale()
+  //    set the scale of the object being moved.
+  Pep.prototype.setScale = function(val) {
+    this.scale = val;
   };
 
   //  removeCSSEasing();

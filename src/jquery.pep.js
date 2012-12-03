@@ -98,6 +98,7 @@
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.velocityQueue  = new Array(5);
+    this.scale          = 1;
     this.disabled       = false;
 
     this.init();
@@ -239,8 +240,8 @@
 
     // if using not using CSS transforms, move object via absolute position
     if ( !this.shouldUseCSSTranslation() ){  
-      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx)*this.options.multiplier : "-=" + Math.abs(dx)*this.options.multiplier;
-      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy)*this.options.multiplier : "-=" + Math.abs(dy)*this.options.multiplier;
+      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
       if ( this.options.constrainToParent || this.options.constrainToWindow ) {
         xOp = (hash.x !== false) ? hash.x : xOp;
@@ -436,18 +437,21 @@
       this.$container.css({ position: 'static' });
     }
 
-    // position type is based on constrainToParent or relative parent
-    var isRelativeParent = this.$el.parent().css('position') === 'relative';
-    var positionType = (this.options.constrainToParent || isRelativeParent ) ? 
-        'position' : 'offset';
-    var pos = this.$el[positionType]();
-
+    var positionType = this.options.constrainToParent ? 'position' : 'offset';
+    this.offset = this.$el[positionType]();
     this.$el.css({ 
       position:   'absolute', 
-      top:        pos.top, 
-      left:       pos.left, 
+      top:        this.offset.top, 
+      left:       this.offset.left, 
       zIndex:     1
     });
+
+  };
+
+  //  setScale()
+  //    set the scale of the object being moved.
+  Pep.prototype.setScale = function(val) {
+    this.scale = val;
   };
 
   //  removeCSSEasing();
