@@ -13,7 +13,16 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.pep').pep();
+        var $pep = $('.pep');
+        $pep.pep();
+
+
+        // Set the multiplier of our Pep object change.
+        $('.multiplier-select').change(function(){
+          var mult = $(this).val();
+          $pep.data('plugin_pep').options.multiplier = mult;
+        })
+
       });
     </script>
 
@@ -23,11 +32,16 @@
 
   </head>
 
+  Multiplier:
+  <select class="multiplier-select">
+    <option value=1.00>1.00</option>
+    <option value=0.75>0.75</option>
+    <option value=0.50>0.50</option>
+    <option value=0.25>0.25</option>
+  </select>
 
   <body>
-
     <div class="pep"></div>
-
   </body>
 
 
