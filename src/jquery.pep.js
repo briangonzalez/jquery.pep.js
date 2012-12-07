@@ -253,6 +253,10 @@
       this.moveTo(xOp, yOp);
     }
     else {
+
+      dx = (dx/this.scale)*this.options.multiplier;
+      dy = (dy/this.scale)*this.options.multiplier
+
       if ( this.options.constrainToParent || this.options.constrainToWindow ) {
         dx = (hash.x === false) ? dx : 0 ;
         dy = (hash.y === false) ? dy : 0 ;
@@ -354,8 +358,8 @@
     var pos       = this.$el.position();
     var vel       = this.velocity();
     var dt        = this.dt;
-    var x         = vel.x * this.options.multiplier;
-    var y         = vel.y * this.options.multiplier
+    var x         = (vel.x/this.scale) * this.options.multiplier;
+    var y         = (vel.y/this.scale) * this.options.multiplier
     var hash      = this.handleConstraint(x, y)
 
     // ✪  Apple the CSS3 animation easing magic  ✪

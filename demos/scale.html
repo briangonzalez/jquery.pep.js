@@ -13,18 +13,22 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        var $pep1 = $('.pep.one');
-        $pep1.pep({ debug: true });
+        var $pep = $('.pep');
+        $pep.pep({ debug: true });
 
-        var $pep2 = $('.pep.two');
-        $pep2.pep({ debug: true, useCSSTranslation: true });
+        // Set the scale of our Pep object change.
+        $('.scale-select').change(function(ev, obj){
+          var scale = $(this).val();
 
+          $('.pep').css({
+              '-webkit-transform' : 'scale(' + scale + ')',
+                 '-moz-transform' : 'scale(' + scale + ')',
+                  '-ms-transform' : 'scale(' + scale + ')',
+                   '-o-transform' : 'scale(' + scale + ')',
+                      'transform' : 'scale(' + scale + ')'
+          })
 
-        // Set the multiplier of our Pep object change.
-        $('.multiplier-select').change(function(ev, obj){
-          var mult = $(this).val();
-          $pep1.data('plugin_pep').setMultiplier(mult);
-          $pep2.data('plugin_pep').setMultiplier(mult);
+          $pep.data('plugin_pep').setScale(scale);
         })
 
       });
@@ -32,13 +36,14 @@
 
     <style type="text/css">
       .pep{ width: 200px; height: 200px; background: blue; }
-      .pep.two{ background: #ccc; opacity: 0.9; }
     </style>
 
   </head>
 
-  Multiplier:
-  <select class="multiplier-select">
+  <div><< BUGGY!!! >></div>
+
+  Scale:
+  <select class="scale-select">
     <option value=1.00>1.00</option>
     <option value=0.75>0.75</option>
     <option value=0.50>0.50</option>
@@ -46,9 +51,8 @@
   </select>
 
   <body>
-    <div class="pep one"></div>
 
-    <div class="pep two">useCSSTranslation: true</div>
+    <div class="pep"></div>
   </body>
 
 
