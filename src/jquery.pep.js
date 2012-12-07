@@ -454,6 +454,12 @@
     this.scale = val;
   };
 
+  //  setMultiplier()
+  //    set the multiplier of the object being moved.
+  Pep.prototype.setMultiplier = function(val) {
+    this.options.multiplier = val;
+  };
+
   //  removeCSSEasing();
   //    remove CSS easing properties, if necessary
   Pep.prototype.removeCSSEasing = function() {
@@ -463,7 +469,7 @@
 
   //  disableSelect();
   //    add the property which causes the object
-  //    to no be selected user drags over text areas
+  //    to not be selected user drags over text areas
   Pep.prototype.disableSelect = function() {
 
     this.$el.css({ 

@@ -9,18 +9,18 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
     <!-- Load local lib and tests. -->
-    <script src="../dist/jquery.pep.min.js"></script>
+    <script src="../src/jquery.pep.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){
         var $pep = $('.pep');
-        $pep.pep();
+        $pep.pep({ debug: true });
 
 
         // Set the multiplier of our Pep object change.
-        $('.multiplier-select').change(function(){
+        $('.multiplier-select').change(function(ev, obj){
           var mult = $(this).val();
-          $pep.data('plugin_pep').options.multiplier = mult;
+          $pep.data('plugin_pep').setMultiplier(mult);
         })
 
       });
