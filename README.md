@@ -46,7 +46,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
   $('#pep').pep(defaults)
 ```
 
-## API
+## The API
 ```javascript
 // Toggle functionality of all Pep objects on the page
 $.pep.toggleAll()
