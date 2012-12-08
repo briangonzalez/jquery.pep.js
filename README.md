@@ -9,9 +9,9 @@ In your web page:
 <script src="jquery.js"></script>
 <script src="dist/jquery.pep.min.js"></script>
 <script>
-jQuery(function($) {
-  $('#pep').pep(); // yup, that simple.
-});
+  jQuery(function($) {
+    $('#pep').pep(); // yup, that simple.
+  });
 </script>
 ```
 
