@@ -16,32 +16,21 @@
  *        http://patorjk.com/software/taag/#p=display&f=Speed&t=jquery.pep.js
  */
       
-
-
-// the semi-colon before function invocation is a safety net against concatenated 
-// scripts and/or other plugins which may not be closed properly.
 ;(function ( $, window, undefined ) {
 
-  //  undefined is used here as the undefined global variable in ECMAScript 3 is
-  //  mutable (ie. it can be changed by someone else). undefined isn't really being
-  //  passed in so we can ensure the value of it is truly undefined. In ES5, undefined
-  //  can no longer be modified.
-  
-  //  window and document are passed through as local variables rather than globals
-  //  as this (slightly) quickens the resolution process and can be more efficiently
-  //  minified (especially when both are regularly referenced in your plugin).
+  "use strict";
   
   //  create the defaults once
   var pluginName = 'pep',
   document = window.document,
   defaults = {
-                                                                            // OPTIONS W/ DEFAULTS
-                                                                            // --------------------------------------------------------------------------------
+                                                                          // OPTIONS W/ DEFAULTS
+                                                                          // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
     activeClass:            'active',                                     // class to add to the DOM el while dragging
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
   
-    shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object. your call.
+    shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
     
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
@@ -55,7 +44,7 @@
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
-    forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own ri
+    forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
     start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
@@ -121,8 +110,8 @@
     if ( this.options.disableSelect )
       this.disableSelect();
 
-    this.ev = {}        // to store our event movements
-    this.pos = {}       // to store positions
+    this.ev = {};       // to store our event movements
+    this.pos = {};      // to store positions
     this.placeObject();
     this.subscribe();
   };
@@ -211,7 +200,7 @@
     // calculate values necessary to moving
     var dx, dy;
 
-    if ( ev.type == this.startTrigger ){
+    if ( ev.type === this.startTrigger ){
       dx = 0;
       dy = 0;
     } else{
@@ -219,6 +208,8 @@
       dy = curY - this.ev.y;
     }
 
+    this.dx   = dx;
+    this.dy   = dy;
     this.ev.x = curX;
     this.ev.y = curY;
 
@@ -229,12 +220,15 @@
     }
 
     // fire user's drag event.
-    this.options.drag(ev, this);
+    var continueDrag = this.options.drag(ev, this);
+
+    if (continueDrag === false)
+      return;
 
     // log the move trigger & event position
     this.log({ type: 'event', event: ev.type });
     this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
-    this.log({ type: 'velocity' })
+    this.log({ type: 'velocity' });
 
     var hash = this.handleConstraint(dx, dy);
 
@@ -255,7 +249,7 @@
     else {
 
       dx = (dx/this.scale)*this.options.multiplier;
-      dy = (dy/this.scale)*this.options.multiplier
+      dy = (dy/this.scale)*this.options.multiplier;
 
       if ( this.options.constrainToParent || this.options.constrainToWindow ) {
         dx = (hash.x === false) ? dx : 0 ;
@@ -282,7 +276,7 @@
     // ease the object, if necessary
     if (this.options.shouldEase)
       this.ease(ev);
-    
+
     // fire user's stop event.
     this.options.stop(ev, this);
 
@@ -301,15 +295,20 @@
       false : true; 
 
     if ( this.options.axis  === 'x' ){
-      y = "+=0" 
+      y = "+=0";
     } 
     else if ( this.options.axis  === 'y' ){
-      x = "+=0"
+      x = "+=0";
     }
 
     var animateDuration = 300;
     this.log({ type: 'delta', x: x, y: y });
-    animate ? this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutCirc', {queue: false}) : this.$el.stop(true, false).css({ top: y , left: x });
+    if ( animate ) {
+      this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutCirc', {queue: false});
+    } else{
+      this.$el.stop(true, false).css({ top: y , left: x });
+    } 
+
   };
 
   //  moveToUsingTransforms();
@@ -321,7 +320,7 @@
       y = 0;
     } 
     else if ( this.options.axis  === 'y' ){
-      x = 0 
+      x = 0;
     }
 
     // CSS3 transforms are additive from current position
@@ -359,8 +358,9 @@
     var vel       = this.velocity();
     var dt        = this.dt;
     var x         = (vel.x/this.scale) * this.options.multiplier;
-    var y         = (vel.y/this.scale) * this.options.multiplier
-    var hash      = this.handleConstraint(x, y)
+    var y         = (vel.y/this.scale) * this.options.multiplier;
+
+    var hash      = this.handleConstraint(x, y);
 
     // ✪  Apple the CSS3 animation easing magic  ✪
     if ( this.cssAnimationsSupported() )
@@ -496,16 +496,16 @@
     this.pos.y            = pos.top;
 
     // log our positions
-    this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y})
+    this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y});
 
     var upperXLimit       = this.$container.width()  - this.$el.outerWidth();
     var upperYLimit       = this.$container.height() - this.$el.outerHeight();
     var hash              = { x: false, y: false };
 
     // is our object trying to move outside upper X & Y limits?
-    if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit
-    if ( this.pos.x + dx < 0 )              hash.x = 0  
-    if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit
+    if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
+    if ( this.pos.x + dx < 0 )              hash.x = 0; 
+    if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
     if ( this.pos.y + dy < 0 )              hash.y = 0;
 
     return hash;
@@ -517,12 +517,13 @@
   Pep.prototype.getCSSEaseHash = function(reset){    
     if ( typeof(reset) === 'undefined' ) reset = false;
 
+    var cssEaseString;
     if (reset){
-      var cssEaseString = '';
+      cssEaseString = '';
     } else if ( this.CSSEaseHash ) {
       return this.CSSEaseHash;
     } else {
-      var cssEaseString = ['all', this.options.cssEaseDuration + 'ms', this.options.cssEaseString].join(' ');
+      cssEaseString = ['all', this.options.cssEaseDuration + 'ms', this.options.cssEaseString].join(' ');
     }
 
     return {
@@ -538,7 +539,7 @@
   //    returns whether or not our device is touch-ready
   Pep.prototype.isTouch = function(reset){    
     if ( typeof(Modernizr) !== 'undefined' )
-      return Modernizr.touch
+      return Modernizr.touch;
 
     if ( 'ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch) ) { 
       return true;
@@ -551,10 +552,10 @@
   //    returns true if we're on a non-touch device -- or -- 
   //    if the event is a non-pinch event on a touch device
   Pep.prototype.isValidMoveEvent = function(ev){   
-    if ( !this.isTouch() || ( this.isTouch() && ev.originalEvent.hasOwnProperty('touches') && ev.originalEvent.touches.length == 1 ) ){
+    if ( !this.isTouch() || ( this.isTouch() && ev.originalEvent.hasOwnProperty('touches') && ev.originalEvent.touches.length === 1 ) ){
       return true;
     } else{
-      return false
+      return false;
     }
   };
 
@@ -584,7 +585,7 @@
   Pep.prototype.cssAnimationsSupported = function() {
 
     if ( typeof(this.cssAnimationsSupport) !== "undefined" ){
-      return this.cssAnimationsSupport
+      return this.cssAnimationsSupport;
     }
 
     // If the page has Modernizr, let them do the heavy lifting.
@@ -626,7 +627,7 @@
                         '-webkit-perspective':          1000,
                         'perspective':                  1000,
                         '-webkit-backface-visibility':  'hidden',
-                        'backface-visibility':          'hidden'  })
+                        'backface-visibility':          'hidden'  });
    }; 
 
   //  getMovementValues();
@@ -641,8 +642,9 @@
   Pep.prototype.buildDebugDiv = function() {
 
     // Build the debugDiv and it's inner HTML -- if necessary
+    var $debugDiv;
     if ( $('#pep-debug').length === 0 ){
-      var $debugDiv = $('<div></div>')
+      $debugDiv = $('<div></div>');
       $debugDiv
         .attr('id', 'pep-debug')
         .append("<div style='font-weight:bold; background: red; color: white;'>DEBUG MODE</div>")
@@ -678,8 +680,8 @@
         $evCoordsY:  $("#pep-debug-ev-coords .pep-y"),
         $posCoordsX: $("#pep-debug-pos-coords .pep-x"),
         $posCoordsY: $("#pep-debug-pos-coords .pep-y")
-      }
-    }, 0)
+      };
+    }, 0);
 
     $('body').append( $debugDiv );
   };
@@ -705,7 +707,7 @@
       this.debugElements.$dY.text(opts.y);
       break;
     case "velocity": 
-      var vel = this.velocity()
+      var vel = this.velocity();
       this.debugElements.$velocityX.text( Math.round(vel.x) );
       this.debugElements.$velocityY.text( Math.round(vel.y) );
       break;
@@ -725,7 +727,7 @@
       return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
     },
     easeOutExpo: function (x, t, b, c, d) {
-      return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+      return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
     }
   });
 
@@ -748,7 +750,7 @@
       if (!$.data(this, 'plugin_' + pluginName)) {
         var pepObj = new Pep( this, options );
         $.data(this, 'plugin_' + pluginName, pepObj);
-        $.pep.peps.push(pepObj)
+        $.pep.peps.push(pepObj);
       }
     });
   };
@@ -758,7 +760,7 @@
   //      / _ \|  _/| | 
   //     /_/ \_\_| |___|
   //
-  $.pep = {}
+  $.pep = {};
   $.pep.peps = [];
   $.pep.toggleAll = function(on){
     $.each(this.peps, function(index, pepObj){

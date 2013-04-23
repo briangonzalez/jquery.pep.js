@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - constrained to axis</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep.fwd').pep({  
+          debug: true,
+          shouldEase: false,
+          hardwareAccelerate: true,
+          drag: function(ev, obj){
+            if (obj.dx < 0 || obj.dy < 0)
+              return false;
+          } 
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      body{ padding: 0; margin: 0; }
+      .pep      { width: 100px; height: 100px; background: rgb(243, 200, 200); color: white; opacity: 0.8;}
+      .fwd      { position: absolute; top: 40px; left: 10px; background: rgb(120, 200, 200); opacity: 0.8;}
+    </style>
+
+  </head>
+
+
+  <body>
+    <div class="pep fwd">forward</div>
+  </body>
+
+
+</html>
