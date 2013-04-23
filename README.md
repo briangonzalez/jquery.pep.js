@@ -18,35 +18,41 @@ In your web page:
 ## Usage
 Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
-  var defaults = {                                                               
+  defaults = {
+                                                                          // OPTIONS W/ DEFAULTS
+                                                                          // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
     activeClass:            'active',                                     // class to add to the DOM el while dragging
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
   
-    shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object. your call.
+    shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
     
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
-    useCSSTranslation:      false,                                        // EXPERIMENTAL: use CSS transform translations as opposed to top/left
+    useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
     disableSelect:          true,                                         // apply `user-select: none` (CSS) to the object
   
     cssEaseString:          "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   // get more css ease params from [ http://matthewlein.com/ceaser/ ]
     cssEaseDuration:        750,                                          // how long should it take (in ms) for the object to get from stop to rest?
     shouldEase:             true,                                         // disable/enable easing
   
+    droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
+    droppableActiveClass:   'pep-droppable-parent',                       // class to add to active droppable parents
+
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
-    forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own ri
+    forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
     start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
-  }
+    
+  };
   $('#pep').pep(defaults)
 ```
 
-## The API
+## API
 ```javascript
 // Toggle functionality of all Pep objects on the page
 $.pep.toggleAll()
