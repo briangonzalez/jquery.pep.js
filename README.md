@@ -37,7 +37,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
     shouldEase:             true,                                         // disable/enable easing
   
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
-    droppableActiveClass:   'pep-droppable-parent',                       // class to add to active droppable parents
+    droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
 
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
@@ -47,7 +47,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
     start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
-    
+
   };
   $('#pep').pep(defaults)
 ```

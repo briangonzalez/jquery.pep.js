@@ -42,7 +42,7 @@
     shouldEase:             true,                                         // disable/enable easing
   
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
-    droppableActiveClass:   'pep-droppable-parent',                       // class to add to active droppable parents
+    droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
 
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
