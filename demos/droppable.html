@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep({
+          shouldEase: false,
+          droppable: ".droppable",
+          drag: function(ev, obj){
+            console.log(obj.parentDroppables);
+
+          }
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 50px; height: 50px; background: blue; }
+      .droppable{   width: 100px; height: 100px; 
+                    position: absolute; 
+                    border: 5px solid #ccc; }
+
+      .droppable.m  { top: 50%; left:50%; margin-left: -50px; margin-top: -50px; }
+      .droppable.tr { right:  30px; bottom:  30px; }
+      .droppable.br { top:    30px; right:   30px;}
+      .droppable.bl { top:    30px; left:    30px;}
+      .droppable.tl { bottom: 30px; left:    30px;}
+      .pep-droppable-parent{ border-color: blue; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep"></div>
+    <div class="droppable m"></div>
+    <div class="droppable tr"></div>
+    <div class="droppable br"></div>
+    <div class="droppable bl"></div>
+    <div class="droppable tl"></div>
+  </body>
+
+
+</html>

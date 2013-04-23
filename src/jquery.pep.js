@@ -6,10 +6,10 @@
  *         ___  /  \__, / \__,_/ \___//_/    _\__, /_(_)  .___/\___/_  .___/_(_)__  /  /____/  
  *         /___/     /_/                     /____/    /_/          /_/        /___/           
  *      
- *        http://briangonzalez.org/pep
+ *        http://pep.briangonzalez.org
  *        Kinetic drag for mobile/desktop.
  *        
- *        Copyright (c) 2012 Brian Gonzalez
+ *        Copyright (c) 2013 Brian Gonzalez
  *        Licensed under the MIT license.
  *
  *        Title generated using "Speed" @ 
@@ -34,13 +34,16 @@
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
     
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
-    useCSSTranslation:      false,                                        // EXPERIMENTAL: use CSS transform translations as opposed to top/left
+    useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
     disableSelect:          true,                                         // apply `user-select: none` (CSS) to the object
   
     cssEaseString:          "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   // get more css ease params from [ http://matthewlein.com/ceaser/ ]
     cssEaseDuration:        750,                                          // how long should it take (in ms) for the object to get from stop to rest?
     shouldEase:             true,                                         // disable/enable easing
   
+    droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
+    droppableActiveClass:   'pep-droppable-parent',                       // class to add to active droppable parents
+
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
@@ -123,16 +126,17 @@
   Pep.prototype.subscribe = function () {
     var self = this;
 
-    // ★★★  Subscribe to our start event  ★★★★★★★★★★
+    // Subscribe to our start event 
     this.$el.bind( this.startTrigger, function(ev){
       self.handleStart(ev);
     });
 
+    // Subscribe to our stop event  
     this.$document.bind( this.stopEvents, function(ev) {
       self.handleStop(ev);
     });
 
-    // subscribe to move event.
+    // Subscribe to our move event  
     this.$document.bind( this.moveTrigger, function(ev){
       self.moveEvent = ev;
     });
@@ -217,6 +221,10 @@
     if (dx === 0 && dy === 0){
       this.log({ type: 'event', event: '** stopped **' });
       return;
+    }
+
+    if ( this.options.droppable ) {
+      this.calculateParentDroppables();
     }
 
     // fire user's drag event.
@@ -534,6 +542,36 @@
                           'transition'   : cssEaseString    // future
           };
   };
+
+  // calculateParentDroppables()
+  //    sets parent droppablesof this.
+  Pep.prototype.calculateParentDroppables = function() {
+    var self = this;
+    this.parentDroppables = [];
+
+    $.each( $(this.options.droppable), function(idx, el){
+      var $el = $(el);
+      if ( self.isOverlapping($el, self.$el) ){
+        $el.addClass(self.options.droppableActiveClass);
+        self.parentDroppables.push($el);
+      } else {
+        $el.removeClass(self.options.droppableActiveClass);
+      }
+    });
+
+  };
+
+  //  isOverlapping();
+  //    returns true if element a over
+  Pep.prototype.isOverlapping = function(a,b) {
+    var rect1 = a[0].getBoundingClientRect();
+    var rect2 = b[0].getBoundingClientRect();
+
+    return !( rect1.right   < rect2.left  || 
+              rect1.left    > rect2.right || 
+              rect1.bottom  < rect2.top   || 
+              rect1.top     > rect2.bottom  );
+  }
 
   //  isTouch();
   //    returns whether or not our device is touch-ready
