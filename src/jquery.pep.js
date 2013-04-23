@@ -224,7 +224,7 @@
     }
 
     if ( this.options.droppable ) {
-      this.calculateParentDroppables();
+      this.calculateActiveParentDroppables();
     }
 
     // fire user's drag event.
@@ -543,17 +543,17 @@
           };
   };
 
-  // calculateParentDroppables()
+  // calculateActiveParentDroppables()
   //    sets parent droppablesof this.
-  Pep.prototype.calculateParentDroppables = function() {
+  Pep.prototype.calculateActiveParentDroppables = function() {
     var self = this;
-    this.parentDroppables = [];
+    this.activeParentDroppables = [];
 
     $.each( $(this.options.droppable), function(idx, el){
       var $el = $(el);
       if ( self.isOverlapping($el, self.$el) ){
         $el.addClass(self.options.droppableActiveClass);
-        self.parentDroppables.push($el);
+        self.activeParentDroppables.push($el);
       } else {
         $el.removeClass(self.options.droppableActiveClass);
       }
