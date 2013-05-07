@@ -43,6 +43,7 @@
   
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
+    overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
 
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
@@ -223,8 +224,9 @@
       return;
     }
 
+    // Calculate our drop regions
     if ( this.options.droppable ) {
-      this.calculateActiveParentDroppables();
+      this.calculateActiveDropRegions();
     }
 
     // fire user's drag event.
@@ -280,6 +282,11 @@
 
     // make object inactive, so watchMoveLoop returns
     this.active = false;
+
+    // Calculate our drop regions
+    if ( this.options.droppable ) {
+      this.calculateActiveDropRegions();
+    }
 
     // ease the object, if necessary
     if (this.options.shouldEase)
@@ -390,6 +397,11 @@
     // user's rest event.
     var self = this;
     this.timeout = setTimeout( function(){ 
+
+      // Calculate our drop regions
+      if ( self.options.droppable ) {
+        self.calculateActiveDropRegions();
+      }
       
       // call users rest event.
       self.options.rest(ev, self);
@@ -543,17 +555,17 @@
           };
   };
 
-  // calculateActiveParentDroppables()
-  //    sets parent droppablesof this.
-  Pep.prototype.calculateActiveParentDroppables = function() {
+  // calculateActiveDropRegions()
+  //    sets parent droppables of this.
+  Pep.prototype.calculateActiveDropRegions = function() {
     var self = this;
-    this.activeParentDroppables = [];
+    this.activeDropRegions = [];
 
     $.each( $(this.options.droppable), function(idx, el){
       var $el = $(el);
       if ( self.isOverlapping($el, self.$el) ){
         $el.addClass(self.options.droppableActiveClass);
-        self.activeParentDroppables.push($el);
+        self.activeDropRegions.push($el);
       } else {
         $el.removeClass(self.options.droppableActiveClass);
       }
@@ -563,9 +575,14 @@
 
   //  isOverlapping();
   //    returns true if element a over
-  Pep.prototype.isOverlapping = function(a,b) {
-    var rect1 = a[0].getBoundingClientRect();
-    var rect2 = b[0].getBoundingClientRect();
+  Pep.prototype.isOverlapping = function($a,$b) {
+
+    if ( this.options.overlapFunction ) {
+      return this.options.overlapFunction($a,$b)
+    }
+
+    var rect1 = $a[0].getBoundingClientRect();
+    var rect2 = $b[0].getBoundingClientRect();
 
     return !( rect1.right   < rect2.left  || 
               rect1.left    > rect2.right || 

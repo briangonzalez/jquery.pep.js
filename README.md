@@ -38,6 +38,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
   
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
+    overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
 
     constrainToWindow:      false,                                        // constrain object to the window
     constrainToParent:      false,                                        // constrain object to its parent
@@ -47,9 +48,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
     start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
-
   };
-  $('#pep').pep(defaults)
 ```
 
 ## API
@@ -88,6 +87,6 @@ As well as:
   - Internet Explorer 8 [I don't believe!](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
   - Internet Explorer 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
 
-## Release History
+## Milestones
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
   - 05/30/12  -   Initial version
