@@ -578,7 +578,7 @@
   Pep.prototype.isOverlapping = function($a,$b) {
 
     if ( this.options.overlapFunction ) {
-      return this.options.overlapFunction($a,$b)
+      return this.options.overlapFunction($a,$b);
     }
 
     var rect1 = $a[0].getBoundingClientRect();
@@ -588,7 +588,7 @@
               rect1.left    > rect2.right || 
               rect1.bottom  < rect2.top   || 
               rect1.top     > rect2.bottom  );
-  }
+  };
 
   //  isTouch();
   //    returns whether or not our device is touch-ready
