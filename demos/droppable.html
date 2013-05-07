@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>jquery.pep base demo</title>
+    <title>jquery.pep droppable</title>
 
     <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
     <script src="../libs/jquery-loader.js"></script>
@@ -14,18 +14,19 @@
     <script type="text/javascript">
       $(document).ready(function(){
         $('.pep').pep({
-          shouldEase: false,
           droppable: ".droppable",
-          drag: function(ev, obj){
-            console.log(obj.activeParentDroppables);
-
+          overlapFunction: false,
+          useCSSTranslation: false,
+          drag: function(ev, obj){        
+            console.log( obj.activeDropRegions);
           }
         });
+
       });
     </script>
 
     <style type="text/css">
-      .pep{ width: 50px; height: 50px; background: blue; }
+      .pep{ width: 90px; height: 90px; background: blue; }
       .droppable{   width: 100px; height: 100px; 
                     position: absolute; 
                     border: 5px solid #ccc; }

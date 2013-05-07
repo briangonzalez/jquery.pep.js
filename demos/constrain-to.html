@@ -13,9 +13,9 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.peppable').pep({ constrainToParent: true });
-        $('.peppable2').pep({ constrainToWindow: true });
-        $('.peppable3').pep({ constrainToWindow: true, useCSSTranslation: true });
+        $('.peppable').pep({  constrainToParent: true, useCSSTranslation: false });
+        $('.peppable2').pep({ constrainToWindow: true, useCSSTranslation: false });
+        $('.peppable3').pep({ constrainToWindow: true });
       });
     </script>
 
@@ -39,7 +39,7 @@
     </div>
 
     <div class="pep peppable2">constrained to window</div>
-    <div class="pep peppable3">constrained to window, css transform movement</div>
+    <div class="pep peppable3">constrained to window, translation movement</div>
   </body>
 
 

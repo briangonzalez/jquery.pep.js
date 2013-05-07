@@ -47,6 +47,7 @@
 
         //I tip based on my velocity in the x direction
         $('.pep2').pep({
+          useCSSTranslation: false,
           drag: function(ev, obj){
             var vel = obj.velocity();
             var rot = (vel.x)/5;
