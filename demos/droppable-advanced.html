@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep dropppable advanced</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep({
+          droppable: ".droppable",
+          overlapFunction: false,
+          useCSSTranslation: false,
+          start: function(ev, obj){
+            obj.noCenter = false;
+          },
+          drag: function(ev, obj){
+            var vel = obj.velocity();
+            var rot = (vel.x)/5;
+            obj.$el.css({ 
+              "-webkit-transform": "rotate("+ rot +"deg)",
+                 "-moz-transform": "rotate("+ rot +"deg)",
+                  "-ms-transform": "rotate("+ rot +"deg)",
+                   "-o-transform": "rotate("+ rot +"deg)",
+                      "transform": "rotate("+ rot +"deg)" 
+            });          
+          },
+          stop: function(ev, obj){
+            handleCentering(ev, obj);
+            obj.$el.css({ 
+              "-webkit-transform": "rotate(0deg)",
+                 "-moz-transform": "rotate(0deg)",
+                  "-ms-transform": "rotate(0deg)",
+                   "-o-transform": "rotate(0deg)",
+                      "transform": "rotate(0deg)" 
+            }); 
+          },
+          rest: handleCentering
+        });
+
+        function handleCentering(ev, obj){
+          if ( obj.activeDropRegions.length > 0 ) { 
+            centerWithin(obj);
+          }   
+        }
+
+        function centerWithin(obj){
+          var $parent = obj.activeDropRegions[0];
+          var pTop    = $parent.offset().top;
+          var pLeft   = $parent.offset().left;
+          var pHeight = $parent.outerHeight();
+          var pWidth  = $parent.outerWidth();
+
+          var oTop    = obj.$el.offset().top;
+          var oLeft   = obj.$el.offset().left;
+          var oHeight = obj.$el.outerHeight();
+          var oWidth  = obj.$el.outerWidth();
+
+          var cTop    = pTop + (pHeight/2);
+          var cLeft   = pLeft + (pWidth/2);
+
+          if ( !obj.noCenter ) {
+            if ( !obj.shouldUseCSSTranslation() ) {
+              var moveTop = cTop - (oHeight/2);
+              var moveLeft = cLeft - (oWidth/2);
+              obj.$el.animate({ top: moveTop, left: moveLeft }, 50);
+            } else{
+              var moveTop   = (cTop - oTop) - oHeight/2;
+              var moveLeft  = (cLeft - oLeft) - oWidth/2;
+
+              console.log(oTop, oLeft)
+              obj.moveToUsingTransforms( moveTop, moveLeft );
+            }
+
+            obj.noCenter = true;
+            return;
+          }
+
+          obj.noCenter = false;
+        }
+
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 90px; height: 90px; background: blue; }
+      .droppable{   width: 100px; height: 100px; 
+                    position: absolute; 
+                    border: 5px solid #ccc; }
+
+      .droppable.m  { top: 50%; left:50%; margin-left: -50px; margin-top: -50px; }
+      .droppable.tr { right:  30px; bottom:  30px; }
+      .droppable.br { top:    30px; right:   30px;}
+      .droppable.bl { top:    30px; left:    30px;}
+      .droppable.tl { bottom: 30px; left:    30px;}
+      .pep-dpa{ border-color: blue; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep"></div>
+    <div class="droppable m"></div>
+    <div class="droppable tr"></div>
+    <div class="droppable br"></div>
+    <div class="droppable bl"></div>
+    <div class="droppable tl"></div>
+  </body>
+
+
+</html>
