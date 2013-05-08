@@ -17,29 +17,18 @@
           droppable: ".droppable",
           overlapFunction: false,
           useCSSTranslation: false,
+          constrainToWindow: true,
           start: function(ev, obj){
             obj.noCenter = false;
           },
           drag: function(ev, obj){
             var vel = obj.velocity();
             var rot = (vel.x)/5;
-            obj.$el.css({ 
-              "-webkit-transform": "rotate("+ rot +"deg)",
-                 "-moz-transform": "rotate("+ rot +"deg)",
-                  "-ms-transform": "rotate("+ rot +"deg)",
-                   "-o-transform": "rotate("+ rot +"deg)",
-                      "transform": "rotate("+ rot +"deg)" 
-            });          
+            rotate(obj.$el, rot)         
           },
           stop: function(ev, obj){
             handleCentering(ev, obj);
-            obj.$el.css({ 
-              "-webkit-transform": "rotate(0deg)",
-                 "-moz-transform": "rotate(0deg)",
-                  "-ms-transform": "rotate(0deg)",
-                   "-o-transform": "rotate(0deg)",
-                      "transform": "rotate(0deg)" 
-            }); 
+            rotate(obj.$el, 0)         
           },
           rest: handleCentering
         });
@@ -83,6 +72,16 @@
           }
 
           obj.noCenter = false;
+        }
+
+        function rotate($obj, deg){
+          $obj.css({ 
+              "-webkit-transform": "rotate("+ deg +"deg)",
+                 "-moz-transform": "rotate("+ deg +"deg)",
+                  "-ms-transform": "rotate("+ deg +"deg)",
+                   "-o-transform": "rotate("+ deg +"deg)",
+                      "transform": "rotate("+ deg +"deg)" 
+            }); 
         }
 
       });
