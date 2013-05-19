@@ -455,14 +455,18 @@
   Pep.prototype.placeObject = function() {
 
     // make `relative` parent if necessary
-    if ( this.options.constrainToParent ) {
+    if ( this.options.constrainTo == 'parent' ) {
       this.$container.css({ position: 'relative' });
     } else {
       this.$container.css({ position: 'static' });
     }
 
-    var positionType = this.options.constrainToParent ? 'position' : 'offset';
-    this.offset = this.$el[positionType]();
+    this.offset = this.options.constrainTo == 'parent' ? 
+                    this.$el.position() : this.$el[0].getBoundingClientRect();
+    
+    if ( this.options.removeMargins )
+      this.$el.css({margin: 0})
+
     this.$el.css({ 
       position:   'absolute', 
       top:        this.offset.top, 
