@@ -45,8 +45,8 @@
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
 
-    constrainToWindow:      false,                                        // constrain object to the window
-    constrainToParent:      false,                                        // constrain object to its parent
+    constrainTo:            false,                                        // constrain object to 'window' || parent; works best w/ useCSSTranslation set to false
+    removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
@@ -87,7 +87,8 @@
     this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-    this.$container   = this.options.constrainToParent ? this.$el.parent() : this.$document;
+    this.$container   = this.options.constrainTo && this.options.constrainTo == 'parent' ? 
+                                                    this.$el.parent() : this.$document;
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.velocityQueue  = new Array(5);
@@ -247,13 +248,11 @@
       var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
       var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
-      if ( this.options.constrainToParent || this.options.constrainToWindow ) {
+      if ( this.options.constrainTo ) {
         xOp = (hash.x !== false) ? hash.x : xOp;
         yOp = (hash.y !== false) ? hash.y : yOp;
       }
-
-      //  If `constrainToParent` option is set, return if
-      //  we hit the edge and we're moving in that direction    
+  
       this.moveTo(xOp, yOp);
     }
     else {
@@ -261,7 +260,7 @@
       dx = (dx/this.scale)*this.options.multiplier;
       dy = (dy/this.scale)*this.options.multiplier;
 
-      if ( this.options.constrainToParent || this.options.constrainToWindow ) {
+      if ( this.options.constrainTo ) {
         dx = (hash.x === false) ? dx : 0 ;
         dy = (hash.y === false) ? dy : 0 ;
       }     
@@ -384,7 +383,7 @@
     var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
     var yOp = ( vel.y > 0 ) ? "+=" + y : "-=" + Math.abs(y);
 
-    if ( this.options.constrainToParent || this.options.constrainToWindow ) {
+    if ( this.options.constrainTo ) {
       xOp = (hash.x !== false) ? hash.x : xOp;
       yOp = (hash.y !== false) ? hash.y : yOp;
     }

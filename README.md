@@ -40,15 +40,15 @@ Pep has many options. Here they are in their entirety, with their defaults.
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
 
-    constrainToWindow:      false,                                        // constrain object to the window
-    constrainToParent:      false,                                        // constrain object to its parent
+    constrainTo:            false,                                        // constrain object to 'window' || parent; works best w/ useCSSTranslation set to false
+    removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
     start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
-  };
+  }; 
 ```
 
 ## API

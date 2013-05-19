@@ -13,19 +13,19 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.peppable').pep({  constrainToParent: true, useCSSTranslation: false });
-        $('.peppable2').pep({ constrainToWindow: true, useCSSTranslation: false });
-        $('.peppable3').pep({ constrainToWindow: true });
+        $('.peppable').pep({  constrainTo: 'parent', useCSSTranslation: false });
+        $('.peppable2').pep({ constrainTo: 'window', useCSSTranslation: false });
+        $('.peppable3').pep({ constrainTo: 'window' });
       });
     </script>
 
     <style type="text/css">
       body{ padding: 0; margin: 0; }
-      #parent{ border: 5px solid #666; width: 800px; height: 500px; margin: 30px; }
-      .pep{ width: 200px; height: 200px; background: rgb(243, 200, 200); color: white; }
-
-      .peppable2{ position: absolute; top: 40px; left: 300px; background: rgb(120, 200, 200); }
-      .peppable3{ position: absolute; top: 40px; left: 600px; background: rgb(243, 120, 200); }
+      #parent     { border: 5px solid #666; width: 800px; height: 500px; margin: 30px; }
+      .pep        { width: 200px; height: 200px; background: rgb(243, 200, 200); color: white; }
+      .peppable   { margin: 10px; }
+      .peppable2  { position: absolute; top: 40px; left: 300px; background: rgb(120, 200, 200); }
+      .peppable3  { position: absolute; top: 40px; left: 600px; background: rgb(243, 120, 200); }
     </style>
 
 
