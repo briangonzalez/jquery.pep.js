@@ -151,23 +151,21 @@
             // log it
             this.log({ type: 'event', event: ev.type });
 
-            // fire user's start event.
-            this.options.start(ev, this);
-
-            // cancel the rest timeout
-            clearTimeout( this.restTimeout );
-
             // hardware accelerate, if necessary.
             if ( this.options.hardwareAccelerate && !this.hardwareAccelerated ) {
               this.hardwareAccelerate();
               this.hardwareAccelerated = true;
             }
 
-            // position the parent.
-            if ( this.constrainTo && !this.parentPositioned ) {
-              this.positionParent();
-              this.parentPositioned = true;
-            }
+            // position the parent & place the object, if necessary.
+            this.positionParent();
+            this.placeObject();
+
+            // fire user's start event.
+            this.options.start(ev, this);
+
+            // cancel the rest timeout
+            clearTimeout( this.restTimeout );
 
             // add active class and reset css animation, if necessary
             this.$el.addClass( this.options.activeClass );
@@ -459,9 +457,13 @@
   };
 
   //  positionParent();
-  //    add the right positioning to the 
-  //    parent object
+  //    add the right positioning to the parent object
   Pep.prototype.positionParent = function() {
+
+    if ( this.parentPositioned )
+      return;
+
+    this.parentPositioned = true;
 
     // make `relative` parent if necessary
     if ( this.options.constrainTo == 'parent' ) {
@@ -469,6 +471,29 @@
     } else {
       this.$container.css({ position: 'static' });
     }
+
+  };
+
+  //  placeObject();
+  //    add the right positioning to the object
+  Pep.prototype.placeObject = function() {
+
+    if ( this.objectPlaced )
+      return;
+
+    this.objectPlaced = true;
+
+    this.offset = this.options.constrainTo == 'parent' ?
+                    this.$el.position() : this.$el[0].getBoundingClientRect();
+    
+    if ( this.options.removeMargins )
+      this.$el.css({margin: 0})
+    
+    this.$el.css({
+      position:   'absolute',
+      top:        this.offset.top,
+      left:       this.offset.left,
+    });
 
   };
 
