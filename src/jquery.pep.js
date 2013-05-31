@@ -111,6 +111,8 @@
     if ( this.options.disableSelect )
       this.disableSelect();
 
+    this.placeObject();
+
     this.ev = {};       // to store our event movements
     this.pos = {};      // to store positions
     this.subscribe();
@@ -159,7 +161,7 @@
 
             // position the parent & place the object, if necessary.
             this.positionParent();
-            this.placeObject();
+            // this.placeObject();
 
             // fire user's start event.
             this.options.start(ev, this);
@@ -460,7 +462,7 @@
   //    add the right positioning to the parent object
   Pep.prototype.positionParent = function() {
 
-    if ( this.parentPositioned )
+    if ( !this.options.constrainTo || this.parentPositioned )
       return;
 
     this.parentPositioned = true;
@@ -483,8 +485,8 @@
 
     this.objectPlaced = true;
 
-    this.offset = this.options.constrainTo == 'parent' ?
-                    this.$el.position() : this.$el[0].getBoundingClientRect();
+    this.offset = (this.options.constrainTo == 'parent' || this.hasNonBodyRelative() ) ?
+                    this.$el.position() : this.$el.offset();
     
     if ( this.options.removeMargins )
       this.$el.css({margin: 0})
@@ -492,9 +494,19 @@
     this.$el.css({
       position:   'absolute',
       top:        this.offset.top,
-      left:       this.offset.left,
+      left:       this.offset.left
     });
 
+  };
+
+  //  hasNonBodyRelative()
+  //    returns true if any parent other than the body
+  //    has relative positioning
+  Pep.prototype.hasNonBodyRelative = function() {
+    return this.$el.parents().filter(function() {  
+        var $this = $(this);
+        return $this.is('body') || $this.css('position') == 'relative';
+    }).length > 1
   };
 
   //  setScale()
