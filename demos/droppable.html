@@ -26,10 +26,12 @@
     </script>
 
     <style type="text/css">
-      .pep{ width: 90px; height: 90px; background: blue; }
+      .pep{ width: 90px; height: 90px; background: blue; z-index: 10; }
       .droppable{   width: 100px; height: 100px; 
                     position: absolute; 
-                    border: 5px solid #ccc; }
+                    border: 5px solid #ccc; 
+                    z-index: -1;
+                  }
 
       .droppable.m  { top: 50%; left:50%; margin-left: -50px; margin-top: -50px; }
       .droppable.tr { right:  30px; bottom:  30px; }
