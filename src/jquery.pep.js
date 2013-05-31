@@ -105,10 +105,6 @@
   Pep.prototype.init = function () {
     var self = this;
 
-    if ( this.options.hardwareAccelerate ){
-      this.hardwareAccelerate();
-    }
-
     if ( this.options.debug )
       this.buildDebugDiv();
 
@@ -117,7 +113,6 @@
 
     this.ev = {};       // to store our event movements
     this.pos = {};      // to store positions
-    this.placeObject();
     this.subscribe();
   };
 
@@ -161,6 +156,18 @@
 
             // cancel the rest timeout
             clearTimeout( this.restTimeout );
+
+            // hardware accelerate, if necessary.
+            if ( this.options.hardwareAccelerate && !this.hardwareAccelerated ) {
+              this.hardwareAccelerate();
+              this.hardwareAccelerated = true;
+            }
+
+            // position the parent.
+            if ( this.constrainTo && !this.parentPositioned ) {
+              this.positionParent();
+              this.parentPositioned = true;
+            }
 
             // add active class and reset css animation, if necessary
             this.$el.addClass( this.options.activeClass );
@@ -451,10 +458,10 @@
             window.setTimeout(callback, 1000 / 60);
   };
 
-  //  placeObject();
-  //    place object right where it is, but make it movable
-  //    via `position: absolute`
-  Pep.prototype.placeObject = function() {
+  //  positionParent();
+  //    add the right positioning to the 
+  //    parent object
+  Pep.prototype.positionParent = function() {
 
     // make `relative` parent if necessary
     if ( this.options.constrainTo == 'parent' ) {
@@ -462,18 +469,6 @@
     } else {
       this.$container.css({ position: 'static' });
     }
-
-    this.offset = this.options.constrainTo == 'parent' ? 
-                    this.$el.position() : this.$el[0].getBoundingClientRect();
-    
-    if ( this.options.removeMargins )
-      this.$el.css({margin: 0})
-
-    this.$el.css({ 
-      position:   'absolute', 
-      top:        this.offset.top, 
-      left:       this.offset.left, 
-    });
 
   };
 
