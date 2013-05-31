@@ -23,7 +23,7 @@
         var objHeight   = $pep.height();
 
         $('.peppable').pep({ 
-          constrainToParent:  true, 
+          constrainTo:        'parent', 
           shouldEase:         false,
           drag:               function(ev, obj){
             var vals = obj.getMovementValues();
@@ -34,12 +34,7 @@
                  "-moz-transform": "scale("+ (1 - percent) +") rotate("+ 100*percent +"deg)",
                   "-ms-transform": "scale("+ (1 - percent) +") rotate("+ 100*percent +"deg)",
                    "-o-transform": "scale("+ (1 - percent) +") rotate("+ 100*percent +"deg)",
-                      "transform": "scale("+ (1 - percent) +") rotate("+ 100*percent +"deg)",
-                 "-webkit-filter": "blur(" + 100*percent + "px)",
-                    "-moz-filter": "blur(" + 100*percent + "px)",
-                     "-ms-filter": "blur(" + 100*percent + "px)",
-                      "-o-filter": "blur(" + 100*percent + "px)",
-                         "filter": "blur(" + 100*percent + "px)" 
+                      "transform": "scale("+ (1 - percent) +") rotate("+ 100*percent +"deg)"
             }) 
           }
         });
