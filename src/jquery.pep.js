@@ -87,7 +87,7 @@
     this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-    this.$container   = this.options.constrainTo && this.options.constrainTo == 'parent' ? 
+    this.$container   = this.options.constrainTo && this.options.constrainTo === 'parent' ? 
                                                     this.$el.parent() : this.$document;
 
     this.CSSEaseHash    = this.getCSSEaseHash();
@@ -468,7 +468,7 @@
     this.parentPositioned = true;
 
     // make `relative` parent if necessary
-    if ( this.options.constrainTo == 'parent' ) {
+    if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
     } else {
       this.$container.css({ position: 'static' });
@@ -485,11 +485,11 @@
 
     this.objectPlaced = true;
 
-    this.offset = (this.options.constrainTo == 'parent' || this.hasNonBodyRelative() ) ?
+    this.offset = (this.options.constrainTo === 'parent' || this.hasNonBodyRelative() ) ?
                     this.$el.position() : this.$el.offset();
     
     if ( this.options.removeMargins )
-      this.$el.css({margin: 0})
+      this.$el.css({margin: 0});
     
     this.$el.css({
       position:   'absolute',
@@ -505,8 +505,8 @@
   Pep.prototype.hasNonBodyRelative = function() {
     return this.$el.parents().filter(function() {  
         var $this = $(this);
-        return $this.is('body') || $this.css('position') == 'relative';
-    }).length > 1
+        return $this.is('body') || $this.css('position') === 'relative';
+    }).length > 1;
   };
 
   //  setScale()
