@@ -27,7 +27,7 @@
                                                                           // OPTIONS W/ DEFAULTS
                                                                           // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
-    activeClass:            'active',                                     // class to add to the DOM el while dragging
+    activeClass:            'pep-active',                                 // class to add to the DOM el while dragging
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
   
     shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
@@ -156,8 +156,11 @@
             // log it
             this.log({ type: 'event', event: ev.type });
 
-            // fire user's stop event.
+            // fire user's start event.
             this.options.start(ev, this);
+
+            // cancel the rest timeout
+            clearTimeout( this.restTimeout );
 
             // add active class and reset css animation, if necessary
             this.$el.addClass( this.options.activeClass );
@@ -376,7 +379,7 @@
 
     var hash      = this.handleConstraint(x, y);
 
-    // ✪  Apple the CSS3 animation easing magic  ✪
+    // ✪  Apply the CSS3 animation easing magic  ✪
     if ( this.cssAnimationsSupported() )
       this.$el.css( this.getCSSEaseHash() );
     
@@ -395,7 +398,7 @@
     // when the rest occurs, remove active class and call
     // user's rest event.
     var self = this;
-    this.timeout = setTimeout( function(){ 
+    this.restTimeout = setTimeout( function(){ 
 
       // Calculate our drop regions
       if ( self.options.droppable ) {
@@ -470,7 +473,6 @@
       position:   'absolute', 
       top:        this.offset.top, 
       left:       this.offset.left, 
-      zIndex:     1
     });
 
   };

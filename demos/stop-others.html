@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var active;
+
+        $('.pep').pep({
+          stop: function(){
+            moving = [];
+          },
+          start: function(ev, obj){
+            if ( active && obj !== active )
+              active.$el.css( active.getCSSEaseHash(true) )
+                        .removeClass('pep-active')
+
+            active = obj;
+          },
+          cssEaseDuration:        3000,
+          useCSSTranslation:      true
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 200px; height: 200px; margin: 50px; background: blue; z-index: 10; }
+      .pep-active{ border: 5px solid red; z-index: 11; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep"></div>
+    <div class="pep"></div>
+    <div class="pep"></div>
+    <div class="pep"></div>
+    <div class="pep"></div>
+  </body>
+
+
+</html>
