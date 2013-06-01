@@ -88,5 +88,6 @@ As well as:
   - Internet Explorer 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
 
 ## Milestones
+  - 05/01/13  -   Added in `draggable` functionality
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
   - 05/30/12  -   Initial version
