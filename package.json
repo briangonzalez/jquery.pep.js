@@ -1,8 +1,8 @@
 {
   "name": "pep",
   "title": "jquery.pep.js",
-  "description": "A lightweight plugin for kinetic-drag on mobile/desktop.",
-  "version": "0.3.1",
+  "description": "Kinetic drag for mobile & desktop",
+  "version": "0.3.2",
   "homepage": "pep.briangonzalez.org",
   "author": {
     "name": "Brian Gonzalez",

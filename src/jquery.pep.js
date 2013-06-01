@@ -111,6 +111,8 @@
     if ( this.options.disableSelect )
       this.disableSelect();
 
+    // position the parent & place the object, if necessary.
+    this.positionParent();
     this.placeObject();
 
     this.ev = {};       // to store our event movements
@@ -158,10 +160,6 @@
               this.hardwareAccelerate();
               this.hardwareAccelerated = true;
             }
-
-            // position the parent & place the object, if necessary.
-            this.positionParent();
-            // this.placeObject();
 
             // fire user's start event.
             this.options.start(ev, this);
