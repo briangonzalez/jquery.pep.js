@@ -29,6 +29,7 @@
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
     activeClass:            'pep-active',                                 // class to add to the DOM el while dragging
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
+    velocityMultiplier:     1.9,                                          // +/- this number to modify the springiness of the object as your release it
   
     shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
@@ -305,7 +306,7 @@
   };
 
   Pep.prototype.resetVelocityQueue = function() {
-    this.velocityQueue = new Array(10);
+    this.velocityQueue = new Array(5);
   };
 
   //  moveTo();
@@ -431,17 +432,14 @@
 
     for ( var i = 0; i < this.velocityQueue.length -1; i++  ){
       if ( this.velocityQueue[i] ){
-        sumX        = sumX + (this.velocityQueue[i+1].x - this.velocityQueue[i].x);
-        sumY        = sumY + (this.velocityQueue[i+1].y - this.velocityQueue[i].y);
-        this.dt    = ( this.velocityQueue[i+1].time - this.velocityQueue[i].time );
+        sumX        += (this.velocityQueue[i+1].x - this.velocityQueue[i].x);
+        sumY        += (this.velocityQueue[i+1].y - this.velocityQueue[i].y);
+        this.dt     = ( this.velocityQueue[i+1].time - this.velocityQueue[i].time );
       }
     }
 
-    // a value to fine tune velocity
-    var velocityMultiplier = 1.6;
-
     // return velocity in each direction.
-    return { x: sumX*velocityMultiplier, y: sumY*velocityMultiplier};
+    return { x: sumX*this.options.velocityMultiplier, y: sumY*this.options.velocityMultiplier};
   };
 
   //  requestAnimationFrame();
