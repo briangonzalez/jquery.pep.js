@@ -30,22 +30,17 @@
     activeClass:            'pep-active',                                 // class to add to the DOM el while dragging
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
     velocityMultiplier:     1.9,                                          // +/- this number to modify the springiness of the object as your release it
-  
     shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
-    
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
     useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
     disableSelect:          true,                                         // apply `user-select: none` (CSS) to the object
-  
     cssEaseString:          "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   // get more css ease params from [ http://matthewlein.com/ceaser/ ]
     cssEaseDuration:        750,                                          // how long should it take (in ms) for the object to get from stop to rest?
     shouldEase:             true,                                         // disable/enable easing
-  
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
-
     constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
     removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
