@@ -65,12 +65,7 @@
     this.el  = el;
     this.$el = $(el);
 
-    //  jQuery has an extend method which merges the contents of two or 
-    //  more objects, storing the result in the first object. 
-
-    //  the first object is generally empty as we don't want to 
-    //  alter the default options for
-    //  future instances of the plugin.
+    //  merge in defaults
     this.options    = $.extend( {}, defaults, options) ;
 
     // store document/window so we don't need to keep grabbing it
@@ -91,9 +86,9 @@
                                                     this.$el.parent() : this.$document;
 
     this.CSSEaseHash    = this.getCSSEaseHash();
-    this.velocityQueue  = new Array(5);
     this.scale          = 1;
     this.disabled       = false;
+    this.resetVelocityQueue();
 
     this.init();
   }
@@ -241,8 +236,10 @@
     // fire user's drag event.
     var continueDrag = this.options.drag(ev, this);
 
-    if (continueDrag === false)
+    if ( continueDrag === false ) {
+      this.resetVelocityQueue();
       return;
+    }
 
     // log the move trigger & event position
     this.log({ type: 'event', event: ev.type });
@@ -303,8 +300,12 @@
     this.options.stop(ev, this);
 
     // reset the velocity queue 
-    this.velocityQueue = new Array(5);
+    this.resetVelocityQueue();
 
+  };
+
+  Pep.prototype.resetVelocityQueue = function() {
+    this.velocityQueue = new Array(10);
   };
 
   //  moveTo();
