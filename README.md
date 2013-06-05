@@ -1,6 +1,5 @@
-![pep title](https://raw.github.com/briangonzalez/jquery.pep.js/master/title.png)
------
-*kinetic drag for mobile & desktop*  - http://pep.briangonzalez.org
+# [jquery.pep.js](http://pep.briangonzalez.org)
+*kinetic drag for mobile & desktop*
 
 ## Getting Started
 In your web page:
