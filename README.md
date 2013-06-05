@@ -1,6 +1,7 @@
-# jquery.pep.js
-*kinetic drag for mobile & desktop*
-[http://pep.briangonzalez.org](http://pep.briangonzalez.org)
+## jquery.pep.js
+*kinetic drag for mobile & desktop*, read more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)
+-------
+
 
 ## Getting Started
 In your web page:
