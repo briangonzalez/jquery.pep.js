@@ -64,10 +64,10 @@
     //  merge in defaults
     this.options    = $.extend( {}, defaults, options) ;
 
-    // store document/window so we don't need to keep grabbing it
+    // store document/window so we don't need to keep grabbing them
     // throughout the code
-    this.$document  = $(document);
-    this.$window  = $(window); 
+    this.$document  = $(this.$el[0].ownerDocument);
+    this.$window    = $(window); 
 
     this._defaults  = defaults;
     this._name      = 'Pep';
