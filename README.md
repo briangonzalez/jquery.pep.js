@@ -21,7 +21,7 @@ In your web page:
 ## Usage
 Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
-  defaults = {
+defaults = {
 
   // OPTIONS W/ DEFAULTS
   // --------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
     
     // called after dragging stops, and object has come to rest
     rest:                   function(){}                                  
-  }; 
+}; 
 ```
 
 ## API
