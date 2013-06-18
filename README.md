@@ -22,13 +22,24 @@ In your web page:
 Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
   defaults = {
-                                                                          // OPTIONS W/ DEFAULTS
-                                                                          // --------------------------------------------------------------------------------
-    debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
-    activeClass:            'active',                                     // class to add to the DOM el while dragging
-    multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
-    velocityMultiplier:     1.9,                                          // +/- this number to modify the springiness of the object as your release it
-    shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
+
+  // OPTIONS W/ DEFAULTS
+  // --------------------------------------------------------------------------------
+
+  // debug via a small div in the lower-righthand corner of the document  
+   debug:                  false,  
+
+  // class to add to the DOM el while dragging                                      
+    activeClass:            'active',   
+
+  // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                  
+    multiplier:             1,     
+    
+    // +/- this number to modify the springiness of the object as your release it                            
+    velocityMultiplier:     1.9, 
+                                         
+   // in some cases, we don't want to prevent the default on our Pep object, your call
+    shouldPreventDefault:   true,                                        
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
     useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
