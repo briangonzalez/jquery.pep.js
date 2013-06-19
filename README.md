@@ -152,3 +152,7 @@ As well as:
   - 05/01/13  -   Added in `droppable` functionality
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
   - 05/30/12  -   Initial version
+
+## License
+
+Pep is licensed under the [Eclipse Public Licnese](http://www.eclipse.org/legal/epl-v10.html)
