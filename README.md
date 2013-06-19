@@ -8,6 +8,21 @@
 ## Getting Started
 In your web page:
 
+Grab Pep via bower:
+
+```shell
+bower install jquery.pep
+````
+
+or grab from CDN:
+
+````
+//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
+//rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
+````
+
+
+
 ```html
 <script src="jquery.js"></script>
 <script src="dist/jquery.pep.min.js"></script>
