@@ -6,7 +6,6 @@
 
 
 ## Getting Started
-In your web page:
 
 Grab Pep via bower:
 
@@ -18,10 +17,12 @@ or grab from CDN:
 
 ````
 //cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
+````
+````
 //rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
 ````
 
-
+In your web page:
 
 ```html
 <script src="jquery.js"></script>
