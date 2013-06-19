@@ -6,22 +6,6 @@
 
 
 ## Getting Started
-
-Grab Pep via bower:
-
-```shell
-bower install jquery.pep
-````
-
-or grab from CDN:
-
-````
-//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
-````
-````
-//rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
-````
-
 In your web page:
 
 ```html
@@ -126,6 +110,21 @@ $.pep.toggleAll(true)
 
 ````
 
+## Installation
+Grab Pep via bower:
+
+```shell
+bower install jquery.pep
+````
+
+or grab from CDN:
+
+````
+//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
+````
+````
+//rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
+````
 
 ## Examples
 Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/ (which can also be found in more detail on Codepen: http://codepen.io/briangonzalez/tag/pep-demo)
