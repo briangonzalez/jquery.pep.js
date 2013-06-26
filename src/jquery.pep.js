@@ -798,23 +798,6 @@
     }
   };
 
-  //  *** Special Easings functions ***
-  //    Used for JS easing fallback 
-  //    We can use any of these for a 
-  //    good intertia ease
-  $.extend($.easing, 
-  {
-    easeOutQuad: function (x, t, b, c, d) {
-      return -c *(t/=d)*(t-2) + b;
-    },
-    easeOutCirc: function (x, t, b, c, d) {
-      return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
-    },
-    easeOutExpo: function (x, t, b, c, d) {
-      return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
-    }
-  });
-
   // toggle()
   //  toggle the pep object
   Pep.prototype.toggle = function(on) {
