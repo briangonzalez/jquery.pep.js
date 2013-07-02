@@ -57,4 +57,13 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['jshint:src', 'qunit', 'uglify']);
 
+  // Server Task
+  grunt.registerTask('serve', 'Serves any directory on given port', function (env) {
+    var shell = require('shelljs');
+    var port  = grunt.option('port') || 8000;
+    var dir   = grunt.option('dir')  || '.';
+    console.log(['Serving', dir,'on port:', port].join(' '))
+    shell.exec('cd '+ dir +' && python -m SimpleHTTPServer ' + port);
+  });
+
 };
