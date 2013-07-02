@@ -108,6 +108,12 @@ $.pep.toggleAll(false)
 // Explicitly enable all Pep objects on the page
 $.pep.toggleAll(true)
 
+// Unbind Pep completely from the object
+var $pep = $('.pep');
+$pep.pep();               // bind
+$.pep.unbind( $pep );     // unbind
+$pep.pep();               // bind
+
 ````
 
 ## Installation

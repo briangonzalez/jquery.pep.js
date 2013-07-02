@@ -893,4 +893,18 @@
     }); 
   };
 
+  $.pep.unbind = function($obj){
+    var pep = $obj.data('plugin_' + pluginName);
+
+    if ( typeof pep === 'undefined' )
+      return;
+
+    pep.toggle(false);
+    $obj.removeData('plugin_' + pluginName);
+  };
+
 }(jQuery, window));
+
+
+
+
