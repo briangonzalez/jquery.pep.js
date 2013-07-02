@@ -335,26 +335,76 @@
   Pep.prototype.moveToUsingTransforms = function(x,y) {
 
     // only move along single axis, if necessary
-    if ( this.options.axis  === 'x' ){
+    if ( this.options.axis  === 'x' )
       y = 0;
-    } 
-    else if ( this.options.axis  === 'y' ){
+    
+    if ( this.options.axis  === 'y' )
       x = 0;
-    }
+
+    // Check for our initial values if we don't have them.
+    var matrixArray  = this.matrixToArray( this.matrixString() );
+    if ( !this.cssX )
+      this.cssX = parseInt(matrixArray[4], 10);
+
+    if ( !this.cssY )
+      this.cssY = parseInt(matrixArray[5], 10);
 
     // CSS3 transforms are additive from current position
-    this.cssX = this.cssX  ? (this.cssX + x) : x;
-    this.cssY = this.cssY  ? (this.cssY + y) : y;
+    this.cssX = this.cssX + x;
+    this.cssY = this.cssY + y;
 
     this.log({ type: 'delta', x: x, y: y });
 
-    this.translation = "translate("+ this.cssX +"px, " + this.cssY + "px)";
+    matrixArray[4]    = this.cssX;
+    matrixArray[5]    = this.cssY;
+    
+    this.translation  = this.arrayToMatrix( matrixArray );
+
     this.$el.css({ 
         '-webkit-transform': this.translation,
            '-moz-transform': this.translation,
             '-ms-transform': this.translation,
              '-o-transform': this.translation,
-                'transform': this.translation });
+                'transform': this.translation  });
+  };
+
+  // 3 helper functions for working with the 
+  // objects CSS3 transforms
+  // matrixString
+  // matrixToArray
+  // arrayToMatrix
+  Pep.prototype.matrixString = function() {
+
+    var validMatrix = function(o){
+      return !( !o || o === 'none' || o.indexOf('matrix') === -1);
+    };
+
+    var matrix = "matrix(1, 0, 0, 1, 0, 0)";
+
+    if ( validMatrix( this.$el.css('-webkit-transform') ) )
+      matrix = this.$el.css('-webkit-transform');
+
+    if ( validMatrix( this.$el.css('-moz-transform') ) )
+      matrix = this.$el.css('-moz-transform');
+
+    if ( validMatrix( this.$el.css('-ms-transform') ) )
+      matrix = this.$el.css('-ms-transform');
+
+    if ( validMatrix( this.$el.css('-o-transform') ) )
+      matrix = this.$el.css('-o-transform');
+
+    if ( validMatrix( this.$el.css('transform') ) )
+      matrix = this.$el.css('transform');
+
+    return matrix;
+  };
+
+  Pep.prototype.matrixToArray = function(str) {
+      return str.split('(')[1].split(')')[0].split(',');
+  };
+
+  Pep.prototype.arrayToMatrix = function(array) {
+      return "matrix(" +  array.join(',')  + ")";
   };
 
   //  addToLIFO();
@@ -480,6 +530,14 @@
     this.offset = (this.options.constrainTo === 'parent' || this.hasNonBodyRelative() ) ?
                     this.$el.position() : this.$el.offset();
     
+    // better to leave absolute position alone if
+    // it already has one.
+    if ( parseInt( this.$el.css('left'), 10 ) )
+      this.offset.left = this.$el.css('left');
+
+    if ( parseInt( this.$el.css('top'), 10 ) )
+      this.offset.top = this.$el.css('top');
+
     if ( this.options.removeMargins )
       this.$el.css({margin: 0});
     
@@ -706,12 +764,12 @@
   //  hardwareAccelerate();
   //    add fool-proof CSS3 hardware acceleration.
   Pep.prototype.hardwareAccelerate = function() {
-    this.$el.css({      '-webkit-transform':            'translateZ(0)',
-                        'transform':                    'translateZ(0)',
-                        '-webkit-perspective':          1000,
-                        'perspective':                  1000,
-                        '-webkit-backface-visibility':  'hidden',
-                        'backface-visibility':          'hidden'  });
+    this.$el.css({     
+      '-webkit-perspective':          1000,
+      'perspective':                  1000,
+      '-webkit-backface-visibility':  'hidden',
+      'backface-visibility':          'hidden'  
+    });
    }; 
 
   //  getMovementValues();
