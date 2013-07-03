@@ -44,6 +44,7 @@
     constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
     removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
+    handle:                 false,                                        // your pep object's handle; use standard sizzle selector
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
     start:                  function(){},                                 // called when dragging starts
@@ -56,13 +57,15 @@
   //  ---------------------------------
   function Pep( el, options ) {
 
-    // reference to our DOM object 
-    // and it's jQuery equivalent.
-    this.el  = el;
-    this.$el = $(el);
-
     //  merge in defaults
     this.options    = $.extend( {}, defaults, options) ;
+
+    // reference to our DOM object 
+    // and it's jQuery equivalent.
+    this.el         = el;
+    this.$el        = $(el);
+    this.$target    = this.options.handle ? $(this.options.handle) : this.$el;
+    this.$movable   = this.options.handle ? this.$el.add( this.$target ) : this.$el;
 
     // store document/window so we don't need to keep grabbing them
     // throughout the code
@@ -119,7 +122,7 @@
     var self = this;
 
     // Subscribe to our start event 
-    this.$el.bind( this.startTrigger, function(ev){
+    this.$target.bind( this.startTrigger, function(ev){
       self.handleStart(ev);
     });
 
@@ -323,9 +326,9 @@
     var animateDuration = 300;
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutCirc', {queue: false});
+      this.$movable.animate({ top: y, left: x }, animateDuration, 'easeOutCirc', {queue: false});
     } else{
-      this.$el.stop(true, false).css({ top: y , left: x });
+      this.$movable.stop(true, false).css({ top: y , left: x });
     } 
 
   };
@@ -360,7 +363,7 @@
     
     this.translation  = this.arrayToMatrix( matrixArray );
 
-    this.$el.css({ 
+    this.$movable.css({ 
         '-webkit-transform': this.translation,
            '-moz-transform': this.translation,
             '-ms-transform': this.translation,
@@ -433,7 +436,7 @@
 
     // ✪  Apply the CSS3 animation easing magic  ✪
     if ( this.cssAnimationsSupported() )
-      this.$el.css( this.getCSSEaseHash() );
+      this.$movable.css( this.getCSSEaseHash() );
     
     var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
     var yOp = ( vel.y > 0 ) ? "+=" + y : "-=" + Math.abs(y);
@@ -575,7 +578,7 @@
   //    remove CSS easing properties, if necessary
   Pep.prototype.removeCSSEasing = function() {
     if ( this.cssAnimationsSupported() )
-      this.$el.css( this.getCSSEaseHash(true) );
+      this.$movable.css( this.getCSSEaseHash(true) );
   };
 
   //  disableSelect();

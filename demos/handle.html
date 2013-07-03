@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep - handle demo</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('input').pep({
+          handle: '.pep-handle'
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      .pep-handle{ 
+        background: #ccc; 
+        position: absolute;
+        top: 10px; left: 10px;
+        padding: 5px 9px;
+        font-size: 20px;
+        border-radius: 2px;
+        cursor: move;
+      }
+
+      .pep-handle:hover{
+        background: #eee;
+      }
+
+      input{
+        position: absolute;
+        top: 20px; left: 60px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    
+    <input type="range" name="points" min="1" max="10">
+    <div class="pep-handle">
+      &#9776;
+    </div>
+
+  </body>
+
+</html>
