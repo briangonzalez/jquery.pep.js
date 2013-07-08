@@ -147,7 +147,7 @@
             this.toggleTouchAction(true);
 
             // normalize event
-            ev = this.normalizeEvent(ev)
+            ev = this.normalizeEvent(ev);
 
             // log it
             this.log({ type: 'event', event: ev.type });
