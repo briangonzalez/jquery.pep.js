@@ -64,18 +64,18 @@
     //  merge in defaults
     this.options    = $.extend( {}, defaults, options) ;
 
-    // store document/window so we don't need to keep grabbing them
+    // store document/body so we don't need to keep grabbing them
     // throughout the code
     this.$document  = $(this.$el[0].ownerDocument);
-    this.$window    = $(window); 
+    this.$body      = this.$document.find('body'); 
 
     this._defaults  = defaults;
     this._name      = 'Pep';
 
     //  Create our triggers based on touch/click device 
-    this.moveTrigger  = this.isTouch() ? "touchmove"   : "mousemove";
-    this.startTrigger = this.isTouch() ? "touchstart"  : "mousedown";
-    this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
+    this.moveTrigger  = "touchmove MSPointerMove MSPointerHover mousemove";
+    this.startTrigger = "touchstart MSPointerDown mousedown";
+    this.stopTrigger  = "touchend MSPointerUp mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
     this.$container   = this.options.constrainTo && this.options.constrainTo === 'parent' ? 
@@ -143,6 +143,12 @@
     // only continue chugging if our start event is a valid move event. 
     if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
+            // turn off touch action CSS
+            this.toggleTouchAction(true);
+
+            // normalize event
+            ev = this.normalizeEvent(ev)
+
             // log it
             this.log({ type: 'event', event: ev.type });
 
@@ -163,8 +169,8 @@
             this.removeCSSEasing();
 
             // store x & y values for later use
-            this.ev.x = this.isTouch() ? ev.originalEvent.pageX : ev.pageX;
-            this.ev.y = this.isTouch() ? ev.originalEvent.pageY : ev.pageY;
+            this.ev.x = ev.pep.x;
+            this.ev.y = ev.pep.y;
 
             // store the initial touch event, used to calculate the inital delta values.
             this.moveEvent = ev;
@@ -191,117 +197,138 @@
   //    the logic for when the move events occur 
   Pep.prototype.handleMove = function() {
 
-    // setup our event object
-    var ev = this.moveEvent;
-    if ( typeof(ev) === 'undefined' ) return;
+            // setup our event object
+            if ( typeof(this.moveEvent) === 'undefined' ) 
+                return;
 
-    // get our move event's x & y
-    var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
-    var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
+            // get our move event's x & y
+            var ev      = this.normalizeEvent( this.moveEvent );
+            var curX    = ev.pep.x;
+            var curY    = ev.pep.y;
 
-    // last in, first out (LIFO) queue to help us manage velocity
-    this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );
+            // last in, first out (LIFO) queue to help us manage velocity
+            this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );
 
-    // calculate values necessary to moving
-    var dx, dy;
+            // calculate values necessary to moving
+            var dx, dy;
 
-    if ( ev.type === this.startTrigger ){
-      dx = 0;
-      dy = 0;
-    } else{
-      dx = curX - this.ev.x;
-      dy = curY - this.ev.y;
-    }
+            if ( ev.pep.type === this.startTrigger ){
+              dx = 0;
+              dy = 0;
+            } else{
+              dx = curX - this.ev.x;
+              dy = curY - this.ev.y;
+            }
 
-    this.dx   = dx;
-    this.dy   = dy;
-    this.ev.x = curX;
-    this.ev.y = curY;
+            this.dx   = dx;
+            this.dy   = dy;
+            this.ev.x = curX;
+            this.ev.y = curY;
 
-    // no movement in either direction -- so return
-    if (dx === 0 && dy === 0){
-      this.log({ type: 'event', event: '** stopped **' });
-      return;
-    }
+            // no movement in either direction -- so return
+            if (dx === 0 && dy === 0){
+              this.log({ type: 'event', event: '** stopped **' });
+              return;
+            }
 
-    // Calculate our drop regions
-    if ( this.options.droppable ) {
-      this.calculateActiveDropRegions();
-    }
+            // Calculate our drop regions
+            if ( this.options.droppable ) {
+              this.calculateActiveDropRegions();
+            }
 
-    // fire user's drag event.
-    var continueDrag = this.options.drag(ev, this);
+            // fire user's drag event.
+            var continueDrag = this.options.drag(ev, this);
 
-    if ( continueDrag === false ) {
-      this.resetVelocityQueue();
-      return;
-    }
+            if ( continueDrag === false ) {
+              this.resetVelocityQueue();
+              return;
+            }
 
-    // log the move trigger & event position
-    this.log({ type: 'event', event: ev.type });
-    this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
-    this.log({ type: 'velocity' });
+            // log the move trigger & event position
+            this.log({ type: 'event', event: ev.pep.type });
+            this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
+            this.log({ type: 'velocity' });
 
-    var hash = this.handleConstraint(dx, dy);
+            var hash = this.handleConstraint(dx, dy);
 
-    // if using not using CSS transforms, move object via absolute position
-    if ( !this.shouldUseCSSTranslation() ){  
-      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
-      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
+            // if using not using CSS transforms, move object via absolute position
+            if ( !this.shouldUseCSSTranslation() ){  
+              var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+              var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
-      if ( this.options.constrainTo ) {
-        xOp = (hash.x !== false) ? hash.x : xOp;
-        yOp = (hash.y !== false) ? hash.y : yOp;
-      }
-  
-      this.moveTo(xOp, yOp);
-    }
-    else {
+              if ( this.options.constrainTo ) {
+                xOp = (hash.x !== false) ? hash.x : xOp;
+                yOp = (hash.y !== false) ? hash.y : yOp;
+              }
+          
+              this.moveTo(xOp, yOp);
+            }
+            else {
 
-      dx = (dx/this.scale)*this.options.multiplier;
-      dy = (dy/this.scale)*this.options.multiplier;
+              dx = (dx/this.scale)*this.options.multiplier;
+              dy = (dy/this.scale)*this.options.multiplier;
 
-      if ( this.options.constrainTo ) {
-        dx = (hash.x === false) ? dx : 0 ;
-        dy = (hash.y === false) ? dy : 0 ;
-      }     
-      this.moveToUsingTransforms( dx, dy );
-    }
+              if ( this.options.constrainTo ) {
+                dx = (hash.x === false) ? dx : 0 ;
+                dy = (hash.y === false) ? dy : 0 ;
+              }     
+              this.moveToUsingTransforms( dx, dy );
+            }
   };
 
   //  handleStop();
   //    the logic for when the stop events occur
   Pep.prototype.handleStop = function(ev) {
 
-    // no need to handle stop event if we're not active
-    if (!this.active) 
-      return;
+            // no need to handle stop event if we're not active
+            if (!this.active) 
+              return;
 
-    // log it
-    this.log({ type: 'event', event: ev.type });
+            // turn off touch action CSS
+            this.toggleTouchAction(false);
 
-    // make object inactive, so watchMoveLoop returns
-    this.active = false;
+            // normalize event
+            ev = this.normalizeEvent(ev);
 
-    // Calculate our drop regions
-    if ( this.options.droppable ) {
-      this.calculateActiveDropRegions();
-    }
+            // log it
+            this.log({ type: 'event', event: ev.pep.type });
 
-    // ease the object, if necessary
-    if (this.options.shouldEase)
-      this.ease(ev);
+            // make object inactive, so watchMoveLoop returns
+            this.active = false;
 
-    // fire user's stop event.
-    this.options.stop(ev, this);
+            // Calculate our drop regions
+            if ( this.options.droppable ) {
+              this.calculateActiveDropRegions();
+            }
 
-    // reset the velocity queue 
-    this.resetVelocityQueue();
+            // ease the object, if necessary
+            if (this.options.shouldEase)
+              this.ease(ev);
+
+            // fire user's stop event.
+            this.options.stop(ev, this);
+
+            // reset the velocity queue 
+            this.resetVelocityQueue();
 
   };
 
-  Pep.prototype.resetVelocityQueue = function() {
-    this.velocityQueue = new Array(5);
+  // normalizeEvent()
+  Pep.prototype.normalizeEvent = function(ev) {
+    ev.pep        = {};
+
+    if ( "MSPointerEvent" in window || !this.isTouch() ) {
+      ev.pep.x      = ev.originalEvent.pageX;
+      ev.pep.y      = ev.originalEvent.pageY;
+      ev.pep.type   = ev.type;
+    } 
+    else {
+      ev.pep.x      = ev.originalEvent.touches[0].pageX;
+      ev.pep.y      = ev.originalEvent.touches[0].pageY;
+      ev.pep.type   = ev.type;
+    }
+
+    return ev;
   };
 
   //  moveTo();
@@ -416,6 +443,12 @@
     arr = arr.slice(1, arr.length);
     arr.push(val);
     this.velocityQueue = arr;
+  };
+
+  // resetVelocityQueue();
+  //    removes all of the points in the velocity queue.
+  Pep.prototype.resetVelocityQueue = function() {
+    this.velocityQueue = new Array(5);
   };
 
   //  ease();
@@ -688,6 +721,19 @@
     } else{
       return false;
     }
+  };
+
+  // toggleTouchAction()
+  // needed in environments which
+  // use MSPointerEvents - very similar to preventDefault
+  // for the document of window move. 
+  Pep.prototype.toggleTouchAction = function(on) {
+    var value = on ? 'none' : 'auto';
+
+    this.$body.css({
+     '-ms-touch-action' : value,
+         'touch-action' : value
+    });
   };
 
   //  isValidMoveEvent();
