@@ -30,7 +30,7 @@ defaults = {
     debug:                  false,  
 
     // class to add to the DOM el while dragging                                      
-    activeClass:            'active',   
+    activeClass:            'pep-active',   
 
     // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                  
     multiplier:             1,     
