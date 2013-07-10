@@ -23,16 +23,16 @@ Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
 defaults = {
 
-  // OPTIONS W/ DEFAULTS
-  // --------------------------------------------------------------------------------
+   // OPTIONS W/ DEFAULTS
+   // --------------------------------------------------------------------------------
 
-  // debug via a small div in the lower-righthand corner of the document  
-   debug:                  false,  
+    // debug via a small div in the lower-righthand corner of the document  
+    debug:                  false,  
 
-  // class to add to the DOM el while dragging                                      
+    // class to add to the DOM el while dragging                                      
     activeClass:            'active',   
 
-  // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                  
+    // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                  
     multiplier:             1,     
     
     // +/- this number to modify the springiness of the object as your release it                            
