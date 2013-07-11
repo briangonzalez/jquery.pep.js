@@ -140,6 +140,9 @@
   Pep.prototype.handleStart = function(ev) {
     var self = this;
 
+    if (ev.preventManipulation)
+      ev.preventManipulation();
+
     // only continue chugging if our start event is a valid move event. 
     if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
