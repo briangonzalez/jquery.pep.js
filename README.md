@@ -76,6 +76,9 @@ defaults = {
     
     // remove margins for better object placement
     removeMargins:          true,                                         
+
+    // defer object placement until start event occurs
+    deferPlacement:         false,                                        
     
     // constrain object to either 'x' or 'y' axis
     axis:                   null,                                         
