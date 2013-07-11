@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep - active, start, and ease classes</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep();
+      });
+    </script>
+
+    <style type="text/css">
+      .pep        { width: 200px; height: 200px; background: blue; border-radius: 200px}
+      .pep-active { border: 10px solid green; }
+      .pep-start  { background: red }
+      .pep-ease   { background: yellow }
+    </style>
+
+
+  </head>
+
+  <body>
+    green border = 'pep-active' class applied </br>
+    red background = 'pep-start' class applied </br>
+    yellow background = 'pep-ease' class applied
+    <div class="pep"></div>
+
+  </body>
+
+</html>

@@ -159,7 +159,7 @@
             clearTimeout( this.restTimeout );
 
             // add active class and reset css animation, if necessary
-            this.$el.addClass( this.options.activeClass );
+            this.$el.addClass( [this.options.activeClass, 'pep-start'].join(' ') );
             this.removeCSSEasing();
 
             // store x & y values for later use
@@ -282,6 +282,10 @@
 
     // make object inactive, so watchMoveLoop returns
     this.active = false;
+
+    // remove our start class
+    this.$el.removeClass('pep-start')
+            .addClass('pep-ease');
 
     // Calculate our drop regions
     if ( this.options.droppable ) {
@@ -461,7 +465,7 @@
       self.options.rest(ev, self);
 
       // remove active class 
-      self.$el.removeClass( self.options.activeClass ); 
+      self.$el.removeClass( [self.options.activeClass, 'pep-ease'].join(' ') ); 
                                 
     }, this.options.cssEaseDuration );
     
