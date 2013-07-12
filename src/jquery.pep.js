@@ -517,7 +517,7 @@
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
     } else if ( this.$container.css('position') !== 'static' ) {
-      // this.$container.css({ position: 'static' });
+      this.$container.css({ position: 'static' });
     }
 
   };
