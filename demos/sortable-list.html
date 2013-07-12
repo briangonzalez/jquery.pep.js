@@ -23,9 +23,6 @@
           place:            false,
           axis:             'y',
           shouldEase:       false,
-          start: function(ev, obj){
-            obj.$el.css({ position: 'relative' })
-          },
           stop: function(ev, obj){
 
             // Grab the list items and sort them based on 
@@ -39,7 +36,7 @@
             var x = -1*matrix[4] 
             var y = -1*matrix[5] 
             obj.moveToUsingTransforms( x,y );
-            obj.$el.css({ position: 'static' })
+            obj.$el.css({ position: 'relative' })
                    .removeClass('activated');
 
             obj.toggle(false)
