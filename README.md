@@ -77,6 +77,9 @@ defaults = {
     // remove margins for better object placement
     removeMargins:          true,                                         
 
+    // bypass pep's object placement logic
+    place:                  true,                                         
+
     // defer object placement until start event occurs
     deferPlacement:         false,                                        
     

@@ -43,6 +43,7 @@
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
     constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
     removeMargins:          true,                                         // remove margins for better object placement
+    place:                  true,                                         // bypass pep's object placement logic
     deferPlacement:         false,                                        // defer object placement until start event occurs
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
@@ -104,7 +105,7 @@
       this.disableSelect();
 
     // position the parent & place the object, if necessary.
-    if ( !this.options.deferPlacement ) {
+    if ( this.options.place && !this.options.deferPlacement ) {
       this.positionParent();
       this.placeObject();
     }
@@ -147,7 +148,7 @@
     if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
             // position the parent & place the object, if necessary.
-            if ( this.options.deferPlacement ) {
+            if ( this.options.place && this.options.deferPlacement ) {
               this.positionParent();
               this.placeObject();
             }

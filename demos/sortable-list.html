@@ -20,9 +20,12 @@
 
         // Pep 'em
         $('li').pep({
-          deferPlacement:   true,
+          place:            false,
           axis:             'y',
           shouldEase:       false,
+          start: function(ev, obj){
+            obj.$el.css({ position: 'relative' })
+          },
           stop: function(ev, obj){
 
             // Grab the list items and sort them based on 
