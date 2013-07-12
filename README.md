@@ -119,7 +119,7 @@ $pep.pep();               // bind
 ## Class Applications
 The following classes are applied corresponding to events that are happening on the pep object:
 
-  - `pep-active` -- applied when start events occurs; removed when ease has finished
+  - `pep-active` -- applied when start event occurs; removed when ease has finished
   - `pep-start` -- applied when start event occurs; removed when stop event occurs
   - `pep-ease` -- applied when stop event occurs; removed when ease has finished
 
