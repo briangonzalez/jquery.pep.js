@@ -24,7 +24,7 @@
           deferPlacement:   true,
           axis:             'y',
           shouldEase:       false,
-          stopEvents:       'stopnow',
+          stopEvents:       'pep-stop',
           stop: function(ev, obj){
             // Grab the list items and sort them based on 
             // distance from the top
@@ -64,7 +64,7 @@
         })
 
         $li.touchhold(function(e){
-          $(this).trigger( 'stopnow' )
+          $(this).trigger( 'pep-stop' )
         }, function(e){
           console.log("Touch hold fired!");
           var $this = $(this);
