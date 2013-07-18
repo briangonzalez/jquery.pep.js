@@ -31,7 +31,7 @@
     multiplier:             1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
     velocityMultiplier:     1.9,                                          // +/- this number to modify the springiness of the object as your release it
     shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
-    stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
+    stopEvents:             '',                                           // space delimited set of events which programmatically cause the ect to stop
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
     useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
     disableSelect:          true,                                         // apply `user-select: none` (CSS) to the object
@@ -42,6 +42,10 @@
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
     constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
+    constrainMinX:          false,                                        // constrain object to min X coordinate
+    constrainMaxX:          false,                                        // constrain object to max X coordinate
+    constrainMinY:          false,                                        // constrain object to min Y coordinate
+    constrainMaxY:          false,                                        // constrain object to max Y coordinate
     removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
@@ -78,8 +82,12 @@
     this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-    this.$container   = this.options.constrainTo && this.options.constrainTo === 'parent' ? 
-                                                    this.$el.parent() : this.$document;
+
+    if( this.options.constrainTo && this.options.constrainTo === 'parent') {
+      this.$container = this.$el.parent();
+    } else if( this.options.constrainTo && this.options.constrainTo === 'document' ) {
+      this.$container = this.$document;
+    }
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.scale          = 1;
@@ -253,7 +261,7 @@
         xOp = (hash.x !== false) ? hash.x : xOp;
         yOp = (hash.y !== false) ? hash.y : yOp;
       }
-  
+
       this.moveTo(xOp, yOp);
     }
     else {
@@ -264,7 +272,7 @@
       if ( this.options.constrainTo ) {
         dx = (hash.x === false) ? dx : 0 ;
         dy = (hash.y === false) ? dy : 0 ;
-      }     
+      }
       this.moveToUsingTransforms( dx, dy );
     }
   };
@@ -516,7 +524,7 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.$container.css('position') !== 'static' ) {
+    } else if ( this.options.constrainTo === 'document' && this.$container.css('position') !== 'static' ) {
       this.$container.css({ position: 'static' });
     }
 
@@ -606,18 +614,39 @@
     this.pos.x            = pos.left;
     this.pos.y            = pos.top;
 
+    var upperYLimit, upperXLimit, lowerXLimit, lowerYLimit;
+
+    var hash              = { x: false, y: false };
+
     // log our positions
     this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y});
 
-    var upperXLimit       = this.$container.width()  - this.$el.outerWidth();
-    var upperYLimit       = this.$container.height() - this.$el.outerHeight();
-    var hash              = { x: false, y: false };
+    if ( this.options.constrainTo === 'custom' ) {
 
+      if ( this.options.constrainMinX !== false && this.options.constrainMaxX !== false ) { 
+        upperXLimit     = this.options.constrainMaxX;
+        lowerXLimit     = this.options.constrainMinX;
+      }
+      if ( this.options.constrainMinY !== false && this.options.constrainMaxY !== false ) { 
+        upperYLimit       = this.options.constrainMaxY;
+        lowerYLimit       = this.options.constrainMinY;
+      }
+
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < lowerXLimit)     hash.x = lowerXLimit; 
+      if ( this.pos.y + dy < lowerYLimit)     hash.y = lowerYLimit;
+
+    } else if ( this.options.constrainTo ) {
+      upperXLimit       = this.$container.width()  - this.$el.outerWidth();
+      upperYLimit       = this.$container.height() - this.$el.outerHeight();
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < 0 )              hash.x = 0; 
+      if ( this.pos.y + dy < 0 )              hash.y = 0;
+    }
+  
     // is our object trying to move outside upper X & Y limits?
     if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
-    if ( this.pos.x + dx < 0 )              hash.x = 0; 
     if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
-    if ( this.pos.y + dy < 0 )              hash.y = 0;
 
     return hash;
   };
