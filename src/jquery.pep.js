@@ -524,7 +524,7 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.options.constrainTo === 'document' && this.$container.css('position') !== 'static' ) {
+    } else if ( this.options.constrainTo === 'window' && this.$container.css('position') !== 'static' ) {
       this.$container.css({ position: 'static' });
     }
 
