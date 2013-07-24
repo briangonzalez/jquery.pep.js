@@ -83,10 +83,12 @@
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
-    if( this.options.constrainTo && this.options.constrainTo === 'parent') {
-      this.$container = this.$el.parent();
-    } else if( this.options.constrainTo && this.options.constrainTo === 'document' ) {
-      this.$container = this.$document;
+    if ( this.options.constrainTo ) {
+      if ( this.options.constrainTo === 'parent' ) {
+        this.$container = this.$el.parent();
+      } else if ( this.options.constrainTo === 'document' ) {
+        this.$container = this.$document;
+      }
     }
 
     this.CSSEaseHash    = this.getCSSEaseHash();
