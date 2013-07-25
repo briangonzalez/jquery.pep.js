@@ -71,9 +71,9 @@ defaults = {
     // override pep's default overlap function; takes two args: a & b and returns true if they overlap
     overlapFunction:        false,                                        
     
-    // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
+    // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
     constrainTo:            false,                                        
-    
+
     // remove margins for better object placement
     removeMargins:          true,                                         
     

@@ -78,8 +78,12 @@
     this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-    this.$container   = this.options.constrainTo && this.options.constrainTo === 'parent' ? 
-                                                    this.$el.parent() : this.$document;
+
+    if ( this.options.constrainTo === 'parent' ) {
+      this.$container = this.$el.parent();
+    } else if ( this.options.constrainTo === 'window' ) {
+      this.$container = this.$document;
+    }
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.scale          = 1;
@@ -253,7 +257,7 @@
         xOp = (hash.x !== false) ? hash.x : xOp;
         yOp = (hash.y !== false) ? hash.y : yOp;
       }
-  
+
       this.moveTo(xOp, yOp);
     }
     else {
@@ -264,7 +268,7 @@
       if ( this.options.constrainTo ) {
         dx = (hash.x === false) ? dx : 0 ;
         dy = (hash.y === false) ? dy : 0 ;
-      }     
+      }
       this.moveToUsingTransforms( dx, dy );
     }
   };
@@ -516,7 +520,7 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.$container.css('position') !== 'static' ) {
+    } else if ( this.options.constrainTo === 'window' && this.$container.css('position') !== 'static' ) {
       this.$container.css({ position: 'static' });
     }
 
@@ -606,18 +610,39 @@
     this.pos.x            = pos.left;
     this.pos.y            = pos.top;
 
+    var upperYLimit, upperXLimit, lowerXLimit, lowerYLimit;
+
+    var hash              = { x: false, y: false };
+
     // log our positions
     this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y});
 
-    var upperXLimit       = this.$container.width()  - this.$el.outerWidth();
-    var upperYLimit       = this.$container.height() - this.$el.outerHeight();
-    var hash              = { x: false, y: false };
+    if ( typeof this.options.constrainTo === 'object' ) {
 
+      if ( this.options.constrainTo[3] !== undefined && this.options.constrainTo[1] !== undefined ) { 
+        upperXLimit     = this.options.constrainTo[1];
+        lowerXLimit     = this.options.constrainTo[3];
+      }
+      if ( this.options.constrainTo[0] !== false && this.options.constrainTo[2] !== false ) { 
+        upperYLimit       = this.options.constrainTo[2];
+        lowerYLimit       = this.options.constrainTo[0];
+      }
+
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < lowerXLimit)     hash.x = lowerXLimit; 
+      if ( this.pos.y + dy < lowerYLimit)     hash.y = lowerYLimit;
+
+    } else if ( typeof this.options.constrainTo === 'string' ) {
+      upperXLimit       = this.$container.width()  - this.$el.outerWidth();
+      upperYLimit       = this.$container.height() - this.$el.outerHeight();
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < 0 )              hash.x = 0; 
+      if ( this.pos.y + dy < 0 )              hash.y = 0;
+    }
+  
     // is our object trying to move outside upper X & Y limits?
     if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
-    if ( this.pos.x + dx < 0 )              hash.x = 0; 
     if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
-    if ( this.pos.y + dy < 0 )              hash.y = 0;
 
     return hash;
   };
