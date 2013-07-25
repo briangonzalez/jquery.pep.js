@@ -17,17 +17,13 @@
           $('.pep-horizontal').pep({
             axis: 'x',
             useCSSTranslation: false,
-            constrainTo: 'custom',
-            constrainMinX: ($('.pep-horizontal').width() - $('.pep-container-horizontal').width()) * -1,
-            constrainMaxX: 0
+            constrainTo: [0, 0, 0, ($('.pep-horizontal').width() - $('.pep-container-horizontal').width()) * -1]
           });
 
           $('.pep-vertical').pep({
             axis: 'y',
             useCSSTranslation: false,
-            constrainTo: 'custom',
-            constrainMinY: ($('.pep-vertical').height() - $('.pep-container-vertical').height()) * -1,
-            constrainMaxY: 0
+            constrainTo: [($('.pep-vertical').height() - $('.pep-container-vertical').height()) * -1, 0, 0, 0]
           });
 
       });

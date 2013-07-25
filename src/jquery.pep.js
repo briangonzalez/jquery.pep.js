@@ -42,10 +42,6 @@
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
     constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
-    constrainMinX:          false,                                        // constrain object to an arbitrary lower X limit (int)
-    constrainMaxX:          false,                                        // constrain object to an arbitrary upper X limit (int)
-    constrainMinY:          false,                                        // constrain object to an arbitrary lower Y limit (int)
-    constrainMaxY:          false,                                        // constrain object to an arbitrary upper Y limit (int)
     removeMargins:          true,                                         // remove margins for better object placement
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
@@ -83,12 +79,10 @@
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
-    if ( this.options.constrainTo ) {
-      if ( this.options.constrainTo === 'parent' ) {
-        this.$container = this.$el.parent();
-      } else if ( this.options.constrainTo === 'document' ) {
-        this.$container = this.$document;
-      }
+    if ( this.options.constrainTo === 'parent' ) {
+      this.$container = this.$el.parent();
+    } else if ( this.options.constrainTo === 'window' ) {
+      this.$container = this.$document;
     }
 
     this.CSSEaseHash    = this.getCSSEaseHash();
@@ -623,22 +617,22 @@
     // log our positions
     this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y});
 
-    if ( this.options.constrainTo === 'custom' ) {
+    if ( typeof this.options.constrainTo === 'object' ) {
 
-      if ( this.options.constrainMinX !== false && this.options.constrainMaxX !== false ) { 
-        upperXLimit     = this.options.constrainMaxX;
-        lowerXLimit     = this.options.constrainMinX;
+      if ( this.options.constrainTo[3] !== undefined && this.options.constrainTo[1] !== undefined ) { 
+        upperXLimit     = this.options.constrainTo[1];
+        lowerXLimit     = this.options.constrainTo[3];
       }
-      if ( this.options.constrainMinY !== false && this.options.constrainMaxY !== false ) { 
-        upperYLimit       = this.options.constrainMaxY;
-        lowerYLimit       = this.options.constrainMinY;
+      if ( this.options.constrainTo[0] !== false && this.options.constrainTo[2] !== false ) { 
+        upperYLimit       = this.options.constrainTo[2];
+        lowerYLimit       = this.options.constrainTo[0];
       }
 
       // is our object trying to move outside lower X & Y limits?
       if ( this.pos.x + dx < lowerXLimit)     hash.x = lowerXLimit; 
       if ( this.pos.y + dy < lowerYLimit)     hash.y = lowerYLimit;
 
-    } else if ( this.options.constrainTo ) {
+    } else if ( typeof this.options.constrainTo === 'string' ) {
       upperXLimit       = this.$container.width()  - this.$el.outerWidth();
       upperYLimit       = this.$container.height() - this.$el.outerHeight();
       // is our object trying to move outside lower X & Y limits?
