@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - sortable w/ double click/tap </title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="../libs/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        // Grab our elements
+        var $ul = $('ul');
+        var $li = $ul.children('li');
+
+        // Pep 'em
+        $('li').pep({
+          place:            false,
+          axis:             'y',
+          shouldEase:       false,
+          stop: function(ev, obj){
+
+            // Grab the list items and sort them based on 
+            // distance from the top
+            $li.sort(function(a,b) {   return ( $(a).position().top - $(b).position().top )    });
+            $ul.append($li);
+
+            // Remove CSS transformations so the list item 
+            // fits nicely into place.
+            var matrix = obj.matrixToArray( obj.matrixString() );
+            var x = -1*matrix[4] 
+            var y = -1*matrix[5] 
+            obj.moveToUsingTransforms( x,y );
+            obj.$el.css({ position: 'relative' })
+                   .removeClass('activated');
+
+            obj.toggle(false)
+          }
+        });
+
+        // ..... then turn all peps off
+        $.pep.toggleAll();
+
+        // Double Tap Logic
+        var startEvent      = Modernizr.touch ? 'touchstart' :  'mousedown';
+        var stopEvent       = Modernizr.touch ? 'touchend'   :  'mouseup';
+        var time            = false;
+        var doubleTapDelay  = 300;
+
+        $li.on( startEvent , function(e){
+          var $this = $(this);
+
+          if ( time && (new Date().getTime() - time) < doubleTapDelay ) {
+            $this.addClass('activated')
+                 .data('plugin_pep')
+                 .toggle(true);
+          }
+          time = new Date().getTime();
+        });
+      });
+
+    </script>
+
+    <style type="text/css">
+      body {
+        font-family: Helvetica;
+        text-align: center;
+        margin: 0; 
+        padding: 0;
+      }
+
+      body h1{
+        color: white;
+        background: black;
+        margin: 0; padding: 10px 0;
+      }
+
+      body ul {
+        margin: 0;
+        padding: 0;
+      }
+      body ul li {
+        background: #eee;
+        list-style-type: none;
+        padding: 40px 0;
+        border-bottom: 1px solid #bbb;
+        cursor: move;
+        width: 100%;
+      }
+
+      body ul li.pep-start{
+        box-shadow: 0 5px 5px rgba(0,0,0,0.2), 0 -5px 5px rgba(0,0,0,0.2);
+        z-index: 999999;
+      }
+
+      body ul li.activated{
+        background: white;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+        <h1>Double tap/click to sort</h1>
+
+        <ul>
+          <li>
+            0. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            3. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            4. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            5. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            6. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            7. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            8. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            9. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            10. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            11. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            12. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            13. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            14. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            15. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+        </ul>
+
+  </body>
+
+
+</html>

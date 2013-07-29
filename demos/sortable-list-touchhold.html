@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - sortable w/ touchhold</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery-loader.js"></script>
+    <script src="../libs/modernizr.min.js"></script>
+    <script src="../libs/jquery.touchhold.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        // Grab our elements
+        var $ul = $('ul');
+        var $li = $ul.children('li');
+
+        // Pep 'em
+        $li.pep({
+          deferPlacement:   true,
+          axis:             'y',
+          shouldEase:       false,
+          stopEvents:       'pep-stop',
+          stop: function(ev, obj){
+
+            // Grab the list items and sort them based on 
+            // distance from the top
+            $li.sort(function(a,b) {   return ( $(a).position().top - $(b).position().top )    });
+            $ul.append($li);
+
+            // Remove CSS transformations so the list item 
+            // fits nicely into place.
+            var matrix = obj.matrixToArray( obj.matrixString() );
+            var x = -1*matrix[4] 
+            var y = -1*matrix[5] 
+            obj.moveToUsingTransforms( x,y );
+            obj.$el.css({ position: 'static' })
+                   .removeClass('activated');
+
+            obj.toggle(false);
+            allowPageScroll = true;
+          }
+        });
+
+        // ..... then turn all peps off
+        $.pep.toggleAll();
+
+        // We need to record the original start event's coords,
+        // since they pep needs 'em
+        var pos = {};
+        var startEvent      = Modernizr.touch ? 'touchstart' :  'mousedown';
+        $li.on( startEvent, function(e){
+
+          if ( e.originalEvent.targetTouches ) {
+            startEvent = e;
+            pos.x = e.originalEvent.targetTouches[0].pageX
+            pos.y = e.originalEvent.targetTouches[0].pageY
+          }
+        })
+
+        // When we touchhold a list item
+        // enable the pep object then fire it's
+        // start event
+        $li.touchhold(function(e){
+          $(this).trigger( 'pep-stop' )
+        }, function(e){
+          console.log("Touch hold fired!");
+          e.preventDefault();
+          
+          allowPageScroll = false;
+
+          var $this = $(this);
+          var obj   = $this.data('plugin_pep');
+          $this.addClass('activated')
+          obj.toggle(true);
+          
+          var newE = jQuery.Event( startEvent );
+          e.touches = [{pageX:pos.x, pageY: pos.y}]
+          newE.originalEvent = e;
+          obj.$el.trigger( newE, e )
+        });
+
+      });
+        
+      var allowPageScroll = true;
+      $(document).on('touchmove', function(e){ 
+        // debugger;
+        if ( !allowPageScroll ) e.preventDefault(); 
+      });
+
+    </script>
+
+    <style type="text/css">
+      body {
+        font-family: Helvetica;
+        text-align: center;
+        margin: 0; 
+        padding: 0;
+      }
+
+      body h1{
+        color: white;
+        background: black;
+        margin: 0; padding: 30px 0;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+      }
+
+      body ul {
+        margin: 0;
+        padding: 0;
+      }
+      body ul li {
+        background: #eee;
+        list-style-type: none;
+        padding: 60px 0;
+        border-bottom: 1px solid #bbb;
+        cursor: move;
+        width: 100%;
+      }
+
+      body ul li.pep-start{
+        box-shadow: 0 5px 5px rgba(0,0,0,0.2), 0 -5px 5px rgba(0,0,0,0.2);
+        z-index: 999999;
+      }
+
+      body ul li.activated{
+        background: white;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+        <h1>Touchhold to sort</h1>
+
+        <ul>
+          <li>
+            0. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            3. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            4. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            5. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            6. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            7. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            8. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            9. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            10. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            11. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            12. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            13. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            14. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+          <li>
+            15. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </li>
+        </ul>
+
+  </body>
+
+
+</html>

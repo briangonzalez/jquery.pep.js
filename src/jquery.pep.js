@@ -24,7 +24,7 @@
   var pluginName = 'pep',
   document = window.document,
   defaults = {
-                                                                          // OPTIONS W/ DEFAULTS
+                                                                          // Options with their defaults
                                                                           // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
     activeClass:            'pep-active',                                 // class to add to the DOM el while dragging
@@ -41,8 +41,10 @@
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
-    constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
+    constrainTo:            false,                                        // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
     removeMargins:          true,                                         // remove margins for better object placement
+    place:                  true,                                         // bypass pep's object placement logic
+    deferPlacement:         false,                                        // defer object placement until start event occurs
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
     drag:                   function(){},                                 // called continuously while the object is dragging 
@@ -107,8 +109,10 @@
       this.disableSelect();
 
     // position the parent & place the object, if necessary.
-    this.positionParent();
-    this.placeObject();
+    if ( this.options.place && !this.options.deferPlacement ) {
+      this.positionParent();
+      this.placeObject();
+    }
 
     this.ev = {};       // to store our event movements
     this.pos = {};      // to store positions
@@ -146,6 +150,12 @@
 
     // only continue chugging if our start event is a valid move event. 
     if ( this.isValidMoveEvent(ev) && !this.disabled ){
+
+            // position the parent & place the object, if necessary.
+            if ( this.options.place && this.options.deferPlacement ) {
+              this.positionParent();
+              this.placeObject();
+            }
 
             // log it
             this.log({ type: 'event', event: ev.type });

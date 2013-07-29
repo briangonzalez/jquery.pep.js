@@ -23,7 +23,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
 defaults = {
 
-   // OPTIONS W/ DEFAULTS
+   // Options with their defaults
    // --------------------------------------------------------------------------------
 
     // debug via a small div in the lower-righthand corner of the document  
@@ -76,6 +76,12 @@ defaults = {
 
     // remove margins for better object placement
     removeMargins:          true,                                         
+
+    // bypass pep's object placement logic
+    place:                  true,                                         
+
+    // defer object placement until start event occurs
+    deferPlacement:         false,                                        
     
     // constrain object to either 'x' or 'y' axis
     axis:                   null,                                         
