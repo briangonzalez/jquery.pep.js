@@ -20,12 +20,13 @@
         var $li = $ul.children('li');
 
         // Pep 'em
-        $('li').pep({
+        $li.pep({
           deferPlacement:   true,
           axis:             'y',
           shouldEase:       false,
           stopEvents:       'pep-stop',
           stop: function(ev, obj){
+
             // Grab the list items and sort them based on 
             // distance from the top
             $li.sort(function(a,b) {   return ( $(a).position().top - $(b).position().top )    });
@@ -40,33 +41,38 @@
             obj.$el.css({ position: 'static' })
                    .removeClass('activated');
 
-            obj.toggle(false)
+            obj.toggle(false);
+            allowPageScroll = true;
           }
         });
 
         // ..... then turn all peps off
         $.pep.toggleAll();
 
-        // Double Tap Logic
-        var startEvent      = Modernizr.touch ? 'touchstart' :  'mousedown';
-        var stopEvent       = Modernizr.touch ? 'touchend'   :  'mouseup';
-        var moveEvent       = Modernizr.touch ? 'touchmove'  :  'mousemove';
-        var time            = false;
-        var doubleTapDelay  = 300;
-
+        // We need to record the original start event's coords,
+        // since they pep needs 'em
         var pos = {};
+        var startEvent      = Modernizr.touch ? 'touchstart' :  'mousedown';
         $li.on( startEvent, function(e){
 
           if ( e.originalEvent.targetTouches ) {
+            startEvent = e;
             pos.x = e.originalEvent.targetTouches[0].pageX
             pos.y = e.originalEvent.targetTouches[0].pageY
           }
         })
 
+        // When we touchhold a list item
+        // enable the pep object then fire it's
+        // start event
         $li.touchhold(function(e){
           $(this).trigger( 'pep-stop' )
         }, function(e){
           console.log("Touch hold fired!");
+          e.preventDefault();
+          
+          allowPageScroll = false;
+
           var $this = $(this);
           var obj   = $this.data('plugin_pep');
           $this.addClass('activated')
@@ -78,7 +84,12 @@
           obj.$el.trigger( newE, e )
         });
 
-
+      });
+        
+      var allowPageScroll = true;
+      $(document).on('touchmove', function(e){ 
+        // debugger;
+        if ( !allowPageScroll ) e.preventDefault(); 
       });
 
     </script>
@@ -94,7 +105,14 @@
       body h1{
         color: white;
         background: black;
-        margin: 0; padding: 10px 0;
+        margin: 0; padding: 30px 0;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
       }
 
       body ul {
@@ -104,7 +122,7 @@
       body ul li {
         background: #eee;
         list-style-type: none;
-        padding: 40px 0;
+        padding: 60px 0;
         border-bottom: 1px solid #bbb;
         cursor: move;
         width: 100%;
