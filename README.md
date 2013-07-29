@@ -23,7 +23,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
 ```javascript
 defaults = {
 
-   // OPTIONS W/ DEFAULTS
+   // Options with their defaults
    // --------------------------------------------------------------------------------
 
     // debug via a small div in the lower-righthand corner of the document  
@@ -71,9 +71,9 @@ defaults = {
     // override pep's default overlap function; takes two args: a & b and returns true if they overlap
     overlapFunction:        false,                                        
     
-    // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
+    // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
     constrainTo:            false,                                        
-    
+
     // remove margins for better object placement
     removeMargins:          true,                                         
 
@@ -125,7 +125,7 @@ $pep.pep();               // bind
 ## Class Applications
 The following classes are applied corresponding to events that are happening on the pep object:
 
-  - `pep-active` -- applied when start events occurs; removed when ease has finished
+  - `pep-active` -- applied when start event occurs; removed when ease has finished
   - `pep-start` -- applied when start event occurs; removed when stop event occurs
   - `pep-ease` -- applied when stop event occurs; removed when ease has finished
 
@@ -152,20 +152,12 @@ Checkout the examples in the `demos` folder, which cover a wide array of test ca
 Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzalez](https://twitter.com/brianmgonzalez).
 
 ## Support
-Pep has been tested in the latest:
 
-  - Firefox
-  - Chrome 
-  - Safari
-  - Opera
-  - Internet Explorer
+| IE6 | IE7 | IE8 | IE9 | IE10 | Chrome | Firefox | Opera | Safari |
+|---|---|---|---|---|---|---|---|---|
+| <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie6/ie6_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie7-8/ie7-8_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie7-8/ie7-8_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie9-10/ie9-10_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie9-10/ie9-10_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/chrome/chrome_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/firefox/firefox_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/opera/opera_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/safari/safari_64x64.png"></a> 
 
-As well as:
-
-  - Internet Explorer 6 [impossible!](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be)
-  - Internet Explorer 7 [you're insane?](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be)
-  - Internet Explorer 8 [I don't believe!](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be)
-  - Internet Explorer 9 [are you sure?](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be)
+See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be), [IE7](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be), [IE8](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be), and [IE9](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be).
 
 ## Milestones
   - 05/01/13  -   Added in `droppable` functionality

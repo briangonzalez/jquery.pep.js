@@ -24,7 +24,7 @@
   var pluginName = 'pep',
   document = window.document,
   defaults = {
-                                                                          // OPTIONS W/ DEFAULTS
+                                                                          // Options with their defaults
                                                                           // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
     activeClass:            'pep-active',                                 // class to add to the DOM el while dragging
@@ -41,7 +41,7 @@
     droppable:              false,                                        // CSS selector that this element can be dropped on, false to disable
     droppableActiveClass:   'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
     overlapFunction:        false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
-    constrainTo:            false,                                        // constrain object to 'window' || 'parent'; works best w/ useCSSTranslation set to false
+    constrainTo:            false,                                        // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
     removeMargins:          true,                                         // remove margins for better object placement
     place:                  true,                                         // bypass pep's object placement logic
     deferPlacement:         false,                                        // defer object placement until start event occurs
@@ -80,8 +80,12 @@
     this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-    this.$container   = this.options.constrainTo && this.options.constrainTo === 'parent' ? 
-                                                    this.$el.parent() : this.$document;
+
+    if ( this.options.constrainTo === 'parent' ) {
+      this.$container = this.$el.parent();
+    } else if ( this.options.constrainTo === 'window' ) {
+      this.$container = this.$document;
+    }
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.scale          = 1;
@@ -263,7 +267,7 @@
         xOp = (hash.x !== false) ? hash.x : xOp;
         yOp = (hash.y !== false) ? hash.y : yOp;
       }
-  
+
       this.moveTo(xOp, yOp);
     }
     else {
@@ -274,7 +278,7 @@
       if ( this.options.constrainTo ) {
         dx = (hash.x === false) ? dx : 0 ;
         dy = (hash.y === false) ? dy : 0 ;
-      }     
+      }
       this.moveToUsingTransforms( dx, dy );
     }
   };
@@ -526,7 +530,7 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.$container.css('position') !== 'static' ) {
+    } else if ( this.options.constrainTo === 'window' && this.$container.css('position') !== 'static' ) {
       this.$container.css({ position: 'static' });
     }
 
@@ -615,19 +619,39 @@
     var pos               = this.$el.position();
     this.pos.x            = pos.left;
     this.pos.y            = pos.top;
+    var hash              = { x: false, y: false };
+
+    var upperYLimit, upperXLimit, lowerXLimit, lowerYLimit;
 
     // log our positions
     this.log({ type: "pos-coords", x: this.pos.x, y: this.pos.y});
 
-    var upperXLimit       = this.$container.width()  - this.$el.outerWidth();
-    var upperYLimit       = this.$container.height() - this.$el.outerHeight();
-    var hash              = { x: false, y: false };
+    if ( $.isArray( this.options.constrainTo ) ) {
 
+      if ( this.options.constrainTo[3] !== undefined && this.options.constrainTo[1] !== undefined ) { 
+        upperXLimit     = this.options.constrainTo[1];
+        lowerXLimit     = this.options.constrainTo[3];
+      }
+      if ( this.options.constrainTo[0] !== false && this.options.constrainTo[2] !== false ) { 
+        upperYLimit       = this.options.constrainTo[2];
+        lowerYLimit       = this.options.constrainTo[0];
+      }
+
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < lowerXLimit)     hash.x = lowerXLimit; 
+      if ( this.pos.y + dy < lowerYLimit)     hash.y = lowerYLimit;
+
+    } else if ( typeof this.options.constrainTo === 'string' ) {
+      upperXLimit       = this.$container.width()  - this.$el.outerWidth();
+      upperYLimit       = this.$container.height() - this.$el.outerHeight();
+      // is our object trying to move outside lower X & Y limits?
+      if ( this.pos.x + dx < 0 )              hash.x = 0; 
+      if ( this.pos.y + dy < 0 )              hash.y = 0;
+    }
+  
     // is our object trying to move outside upper X & Y limits?
     if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
-    if ( this.pos.x + dx < 0 )              hash.x = 0; 
     if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
-    if ( this.pos.y + dy < 0 )              hash.y = 0;
 
     return hash;
   };
