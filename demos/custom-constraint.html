@@ -26,6 +26,11 @@
             constrainTo: [($('.pep-vertical').height() - $('.pep-container-vertical').height()) * -1, 0, 0, 0]
           });
 
+          $('.pep').pep({
+            useCSSTranslation: false,
+            constrainTo: [300, 600, 600, 300]
+          })
+
       });
     </script>
 
@@ -39,6 +44,8 @@
       .pep-vertical { list-style: none; margin: 0; width: 2510px; padding: 0 }
       .pep-vertical li { margin-bottom: 10px; background: red; text-align: center; width: 200px; height: 200px; color: #fff }
       .pep-vertical li:last-child { margin-bottom: 0; }
+
+      .pep{ height: 100px; width: 100px; position: absolute; top: 300px; left: 300px; background: blue }
     </style>
 
   </head>
@@ -77,6 +84,8 @@
         <li>12</li>
       </ul>
     </div>
+
+    <div class='pep'></div>
 
   </body>
 
