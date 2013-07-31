@@ -36,7 +36,7 @@
   test('plugin name', 1, function() {
     var $el = $( '#qunit-fixture span' ).first();
     $el.pep();
-    strictEqual($el.data('plugin_pep')._name, 'Pep', 'plugin name should be Pep');
+    strictEqual($el.data('plugin_pep').name, 'pep', 'plugin name should be Pep');
   });
 
   test('toggle pep object', 1, function() {

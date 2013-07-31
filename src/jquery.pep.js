@@ -21,9 +21,8 @@
   "use strict";
   
   //  create the defaults once
-  var pluginName = 'pep',
-  document = window.document,
-  defaults = {
+  var pluginName = 'pep';
+  var defaults   = {
                                                                           // Options with their defaults
                                                                           // --------------------------------------------------------------------------------
     debug:                  false,                                        // debug via a small div in the lower-righthand corner of the document 
@@ -47,8 +46,10 @@
     deferPlacement:         false,                                        // defer object placement until start event occurs
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
+    startThreshold:         [0,0],                                        // how far past should the object move in the [x,y] direction before 'start' event is called  
+    initiate:               function(){},                                 // called when first touch / click is trigger on the object 
+    start:                  function(){},                                 // called when dragging starts (dx||dy > 0)
     drag:                   function(){},                                 // called continuously while the object is dragging 
-    start:                  function(){},                                 // called when dragging starts
     stop:                   function(){},                                 // called when dragging stops
     rest:                   function(){}                                  // called after dragging stops, and object has come to rest
   };
@@ -58,21 +59,21 @@
   //  ---------------------------------
   function Pep( el, options ) {
 
+    this.name = pluginName;
+
     // reference to our DOM object 
     // and it's jQuery equivalent.
     this.el  = el;
     this.$el = $(el);
 
     //  merge in defaults
-    this.options    = $.extend( {}, defaults, options) ;
+    this.defaults   = defaults;
+    this.options    = $.extend( {}, this.defaults, options) ;
 
     // store document/window so we don't need to keep grabbing them
     // throughout the code
     this.$document  = $(this.$el[0].ownerDocument);
     this.$window    = $(window); 
-
-    this._defaults  = defaults;
-    this._name      = 'Pep';
 
     //  Create our triggers based on touch/click device 
     this.moveTrigger  = this.isTouch() ? "touchmove"   : "mousemove";
@@ -89,6 +90,7 @@
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.scale          = 1;
+    this.started        = false;
     this.disabled       = false;
     this.resetVelocityQueue();
 
@@ -148,176 +150,238 @@
   Pep.prototype.handleStart = function(ev) {
     var self = this;
 
-    // only continue chugging if our start event is a valid move event. 
-    if ( this.isValidMoveEvent(ev) && !this.disabled ){
+            // only continue chugging if our start event is a valid move event. 
+            if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
-            // position the parent & place the object, if necessary.
-            if ( this.options.place && this.options.deferPlacement ) {
-              this.positionParent();
-              this.placeObject();
+                    // position the parent & place the object, if necessary.
+                    if ( this.options.place && this.options.deferPlacement ) {
+                      this.positionParent();
+                      this.placeObject();
+                    }
+
+                    // log it
+                    this.log({ type: 'event', event: ev.type });
+
+                    // hardware accelerate, if necessary.
+                    if ( this.options.hardwareAccelerate && !this.hardwareAccelerated ) {
+                      this.hardwareAccelerate();
+                      this.hardwareAccelerated = true;
+                    }
+
+                    // fire user's initiate event.
+                    this.options.initiate.call(this, ev, this);
+
+                    // cancel the rest timeout
+                    clearTimeout( this.restTimeout );
+
+                    // add active class and reset css animation, if necessary
+                    this.$el.addClass( [this.options.activeClass, 'pep-start'].join(' ') );
+                    this.removeCSSEasing();
+
+                    // store x & y values for later use
+                    this.startX = this.ev.x = this.isTouch() ? ev.originalEvent.pageX : ev.pageX;
+                    this.startY = this.ev.y = this.isTouch() ? ev.originalEvent.pageY : ev.pageY;
+
+                    // store the initial touch/click event, used to calculate the inital delta values.
+                    this.startEvent = this.moveEvent = ev;
+
+                    // make object active, so watchMoveLoop starts looping.
+                    this.active     = true;
+
+                    // preventDefault(), is necessary
+                    if ( this.options.shouldPreventDefault )
+                      ev.preventDefault();
+
+                    // animation loop to ensure we don't fire 
+                    // too many unneccessary repaints  
+                    (function watchMoveLoop(){
+                        if ( !self.active ) return;
+                        self.handleMove();
+                        self.requestAnimationFrame( watchMoveLoop );
+                    })($, self);
+
             }
-
-            // log it
-            this.log({ type: 'event', event: ev.type });
-
-            // hardware accelerate, if necessary.
-            if ( this.options.hardwareAccelerate && !this.hardwareAccelerated ) {
-              this.hardwareAccelerate();
-              this.hardwareAccelerated = true;
-            }
-
-            // fire user's start event.
-            this.options.start(ev, this);
-
-            // cancel the rest timeout
-            clearTimeout( this.restTimeout );
-
-            // add active class and reset css animation, if necessary
-            this.$el.addClass( [this.options.activeClass, 'pep-start'].join(' ') );
-            this.removeCSSEasing();
-
-            // store x & y values for later use
-            this.ev.x = this.isTouch() ? ev.originalEvent.pageX : ev.pageX;
-            this.ev.y = this.isTouch() ? ev.originalEvent.pageY : ev.pageY;
-
-            // store the initial touch event, used to calculate the inital delta values.
-            this.moveEvent = ev;
-
-            // make object active, so watchMoveLoop starts looping.
-            this.active     = true;
-
-            // preventDefault(), is necessary
-            if ( this.options.shouldPreventDefault )
-              ev.preventDefault();
-
-            // animation loop to ensure we don't fire 
-            // too many unneccessary repaints  
-            (function watchMoveLoop(){
-                if ( !self.active ) return;
-                self.handleMove();
-                self.requestAnimationFrame( watchMoveLoop );
-            })($, self);
-
-    }
   };
 
   //  handleMove();
   //    the logic for when the move events occur 
   Pep.prototype.handleMove = function() {
 
-    // setup our event object
-    var ev = this.moveEvent;
-    if ( typeof(ev) === 'undefined' ) return;
+            // setup our event object
+            var ev = this.moveEvent;
+            if ( typeof(ev) === 'undefined' ) return;
 
-    // get our move event's x & y
-    var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
-    var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
+            // get our move event's x & y
+            var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
+            var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
 
-    // last in, first out (LIFO) queue to help us manage velocity
-    this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );
+            // last in, first out (LIFO) queue to help us manage velocity
+            this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );
 
-    // calculate values necessary to moving
-    var dx, dy;
+            // calculate values necessary to moving
+            var dx, dy;
 
-    if ( ev.type === this.startTrigger ){
-      dx = 0;
-      dy = 0;
-    } else{
-      dx = curX - this.ev.x;
-      dy = curY - this.ev.y;
-    }
+            if ( ev.type === this.startTrigger ){
+              dx = 0;
+              dy = 0;
+            } else{
+              dx = curX - this.ev.x;
+              dy = curY - this.ev.y;
+            }
 
-    this.dx   = dx;
-    this.dy   = dy;
-    this.ev.x = curX;
-    this.ev.y = curY;
+            this.dx   = dx;
+            this.dy   = dy;
+            this.ev.x = curX;
+            this.ev.y = curY;
 
-    // no movement in either direction -- so return
-    if (dx === 0 && dy === 0){
-      this.log({ type: 'event', event: '** stopped **' });
-      return;
-    }
+            // no movement in either direction -- so return
+            if (dx === 0 && dy === 0){
+              this.log({ type: 'event', event: '** stopped **' });
+              return;
+            }
 
-    // Calculate our drop regions
-    if ( this.options.droppable ) {
-      this.calculateActiveDropRegions();
-    }
+            // check if object has moved past X/Y thresholds
+            // if so, fire users start event
+            var initialDx  = Math.abs(this.startX - curX);
+            var initialDy  = Math.abs(this.startY - curY);
+            if ( !this.started && ( initialDx > this.options.startThreshold[0] || initialDy > this.options.startThreshold[1] ) ){
+              this.started = true;
+              this.options.start.call(this, this.startEvent, this);
+            }
 
-    // fire user's drag event.
-    var continueDrag = this.options.drag(ev, this);
+            // Calculate our drop regions
+            if ( this.options.droppable ) {
+              this.calculateActiveDropRegions();
+            }
 
-    if ( continueDrag === false ) {
-      this.resetVelocityQueue();
-      return;
-    }
+            // fire user's drag event.
+            var continueDrag = this.options.drag.call(this, ev, this);
 
-    // log the move trigger & event position
-    this.log({ type: 'event', event: ev.type });
-    this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
-    this.log({ type: 'velocity' });
+            if ( continueDrag === false ) {
+              this.resetVelocityQueue();
+              return;
+            }
 
-    var hash = this.handleConstraint(dx, dy);
+            // log the move trigger & event position
+            this.log({ type: 'event', event: ev.type });
+            this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
+            this.log({ type: 'velocity' });
 
-    // if using not using CSS transforms, move object via absolute position
-    if ( !this.shouldUseCSSTranslation() ){  
-      var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
-      var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
+            var hash = this.handleConstraint(dx, dy);
 
-      if ( this.options.constrainTo ) {
-        xOp = (hash.x !== false) ? hash.x : xOp;
-        yOp = (hash.y !== false) ? hash.y : yOp;
-      }
+            // if using not using CSS transforms, move object via absolute position
+            if ( !this.shouldUseCSSTranslation() ){  
+              var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+              var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
-      this.moveTo(xOp, yOp);
-    }
-    else {
+              if ( this.options.constrainTo ) {
+                xOp = (hash.x !== false) ? hash.x : xOp;
+                yOp = (hash.y !== false) ? hash.y : yOp;
+              }
 
-      dx = (dx/this.scale)*this.options.multiplier;
-      dy = (dy/this.scale)*this.options.multiplier;
+              this.moveTo(xOp, yOp);
+            }
+            else {
 
-      if ( this.options.constrainTo ) {
-        dx = (hash.x === false) ? dx : 0 ;
-        dy = (hash.y === false) ? dy : 0 ;
-      }
-      this.moveToUsingTransforms( dx, dy );
-    }
+              dx = (dx/this.scale)*this.options.multiplier;
+              dy = (dy/this.scale)*this.options.multiplier;
+
+              if ( this.options.constrainTo ) {
+                dx = (hash.x === false) ? dx : 0 ;
+                dy = (hash.y === false) ? dy : 0 ;
+              }
+              this.moveToUsingTransforms( dx, dy );
+            }
   };
 
   //  handleStop();
   //    the logic for when the stop events occur
   Pep.prototype.handleStop = function(ev) {
 
-    // no need to handle stop event if we're not active
-    if (!this.active) 
-      return;
+            // no need to handle stop event if we're not active
+            if (!this.active) 
+              return;
 
-    // log it
-    this.log({ type: 'event', event: ev.type });
+            // log it
+            this.log({ type: 'event', event: ev.type });
 
-    // make object inactive, so watchMoveLoop returns
-    this.active = false;
+            // make object inactive, so watchMoveLoop returns
+            this.active = false;
 
-    // remove our start class
-    this.$el.removeClass('pep-start')
-            .addClass('pep-ease');
+            this.started = false;
 
-    // Calculate our drop regions
-    if ( this.options.droppable ) {
-      this.calculateActiveDropRegions();
-    }
+            // remove our start class
+            this.$el.removeClass('pep-start')
+                    .addClass('pep-ease');
 
-    // ease the object, if necessary
-    if (this.options.shouldEase)
-      this.ease(ev);
+            // Calculate our drop regions
+            if ( this.options.droppable ) {
+              this.calculateActiveDropRegions();
+            }
 
-    // fire user's stop event.
-    this.options.stop(ev, this);
+            // ease the object, if necessary
+            if (this.options.shouldEase)
+              this.ease(ev);
 
-    // reset the velocity queue 
-    this.resetVelocityQueue();
+            // fire user's stop event.
+            this.options.stop.call(this, ev, this);
+
+            // reset the velocity queue 
+            this.resetVelocityQueue();
 
   };
 
+  //  ease();
+  //    used in conjunction with the LIFO queue 
+  //    to ease the object after stop
+  Pep.prototype.ease = function(ev){
+
+            var pos       = this.$el.position();
+            var vel       = this.velocity();
+            var dt        = this.dt;
+            var x         = (vel.x/this.scale) * this.options.multiplier;
+            var y         = (vel.y/this.scale) * this.options.multiplier;
+
+            var hash      = this.handleConstraint(x, y);
+
+            // ✪  Apply the CSS3 animation easing magic  ✪
+            if ( this.cssAnimationsSupported() )
+              this.$el.css( this.getCSSEaseHash() );
+            
+            var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
+            var yOp = ( vel.y > 0 ) ? "+=" + y : "-=" + Math.abs(y);
+
+            if ( this.options.constrainTo ) {
+              xOp = (hash.x !== false) ? hash.x : xOp;
+              yOp = (hash.y !== false) ? hash.y : yOp;
+            }
+
+            // ease it via JS, the last true tells it to animate.
+            var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
+                   this.moveTo(xOp, yOp, jsAnimateFallback);
+
+            // when the rest occurs, remove active class and call
+            // user's rest event.
+            var self = this;
+            this.restTimeout = setTimeout( function(){ 
+
+              // Calculate our drop regions
+              if ( self.options.droppable ) {
+                self.calculateActiveDropRegions();
+              }
+              
+              // call users rest event.
+              self.options.rest.call(self, ev, self);
+
+              // remove active class 
+              self.$el.removeClass( [self.options.activeClass, 'pep-ease'].join(' ') ); 
+                                        
+            }, this.options.cssEaseDuration );
+    
+  }; 
+
+  // resetVelocityQueue()
+  //    
   Pep.prototype.resetVelocityQueue = function() {
     this.velocityQueue = new Array(5);
   };
@@ -435,56 +499,6 @@
     arr.push(val);
     this.velocityQueue = arr;
   };
-
-  //  ease();
-  //    used in conjunction with the LIFO queue 
-  //    to ease the object after stop
-  Pep.prototype.ease = function(ev){
-
-    var pos       = this.$el.position();
-    var vel       = this.velocity();
-    var dt        = this.dt;
-    var x         = (vel.x/this.scale) * this.options.multiplier;
-    var y         = (vel.y/this.scale) * this.options.multiplier;
-
-    var hash      = this.handleConstraint(x, y);
-
-    // ✪  Apply the CSS3 animation easing magic  ✪
-    if ( this.cssAnimationsSupported() )
-      this.$el.css( this.getCSSEaseHash() );
-    
-    var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
-    var yOp = ( vel.y > 0 ) ? "+=" + y : "-=" + Math.abs(y);
-
-    if ( this.options.constrainTo ) {
-      xOp = (hash.x !== false) ? hash.x : xOp;
-      yOp = (hash.y !== false) ? hash.y : yOp;
-    }
-
-    // ease it via JS, the last true tells it to animate..........
-    var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
-           this.moveTo(xOp, yOp, jsAnimateFallback);
-
-    // when the rest occurs, remove active class and call
-    // user's rest event.
-    var self = this;
-    this.restTimeout = setTimeout( function(){ 
-
-      // Calculate our drop regions
-      if ( self.options.droppable ) {
-        self.calculateActiveDropRegions();
-      }
-      
-      // call users rest event.
-      self.options.rest(ev, self);
-
-      // remove active class 
-      self.$el.removeClass( [self.options.activeClass, 'pep-ease'].join(' ') ); 
-                                
-    }, this.options.cssEaseDuration );
-    
-
-  }; 
 
   //  velocity();
   //    using the LIFO, calculate velocity and return
