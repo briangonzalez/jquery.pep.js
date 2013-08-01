@@ -308,8 +308,6 @@
             // make object inactive, so watchMoveLoop returns
             this.active = false;
 
-            this.started = false;
-
             // remove our start class
             this.$el.removeClass('pep-start')
                     .addClass('pep-ease');
@@ -325,6 +323,11 @@
 
             // fire user's stop event.
             this.options.stop.call(this, ev, this);
+
+            // this must be set to false after 
+            // the user's stop event is called, so the dev
+            // has access to it. 
+            this.started = false;
 
             // reset the velocity queue 
             this.resetVelocityQueue();
