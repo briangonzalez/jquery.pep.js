@@ -530,7 +530,9 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.options.constrainTo === 'window' && this.$container.css('position') !== 'static' ) {
+    } else if ( this.options.constrainTo === 'window' && this.$container.get(0).nodeName !== "#document" &&
+                this.$container.css('position') !== 'static' )
+    {
       this.$container.css({ position: 'static' });
     }
 
