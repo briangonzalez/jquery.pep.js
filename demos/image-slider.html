@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep image slider demo</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+          var $inner = $('.slider .inner');
+
+          $inner.pep({
+            place: false,
+            axis: 'x',
+            stop: function(ev){
+              if ( !this.started ) {
+                $(ev.target).toggleClass('gray')
+              };
+            }
+          });
+
+      });
+    </script>
+
+    <style type="text/css">
+        .slider {
+          box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.2), -2px 5px 10px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.3);
+          width: 80%;
+          height: 200px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          overflow: hidden;
+          -webkit-transform: translateX(-50%) translateY(-50%);
+          -moz-transform: translateX(-50%) translateY(-50%);
+          -ms-transform: translateX(-50%) translateY(-50%);
+          -o-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+        }
+        .slider .inner {
+          height: 100%;
+          white-space: nowrap;
+          font-size: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        .slider .inner img {
+          display: inline-block;
+          height: 100%;
+          font-size: 1rem;
+        }
+
+        .slider .inner img.gray {
+          -webkit-filter: grayscale(100%);
+        }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class='slider'>
+      <div class='inner'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51f92f36596808417100001f/800x600/vsco_073113_20.jpg'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51ec0016596808105700006b/800x600/vsco_072113_18.jpg'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51f92f36596808417100001f/800x600/vsco_073113_20.jpg'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51ec0016596808105700006b/800x600/vsco_072113_18.jpg'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51f92f36596808417100001f/800x600/vsco_073113_20.jpg'>
+        <img draggable='false' src='http://vscosites.s3.amazonaws.com/1/51dc13aa0eba421541/51ec0016596808105700006b/800x600/vsco_072113_18.jpg'>
+      </div>
+    </div>
+
+  </body>
+
+</html>
