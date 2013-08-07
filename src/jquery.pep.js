@@ -46,8 +46,8 @@
     deferPlacement:         false,                                        // defer object placement until start event occurs
     axis:                   null,                                         // constrain object to either 'x' or 'y' axis
     forceNonCSS3Movement:   false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
-    startThreshold:         [0,0],                                        // how far past should the object move in the [x,y] direction before 'start' event is called  
-    initiate:               function(){},                                 // called when first touch / click is trigger on the object 
+    startThreshold:         [0,0],                                        // how far past should the object move in the [x,y] direction before user 'start' function is called  
+    initiate:               function(){},                                 // called when first touch / click event is triggered on the object 
     start:                  function(){},                                 // called when dragging starts (dx||dy > 0)
     drag:                   function(){},                                 // called continuously while the object is dragging 
     stop:                   function(){},                                 // called when dragging stops

@@ -87,14 +87,20 @@ defaults = {
     axis:                   null,                                         
     
     // DO NOT USE: this is subject to come/go. Use at your own risk
-    forceNonCSS3Movement:   false,                                        
+    forceNonCSS3Movement:   false,                                                                      
+
+    // how far past should the object move in the [x,y] direction before 'start' event is called 
+    startThreshold:         [0,0],
+
+    // called when first touch / mousedown event is triggered on the object 
+    initiate:               function(){},
     
-     // called continuously while the object is dragging 
-    drag:                   function(){},                                
-    
-    // called when dragging starts
+    // called when dragging starts; dx || dy must be greater than startThreshold ([x,y])
     start:                  function(){},                                 
     
+     // called continuously while the object is dragging 
+    drag:                   function(){},  
+
     // called when dragging stops
     stop:                   function(){},                                 
     
@@ -125,9 +131,9 @@ $pep.pep();               // bind
 ## Class Applications
 The following classes are applied corresponding to events that are happening on the pep object:
 
-  - `pep-active` -- applied when start event occurs; removed when ease has finished
-  - `pep-start` -- applied when start event occurs; removed when stop event occurs
-  - `pep-ease` -- applied when stop event occurs; removed when ease has finished
+  - `pep-active` -- applied when initiate event is triggered; removed when ease has finished
+  - `pep-start` -- applied when start event is triggered; removed when stop event occurs
+  - `pep-ease` -- applied when stop event is triggered; removed when ease has finished
 
 ## Installation
 Grab Pep via bower:
@@ -139,10 +145,12 @@ bower install jquery.pep
 or grab from CDN:
 
 ````
-//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
-````
-````
+// Guaranteed to be up-to-date
 //rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
+````
+````
+// This is likely to get out of sync from master
+//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
 ````
 
 ## Examples
@@ -160,6 +168,7 @@ Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzal
 See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be), [IE7](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be), [IE8](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be), and [IE9](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be).
 
 ## Milestones
+  - 08/06/13  -   Added in user-provided `initiate` function, which is fired during touchstart or mousedown; `start` is now called after object has moved past threshold    
   - 05/01/13  -   Added in `droppable` functionality
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
   - 05/30/12  -   Initial version
