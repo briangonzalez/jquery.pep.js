@@ -175,7 +175,7 @@
                     clearTimeout( this.restTimeout );
 
                     // add active class and reset css animation, if necessary
-                    this.$el.addClass( [this.options.activeClass, 'pep-start'].join(' ') );
+                    this.$el.addClass( this.options.activeClass );
                     this.removeCSSEasing();
 
                     // store x & y values for later use
@@ -246,6 +246,7 @@
             var initialDy  = Math.abs(this.startY - curY);
             if ( !this.started && ( initialDx > this.options.startThreshold[0] || initialDy > this.options.startThreshold[1] ) ){
               this.started = true;
+              this.$el.addClass('pep-start');
               this.options.start.call(this, this.startEvent, this);
             }
 
