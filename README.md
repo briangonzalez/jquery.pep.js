@@ -89,7 +89,7 @@ defaults = {
     // DO NOT USE: this is subject to come/go. Use at your own risk
     forceNonCSS3Movement:   false,                                                                      
 
-    // how far past should the object move in the [x,y] direction before 'start' event is called 
+    // how far past should the object move in the [x,y] direction before users 'start' function is called 
     startThreshold:         [0,0],
 
     // called when first touch / mousedown event is triggered on the object 
