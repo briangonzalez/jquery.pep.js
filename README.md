@@ -38,8 +38,11 @@ defaults = {
     // +/- this number to modify the springiness of the object as your release it                            
     velocityMultiplier:     1.9, 
                                          
-   // in some cases, we don't want to prevent the default on our Pep object, your call
+    // in some cases, we don't want to prevent the default mousedown/touchstart on our Pep object, your call
     shouldPreventDefault:   true,
+    
+    // set to false to stop drag events from bubbling up through the DOM tree
+    allowDragEventPropagation:      true,
     
     // space delimited set of events which programmatically cause the object to stop
     stopEvents:             '',                                           
