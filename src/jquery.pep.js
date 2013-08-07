@@ -31,6 +31,7 @@
     velocityMultiplier:     1.9,                                          // +/- this number to modify the springiness of the object as your release it
     shouldPreventDefault:   true,                                         // in some cases, we don't want to prevent the default on our Pep object, your call
     stopEvents:             '',                                           // space delimited set of events which programmatically cause the object to stop
+    allowEventPropagation:  true,                                         // set to false to stop drag events from bubbling up through the DOM tree
     hardwareAccelerate:     true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
     useCSSTranslation:      true,                                         // use CSS transform translations as opposed to top/left
     disableSelect:          true,                                         // apply `user-select: none` (CSS) to the object
@@ -211,7 +212,9 @@
             var ev = this.moveEvent;
             if ( typeof(ev) === 'undefined' ) return;
 
-            // get our move event's x & y
+            // Allow/Disallow event bubbling
+            if ( !this.options.allowEventPropagation ) ev.stopPropagation();
+
             var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
             var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
 
