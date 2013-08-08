@@ -69,7 +69,6 @@ var $pep = $('.pep');
 $pep.pep();               // bind
 $.pep.unbind( $pep );     // unbind
 $pep.pep();               // bind
-
 ````
 
 ### Class Applications
