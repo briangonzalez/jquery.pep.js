@@ -22,7 +22,6 @@ Pep has many options. Here they are in their entirety, with their defaults.
 
 | Name                            | Default                                         | Description                                                                                                                                             |
 |---------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| startThreshold                  | `[0,0]`                                         | how far should the object move in the [x,y] direction before user-prived 'start' function is called                                                     |
 | initiate                        | `function(){}`                                  | [≘ touchstart/mousedown] called when first touch / click event is triggered on the object                                                               |
 | start                           | `function(){}`                                  | called when dragging starts; when dx || dy are greater than startThreshold[0] || startThreshold[1]                                                      |
 | drag                            | `function(){}`                                  | [≘ touchmove/mousemove] called continuously while the object is dragging                                                                                |
