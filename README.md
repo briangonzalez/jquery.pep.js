@@ -2,7 +2,6 @@
 
 *kinetic drag for mobile & desktop*, read more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)
 
--------
 
 
 ### Getting Started
