@@ -20,97 +20,40 @@ In your web page:
 
 ## Usage
 Pep has many options. Here they are in their entirety, with their defaults.
-```javascript
-defaults = {
 
-   // Options with their defaults
-   // --------------------------------------------------------------------------------
+| Name                            | Default                                         | Description                                                                                                                                             |
+|---------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| startThreshold                  | [0,0]                                           | how far should the object move in the [x,y] direction before user-prived 'start' function is called                                                     |
+| initiate                        | function(){}                                    | [≘ touchstart/mousedown] called when first touch / click event is triggered on the object                                                               |
+| start                           | function(){}                                    | called when dragging starts; when dx || dy are greater than startThreshold[0] || startThreshold[1]                                                      |
+| drag                            | function(){}                                    | [≘ touchmove/mousemove] called continuously while the object is dragging                                                                                |
+| stop                            | function(){}                                    | [≘ touchend/mouseup] called when dragging stops                                                                                                         |
+| rest                            | function(){}                                    | called after dragging stops, and object has come to rest                                                                                                |
+| startThreshold                  | [0,0]                                           | how far past should the object move in the [x,y] direction before user 'start' function is called                                                       |
+| droppable                       | false                                           | CSS selector that this element can be dropped on, false to disable                                                                                      |
+| droppableActiveClass            | 'pep-dpa'                                       | class to add to active droppable parents, default to pep-dpa (droppable parent active)                                                                  |
+| overlapFunction                 | false                                           | override pep's default overlap function; takes two args: a & b and returns true if they overlap                                                         |
+| cssEaseString                   | cubic-bezier(0.190, 1.000, 0.220, 1.000)        | get more css ease params from [ http://matthewlein.com/ceaser/ ]                                                                                        |
+| cssEaseDuration                 | 750                                             | how long should it take (in ms) for the object to get from stop to rest?                                                                                |
+| constrainTo                     | false                                           | constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false                                    |
+| axis                            | null                                            | constrain object to either 'x' or 'y' axis                                                                                                              |
+| debug                           | false                                           | show debug values and events in the lower-righthand corner of page                                                                                      |
+| activeClass                     | 'pep-active'                                    | class to add to the pep element while dragging                                                                                                          |
+| multiplier                      | 1                                               | +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                                                          |
+| velocityMultiplier              | 1.9                                             | +/- this number to modify the springiness of the object as your release it                                                                              |
+| shouldPreventDefault            | true                                            | in some cases, we don't want to prevent the default mousedown/touchstart on our Pep object, your call                                                   |
+| allowDragEventPropagation       | true                                            | set to false to stop drag events from bubbling up through the DOM tree                                                                                  |
+| stopEvents                      | ''                                              | space delimited set of events which programmatically cause the object to stop                                                                           |
+| hardwareAccelerate              | true                                            | apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/     |
+| useCSSTranslation               | true                                            | use CSS transform translations as opposed to top/left                                                                                                   |
+| disableSelect                   | true                                            | apply `user-select: none` (CSS) to the object                                                                                                           |
+| removeMargins                   | true                                            | remove margins for better object placement                                                                                                              |
+| shouldEase                      | true                                            | disable/enable easing                                                                                                                                   |
+| place                           | true                                            | bypass pep's object placement logic                                                                                                                     |
+| deferPlacement                  | false                                           | defer object placement until start event occurs                                                                                                         |
+| forceNonCSS3Movement            | false                                           | DO NOT USE: this is subject to come/go. Use at your own risk                                                                                            |
 
-    // debug via a small div in the lower-righthand corner of the document  
-    debug:                  false,  
 
-    // class to add to the DOM el while dragging                                      
-    activeClass:            'pep-active',   
-
-    // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement                                  
-    multiplier:             1,     
-    
-    // +/- this number to modify the springiness of the object as your release it                            
-    velocityMultiplier:     1.9, 
-                                         
-    // in some cases, we don't want to prevent the default mousedown/touchstart on our Pep object, your call
-    shouldPreventDefault:   true,
-    
-    // set to false to stop drag events from bubbling up through the DOM tree
-    allowDragEventPropagation:      true,
-    
-    // space delimited set of events which programmatically cause the object to stop
-    stopEvents:             '',                                           
-    
-    // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
-    hardwareAccelerate:     true,                                         
-    
-    // use CSS transform translations as opposed to top/left
-    useCSSTranslation:      true,                                         
-    
-    // apply `user-select: none` (CSS) to the object
-    disableSelect:          true,                                         
-    
-    // get more css ease params from [ http://matthewlein.com/ceaser/ ]
-    cssEaseString:          "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   
-    
-    // how long should it take (in ms) for the object to get from stop to rest?
-    cssEaseDuration:        750,                                          
-    
-    // disable/enable easing
-    shouldEase:             true,                                         
-    
-    // CSS selector that this element can be dropped on, false to disable
-    droppable:              false,                                        
-    
-    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
-    droppableActiveClass:   'pep-dpa',                                    
-    
-    // override pep's default overlap function; takes two args: a & b and returns true if they overlap
-    overlapFunction:        false,                                        
-    
-    // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
-    constrainTo:            false,                                        
-
-    // remove margins for better object placement
-    removeMargins:          true,                                         
-
-    // bypass pep's object placement logic
-    place:                  true,                                         
-
-    // defer object placement until start event occurs
-    deferPlacement:         false,                                        
-    
-    // constrain object to either 'x' or 'y' axis
-    axis:                   null,                                         
-    
-    // DO NOT USE: this is subject to come/go. Use at your own risk
-    forceNonCSS3Movement:   false,                                                                      
-
-    // how far past should the object move in the [x,y] direction before users 'start' function is called 
-    startThreshold:         [0,0],
-
-    // called when first touch / mousedown event is triggered on the object 
-    initiate:               function(){},
-    
-    // called when dragging starts; dx || dy must be greater than startThreshold ([x,y])
-    start:                  function(){},                                 
-    
-     // called continuously while the object is dragging 
-    drag:                   function(){},  
-
-    // called when dragging stops
-    stop:                   function(){},                                 
-    
-    // called after dragging stops, and object has come to rest
-    rest:                   function(){}                                  
-}; 
-```
 
 ## API
 ```javascript

@@ -23,36 +23,40 @@
   //  create the defaults once
   var pluginName = 'pep';
   var defaults   = {
-                                                                          // Options with their defaults
-                                                                          // --------------------------------------------------------------------------------
-    debug:                          false,                                        // debug via a small div in the lower-righthand corner of the document 
-    activeClass:                    'pep-active',                                 // class to add to the DOM el while dragging
-    multiplier:                     1,                                            // +/- this number to modify to 1:1 ratio of finger/mouse movement to el movement 
-    velocityMultiplier:             1.9,                                          // +/- this number to modify the springiness of the object as your release it
-    shouldPreventDefault:           true,                                         // in some cases, we don't want to prevent the default mousedown/touchstart on our Pep object, your call
-    allowDragEventPropagation:      true,                                         // set to false to stop drag events from bubbling up through the DOM tree
-    stopEvents:                     '',                                           // space delimited set of events which programmatically cause the object to stop
-    hardwareAccelerate:             true,                                         // apply the CSS3 silver bullet method to accelerate the pep object: http://indiegamr.com/ios6-html-hardware-acceleration-changes-and-how-to-fix-them/
-    useCSSTranslation:              true,                                         // use CSS transform translations as opposed to top/left
-    disableSelect:                  true,                                         // apply `user-select: none` (CSS) to the object
-    cssEaseString:                  "cubic-bezier(0.190, 1.000, 0.220, 1.000)",   // get more css ease params from [ http://matthewlein.com/ceaser/ ]
-    cssEaseDuration:                750,                                          // how long should it take (in ms) for the object to get from stop to rest?
-    shouldEase:                     true,                                         // disable/enable easing
-    droppable:                      false,                                        // CSS selector that this element can be dropped on, false to disable
-    droppableActiveClass:           'pep-dpa',                                    // class to add to active droppable parents, default to pep-dpa (droppable parent active)
-    overlapFunction:                false,                                        // override pep's default overlap function; takes two args: a & b and returns true if they overlap
-    constrainTo:                    false,                                        // constrain object to 'window' || 'parent' || [top, right, bottom, left]; works best w/ useCSSTranslation set to false
-    removeMargins:                  true,                                         // remove margins for better object placement
-    place:                          true,                                         // bypass pep's object placement logic
-    deferPlacement:                 false,                                        // defer object placement until start event occurs
-    axis:                           null,                                         // constrain object to either 'x' or 'y' axis
-    forceNonCSS3Movement:           false,                                        // DO NOT USE: this is subject to come/go. Use at your own risk
-    startThreshold:                 [0,0],                                        // how far past should the object move in the [x,y] direction before user 'start' function is called  
-    initiate:                       function(){},                                 // called when first touch / click event is triggered on the object 
-    start:                          function(){},                                 // called when dragging starts (dx||dy > 0)
-    drag:                           function(){},                                 // called continuously while the object is dragging 
-    stop:                           function(){},                                 // called when dragging stops
-    rest:                           function(){}                                  // called after dragging stops, and object has come to rest
+
+    // Options
+    // ----------------------------------------------------------------------------------------------
+    // See ** https://github.com/briangonzalez/jquery.pep.js ** for fully documented options.
+    // It was too hard to manage options here and in the readme.
+    // ----------------------------------------------------------------------------------------------
+    initiate:                       function(){},                                
+    start:                          function(){},                                
+    drag:                           function(){},                                
+    stop:                           function(){},                                
+    rest:                           function(){},
+    startThreshold:                 [0,0],                                                                       
+    debug:                          false,                                       
+    activeClass:                    'pep-active',                                
+    multiplier:                     1,                                           
+    velocityMultiplier:             1.9,                                         
+    shouldPreventDefault:           true,                                        
+    allowDragEventPropagation:      true,                                        
+    stopEvents:                     '',                                          
+    hardwareAccelerate:             true,                                        
+    useCSSTranslation:              true,                                        
+    disableSelect:                  true,                                        
+    cssEaseString:                  "cubic-bezier(0.190, 1.000, 0.220, 1.000)",  
+    cssEaseDuration:                750,                                         
+    shouldEase:                     true,                                        
+    droppable:                      false,                                       
+    droppableActiveClass:           'pep-dpa',                                   
+    overlapFunction:                false,                                       
+    constrainTo:                    false,                                       
+    removeMargins:                  true,                                        
+    place:                          true,                                        
+    deferPlacement:                 false,                                       
+    axis:                           null,                                        
+    forceNonCSS3Movement:           false                                       
   };
 
   //  ---------------------------------
