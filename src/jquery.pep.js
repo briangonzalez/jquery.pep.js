@@ -75,15 +75,15 @@
     this.defaults   = defaults;
     this.options    = $.extend( {}, this.defaults, options) ;
 
-    // store document/window so we don't need to keep grabbing them
+    // store document/body so we don't need to keep grabbing them
     // throughout the code
     this.$document  = $(this.$el[0].ownerDocument);
-    this.$window    = $(window); 
+    this.$body      = this.$document.find('body'); 
 
     //  Create our triggers based on touch/click device 
-    this.moveTrigger  = this.isTouch() ? "touchmove"   : "mousemove";
-    this.startTrigger = this.isTouch() ? "touchstart"  : "mousedown";
-    this.stopTrigger  = this.isTouch() ? "touchend"    : "mouseup";
+    this.moveTrigger  = "MSPointerMove touchmove mousemove";
+    this.startTrigger = "MSPointerDown touchstart mousedown";
+    this.stopTrigger  = "MSPointerUp touchend mouseup";
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
@@ -92,6 +92,10 @@
     } else if ( this.options.constrainTo === 'window' ) {
       this.$container = this.$document;
     }
+
+    // IE need this
+    if ( this.isPointerEventCompatible() )
+      this.applyMSDefaults();
 
     this.CSSEaseHash    = this.getCSSEaseHash();
     this.scale          = 1;
@@ -135,6 +139,7 @@
 
     // Subscribe to our start event 
     this.$el.bind( this.startTrigger, function(ev){
+      console.log('started')
       self.handleStart(ev);
     });
 
@@ -157,6 +162,13 @@
 
             // only continue chugging if our start event is a valid move event. 
             if ( this.isValidMoveEvent(ev) && !this.disabled ){
+
+                    // IE10 Hack. Me not happy.
+                    if ( this.isPointerEventCompatible() && ev.preventManipulation )
+                      ev.preventManipulation();
+
+                    // normalize event
+                    ev = this.normalizeEvent(ev);
 
                     // position the parent & place the object, if necessary.
                     if ( this.options.place && this.options.deferPlacement ) {
@@ -184,8 +196,8 @@
                     this.removeCSSEasing();
 
                     // store x & y values for later use
-                    this.startX = this.ev.x = this.isTouch() ? ev.originalEvent.pageX : ev.pageX;
-                    this.startY = this.ev.y = this.isTouch() ? ev.originalEvent.pageY : ev.pageY;
+                    this.startX = this.ev.x = ev.pep.x;
+                    this.startY = this.ev.y = ev.pep.y;
 
                     // store the initial touch/click event, used to calculate the inital delta values.
                     this.startEvent = this.moveEvent = ev;
@@ -217,11 +229,13 @@
   Pep.prototype.handleMove = function() {
 
             // setup our event object
-            var ev = this.moveEvent;
-            if ( typeof(ev) === 'undefined' ) return;
+            if ( typeof(this.moveEvent) === 'undefined' ) 
+              return;
 
-            var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
-            var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
+            // get our move event's x & y
+            var ev      = this.normalizeEvent( this.moveEvent );
+            var curX    = ev.pep.x;
+            var curY    = ev.pep.y;
 
             // last in, first out (LIFO) queue to help us manage velocity
             this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );
@@ -229,7 +243,7 @@
             // calculate values necessary to moving
             var dx, dy;
 
-            if ( ev.type === this.startTrigger ){
+            if ( this.startTrigger.split(' ').indexOf(ev.type) > -1  ){
               dx = 0;
               dy = 0;
             } else{
@@ -391,6 +405,24 @@
             }, this.options.cssEaseDuration );
     
   }; 
+
+  // normalizeEvent()
+  Pep.prototype.normalizeEvent = function(ev) {
+      ev.pep        = {};
+
+       if ( this.isPointerEventCompatible() || !this.isTouch() ) {
+        ev.pep.x      = ev.originalEvent.pageX;
+        ev.pep.y      = ev.originalEvent.pageY;
+        ev.pep.type   = ev.type;
+      } 
+      else {
+        ev.pep.x      = ev.originalEvent.touches[0].pageX;
+        ev.pep.y      = ev.originalEvent.touches[0].pageY;
+        ev.pep.type   = ev.type;
+      }
+
+       return ev;
+   };
 
   // resetVelocityQueue()
   //    
@@ -754,6 +786,25 @@
     } else{
       return false;
     }
+  };
+
+  // isPointerEventCompatible();
+  //    return whether or note our device is pointer 
+  //    event compatible; typically means where on a 
+  //    touch Win8 device
+  Pep.prototype.isPointerEventCompatible = function() {
+    return ("MSPointerEvent" in window);
+  };
+
+  // applyMSDefaults();
+  Pep.prototype.applyMSDefaults = function(first_argument) {
+    this.$body.css({
+        '-ms-touch-action' :    'none',
+        'touch-action' :        'none',
+        '-ms-scroll-chaining':  'none', 
+        '-ms-scroll-limit':     '0 0 0 0', 
+        'overflow':             'hidden'
+    });
   };
 
   //  isValidMoveEvent();
