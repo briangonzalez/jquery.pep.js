@@ -139,7 +139,6 @@
 
     // Subscribe to our start event 
     this.$el.bind( this.startTrigger, function(ev){
-      console.log('started')
       self.handleStart(ev);
     });
 
@@ -410,7 +409,7 @@
   Pep.prototype.normalizeEvent = function(ev) {
       ev.pep        = {};
 
-       if ( this.isPointerEventCompatible() || !this.isTouch() ) {
+      if ( this.isPointerEventCompatible() || !this.isTouch(ev) ) {
         ev.pep.x      = ev.originalEvent.pageX;
         ev.pep.y      = ev.originalEvent.pageY;
         ev.pep.type   = ev.type;
@@ -776,16 +775,9 @@
   };
 
   //  isTouch();
-  //    returns whether or not our device is touch-ready
-  Pep.prototype.isTouch = function(reset){    
-    if ( typeof(Modernizr) !== 'undefined' )
-      return Modernizr.touch;
-
-    if ( 'ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch) ) { 
-      return true;
-    } else{
-      return false;
-    }
+  //    returns whether or not event is a touch event
+  Pep.prototype.isTouch = function(ev){    
+    return ev.type.search('touch') > -1;
   };
 
   // isPointerEventCompatible();
@@ -811,7 +803,7 @@
   //    returns true if we're on a non-touch device -- or -- 
   //    if the event is a non-pinch event on a touch device
   Pep.prototype.isValidMoveEvent = function(ev){   
-    if ( !this.isTouch() || ( this.isTouch() && ev.originalEvent.hasOwnProperty('touches') && ev.originalEvent.touches.length === 1 ) ){
+    if ( !this.isTouch(ev) || ( this.isTouch(ev) && ev.originalEvent.hasOwnProperty('touches') && ev.originalEvent.touches.length === 1 ) ){
       return true;
     } else{
       return false;
