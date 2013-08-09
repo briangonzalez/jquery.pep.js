@@ -197,6 +197,10 @@
                     if ( this.options.shouldPreventDefault )
                       ev.preventDefault();
 
+                    // allow / disallow event bubbling
+                    if ( !this.options.allowDragEventPropagation ) 
+                      ev.stopPropagation();
+
                     // animation loop to ensure we don't fire 
                     // too many unneccessary repaints  
                     (function watchMoveLoop(){
@@ -215,10 +219,6 @@
             // setup our event object
             var ev = this.moveEvent;
             if ( typeof(ev) === 'undefined' ) return;
-
-            // Allow/Disallow event bubbling
-            if ( !this.options.allowDragEventPropagation ) 
-              ev.stopPropagation();
 
             var curX    = (this.isTouch() ? ev.originalEvent.touches[0].pageX : ev.pageX);
             var curY    = (this.isTouch() ? ev.originalEvent.touches[0].pageY : ev.pageY);
