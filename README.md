@@ -111,6 +111,7 @@ Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzal
 See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be), [IE7](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be), [IE8](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be), and [IE9](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be).
 
 ### Milestones
+  - 08/08/13  -   Now with 100% IE coverage! That is, Pep now supports MSPointerEvents!
   - 08/06/13  -   Added in user-provided `initiate` function, which is fired during touchstart or mousedown; `start` is now called after object has moved past threshold    
   - 05/01/13  -   Added in `droppable` functionality
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
