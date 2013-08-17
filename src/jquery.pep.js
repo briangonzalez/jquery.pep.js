@@ -34,7 +34,8 @@
     drag:                           function(){},                                
     stop:                           function(){},                                
     rest:                           function(){},
-    startThreshold:                 [0,0],                                                                       
+    startThreshold:                 [0,0],        
+    grid:                           [1,1],                                                               
     debug:                          false,                                       
     activeClass:                    'pep-active',                                
     multiplier:                     1,                                           
@@ -233,8 +234,8 @@
 
             // get our move event's x & y
             var ev      = this.normalizeEvent( this.moveEvent );
-            var curX    = ev.pep.x;
-            var curY    = ev.pep.y;
+            var curX    = window.parseInt(ev.pep.x / this.options.grid[0]) * this.options.grid[0];
+            var curY    = window.parseInt(ev.pep.y / this.options.grid[1]) * this.options.grid[1];
 
             // last in, first out (LIFO) queue to help us manage velocity
             this.addToLIFO( { time: ev.timeStamp, x: curX, y: curY } );

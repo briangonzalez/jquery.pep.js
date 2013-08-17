@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - grid</title>
+
+    <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+        $('.pep.one').pep({ 
+          grid:       [80,80],
+          shouldEase: false
+        });
+
+        $('.pep.two').pep({ 
+          grid:       [120,120],
+          shouldEase: false
+        });
+      });
+
+    </script>
+
+    <style type="text/css">
+      .pep{ 
+          width: 80px; height: 80px; background: blue; position: absolute; 
+          top: 20px; left: 20px; 
+        }
+
+      .pep.two{
+          background: red; width: 160px; height: 160px; top: 140px;
+      }
+
+      body{
+          background-color: #eee;
+          background-image:       
+            linear-gradient(
+              0deg, transparent 24%, rgba(0, 0, 0, 0.6) 25%, rgba(0, 0, 0, 0.6) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.6) 75%, rgba(0, 0, 0, 0.6) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.6) 25%, rgba(0, 0, 0, 0.6) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.6) 75%, rgba(0, 0, 0, 0.6) 76%, transparent 77%, transparent);
+          height:100%;
+          background-size:80px 80px;
+      }
+
+    </style>
+
+
+  </head>
+
+  <body>
+
+    <div class='container'>
+      <div class="pep one"></div>
+      <div class="pep two"></div>
+    </div>
+
+  </body>
+
+</html>
