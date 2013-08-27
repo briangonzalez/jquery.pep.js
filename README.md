@@ -120,4 +120,4 @@ See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=you
 
 ### License
 
-Pep is licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html)
+Pep is licensed under the [MIT License](http://www.tldrlegal.com/license/mit-license)
