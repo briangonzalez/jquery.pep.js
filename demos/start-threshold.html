@@ -17,14 +17,25 @@
 
         var threshold = 30;
 
-        $('.pep').pep({
+        $('.pep-1').pep({
           initiate: function(ev, obj) { obj.$el.text('initiate');            },
           start: function(ev, obj)    { obj.$el.text('start event fired after ' + threshold + "px movement from initial position"); },
           drag: function(ev, obj)     { obj.$el.text( obj.$el.text() + '. ') },
           stop: function(ev, obj)     { obj.$el.text('stop');                },
           rest: function(ev, obj)     { obj.$el.text('rest');                },
-          startThreshold: [30,30]
+          startThreshold: [threshold, threshold]
         });
+
+        $('.pep-2').pep({
+          initiate: function(ev, obj) { obj.$el.text('initiate');            },
+          start: function(ev, obj)    { obj.$el.text('start event fired after ' + (threshold+70) + "px movement from initial position"); },
+          drag: function(ev, obj)     { obj.$el.text( obj.$el.text() + '. ') },
+          stop: function(ev, obj)     { obj.$el.text('stop');                },
+          rest: function(ev, obj)     { obj.$el.text('rest');                },
+          startThreshold: [threshold + 70, threshold + 70],
+          callIfNotStarted: []
+        });
+
       });  
 
     </script>
@@ -35,11 +46,13 @@
         height: 200px; 
         color: white; 
         opacity: 0.8; 
-        background: blue;   
         position: absolute; 
         top: 0; 
         left: 0px;
       }
+
+      .pep-1 { background: blue }
+      .pep-2 { background: red; }
     </style>
 
 
@@ -47,7 +60,8 @@
 
   <body>
 
-    <div class="pep"></div>
+    <div class="pep pep-1"> </div>
+    <div class="pep pep-2"> ** I don't fire the user-provided stop & rest functions unless I move past the startThreshold ** </div>
 
   </body>
 

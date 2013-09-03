@@ -34,6 +34,7 @@
     drag:                           function(){},                                
     stop:                           function(){},                                
     rest:                           function(){},
+    callIfNotStarted:               ['stop', 'rest'],
     startThreshold:                 [0,0],        
     grid:                           [1,1],                                                               
     debug:                          false,                                       
@@ -344,10 +345,12 @@
 
             // ease the object, if necessary
             if (this.options.shouldEase)
-              this.ease(ev);
+              this.ease(ev, this.started);
 
             // fire user's stop event.
-            this.options.stop.call(this, ev, this);
+            if ( this.started || (!this.started && this.options.callIfNotStarted.indexOf('stop') > -1 ) ) {
+              this.options.stop.call(this, ev, this);
+            } 
 
             // this must be set to false after 
             // the user's stop event is called, so the dev
@@ -362,7 +365,7 @@
   //  ease();
   //    used in conjunction with the LIFO queue 
   //    to ease the object after stop
-  Pep.prototype.ease = function(ev){
+  Pep.prototype.ease = function(ev, started){
 
             var pos       = this.$el.position();
             var vel       = this.velocity();
@@ -399,7 +402,9 @@
               }
               
               // call users rest event.
-              self.options.rest.call(self, ev, self);
+              if ( started || ( !started && self.options.callIfNotStarted.indexOf('rest') > -1 ) ) {
+                self.options.rest.call(self, ev, self);
+              } 
 
               // remove active class 
               self.$el.removeClass( [self.options.activeClass, 'pep-ease'].join(' ') ); 
