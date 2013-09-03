@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - </title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        $('.pep').pep({
+          initiate: function(){
+            if ( this.$el.hasClass('no-drag') ){
+              this.toggle(false);
+              return false;
+            }
+          }
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 200px; height: 200px; background: blue; opacity: 0.6; color: white; }
+
+      .pep-1  { position: absolute; top: 50px; left: 10px; }
+      .pep-2  { position: absolute; top: 100px; left: 50px; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep pep-1"></div>
+    <div class="pep pep-2 no-drag">no drag</div>
+
+  </body>
+
+
+</html>

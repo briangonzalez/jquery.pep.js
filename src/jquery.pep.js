@@ -186,7 +186,9 @@
                     }
 
                     // fire user's initiate event.
-                    this.options.initiate.call(this, ev, this);
+                    var shouldContinue = this.options.initiate.call(this, ev, this);
+                    if ( shouldContinue === false )
+                      return;
 
                     // cancel the rest timeout
                     clearTimeout( this.restTimeout );
