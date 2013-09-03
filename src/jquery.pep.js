@@ -446,10 +446,10 @@
       x = "+=0";
     }
 
-    var animateDuration = 300;
+    var animateDuration = 200;
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutCirc', {queue: false});
+      this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutQuad', {queue: false});
     } else{
       this.$el.stop(true, false).css({ top: y , left: x });
     } 
@@ -976,6 +976,23 @@
       this.disabled = !on;
     }   
   };
+
+  //  *** Special Easings functions ***
+  //    Used for JS easing fallback 
+  //    We can use any of these for a 
+  //    good intertia ease
+  $.extend($.easing,
+  {
+    easeOutQuad: function (x, t, b, c, d) {
+      return -c *(t/=d)*(t-2) + b;
+    },
+    easeOutCirc: function (x, t, b, c, d) {
+      return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+    },
+    easeOutExpo: function (x, t, b, c, d) {
+      return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+    }
+  });
 
   //  wrap it 
   //    A really lightweight plugin wrapper around the constructor, 
