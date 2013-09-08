@@ -140,17 +140,17 @@
     var self = this;
 
     // Subscribe to our start event 
-    this.$el.bind( this.startTrigger, function(ev){
+    this.$el.on( this.startTrigger, function(ev){
       self.handleStart(ev);
     });
 
     // Subscribe to our stop event  
-    this.$document.bind( this.stopEvents, function(ev) {
+    this.$document.on( this.stopEvents, function(ev) {
       self.handleStop(ev);
     });
 
     // Subscribe to our move event  
-    this.$document.bind( this.moveTrigger, function(ev){
+    this.$document.on( this.moveTrigger, function(ev){
       self.moveEvent = ev;
     });
   };
