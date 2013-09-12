@@ -87,6 +87,10 @@
     this.startTrigger = "MSPointerDown touchstart mousedown";
     this.stopTrigger  = "MSPointerUp touchend mouseup";
 
+    this.startTriggerArray  = this.startTrigger.split(' ');
+    this.moveTriggerArray   = this.moveTrigger.split(' ');
+    this.stopTriggerArray   = this.stopTrigger.split(' ');
+
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
     if ( this.options.constrainTo === 'parent' ) {
@@ -246,7 +250,7 @@
             // calculate values necessary to moving
             var dx, dy;
 
-            if ( this.startTrigger.split(' ').indexOf(ev.type) > -1  ){
+            if ( $.inArray( ev.type, this.startTriggerArray ) > -1  ){
               dx = 0;
               dy = 0;
             } else{
@@ -348,7 +352,7 @@
               this.ease(ev, this.started);
 
             // fire user's stop event.
-            if ( this.started || (!this.started && this.options.callIfNotStarted.indexOf('stop') > -1 ) ) {
+            if ( this.started || (!this.started &&  $.inArray('stop', this.options.callIfNotStarted) > -1 ) ) {
               this.options.stop.call(this, ev, this);
             } 
 
@@ -402,7 +406,7 @@
               }
               
               // call users rest event.
-              if ( started || ( !started && self.options.callIfNotStarted.indexOf('rest') > -1 ) ) {
+              if ( started || ( !started && $.inArray('rest', self.options.callIfNotStarted) > -1 ) ) {
                 self.options.rest.call(self, ev, self);
               } 
 
@@ -418,9 +422,18 @@
       ev.pep        = {};
 
       if ( this.isPointerEventCompatible() || !this.isTouch(ev) ) {
-        ev.pep.x      = ev.originalEvent.pageX;
-        ev.pep.y      = ev.originalEvent.pageY;
+
+        if ( ev.pageX  ) {
+          ev.pep.x      = ev.pageX;
+          ev.pep.y      = ev.pageY;
+        } else {
+          ev.pep.x      = ev.originalEvent.pageX;
+          ev.pep.y      = ev.originalEvent.pageY;
+        }
+
+
         ev.pep.type   = ev.type;
+
       } 
       else {
         ev.pep.x      = ev.originalEvent.touches[0].pageX;
@@ -453,10 +466,10 @@
       x = "+=0";
     }
 
-    var animateDuration = 200;
+    var animateDuration = 5000;
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$el.animate({ top: y, left: x }, animateDuration, 'easeOutQuad', {queue: false});
+      this.$el.animate({ top: y, left: x }, this.options.cssEaseDuration/2, 'easeOutQuad', {queue: false});
     } else{
       this.$el.stop(true, false).css({ top: y , left: x });
     } 
@@ -509,7 +522,7 @@
   Pep.prototype.matrixString = function() {
 
     var validMatrix = function(o){
-      return !( !o || o === 'none' || o.indexOf('matrix') === -1);
+      return !( !o || o === 'none' || $.inArray('matrix', o) < 0  );
     };
 
     var matrix = "matrix(1, 0, 0, 1, 0, 0)";
