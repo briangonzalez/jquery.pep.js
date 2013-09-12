@@ -36,6 +36,16 @@
           callIfNotStarted: []
         });
 
+        $('.pep-3').pep({
+          initiate: function(ev, obj) { obj.$el.text('initiate');            },
+          start: function(ev, obj)    { obj.$el.text('start event fired after ' + (threshold+70) + "px movement from initial position"); },
+          drag: function(ev, obj)     { obj.$el.text( obj.$el.text() + '. ') },
+          stop: function(ev, obj)     { obj.$el.text('stop');                },
+          rest: function(ev, obj)     { obj.$el.text('rest');                },
+          startThreshold: [threshold + 70, threshold + 70],
+          callIfNotStarted: ['rest']
+        });
+
       });  
 
     </script>
@@ -53,6 +63,7 @@
 
       .pep-1 { background: blue }
       .pep-2 { background: red; }
+      .pep-3 { background: green; }
     </style>
 
 
@@ -62,6 +73,7 @@
 
     <div class="pep pep-1"> </div>
     <div class="pep pep-2"> ** I don't fire the user-provided stop & rest functions unless I move past the startThreshold ** </div>
+    <div class="pep pep-3"> ** I don't fire the user-provided stop functions unless I move past the startThreshold, I call rest regardless ** </div>
 
   </body>
 
