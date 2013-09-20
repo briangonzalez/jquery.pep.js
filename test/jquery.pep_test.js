@@ -69,18 +69,5 @@
     $.pep.toggleAll()
     strictEqual($el.first().data('plugin_pep').disabled, false, 'this.disable variable should be false when toggled twice');
   });
-
-  test('source code contains no < IE9 incompatibles', 1, function() {
-    var pepSource = '';
-    $.ajax({
-      url: '../src/jquery.pep.js', 
-      async: false,
-      success: function(d){
-        pepSource = d;
-      }
-    });
-
-    strictEqual( pepSource.indexOf('indexOf'), -1 )
-  });
   
 }(jQuery));

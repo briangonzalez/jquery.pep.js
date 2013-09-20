@@ -522,7 +522,7 @@
   Pep.prototype.matrixString = function() {
 
     var validMatrix = function(o){
-      return !( !o || o === 'none' || $.inArray('matrix', o) < 0  );
+      return !( !o || o === 'none' || o.indexOf('matrix') < 0  );
     };
 
     var matrix = "matrix(1, 0, 0, 1, 0, 0)";
