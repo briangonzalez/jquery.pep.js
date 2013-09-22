@@ -1,4 +1,4 @@
-## jquery.pep.js
+# jquery.pep.js
 
 *kinetic drag for mobile & desktop; more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)*
 
