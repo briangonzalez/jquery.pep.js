@@ -1,11 +1,11 @@
-# jquery.pep.js
-
+<img src="http://s.cdpn.io/4629/pep-with-circles.svg" width=600 style="display: block; margin: 0 auto"> 
+----
 *kinetic drag for mobile & desktop; more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)*
 
 
 
-### Getting Started
-In your web page:
+## Getting Started
+Getting started is simple: include jquery, include pep, then do some binding.
 
 ```html
 <script src="jquery.js"></script>
@@ -17,8 +17,8 @@ In your web page:
 </script>
 ```
 
-### Usage
-Pep has many options. Here they are in their entirety, with their defaults.
+## Usage
+Pep has many options. Here they are in their entirety, with their defaults. This list can be a little daunting, but most of Pep's options are comparable to jQueryUI. Need a little help? [Just ask](http://twitter.com/brianmgonzalez).
 
 | Name                            | Default                                         | Description                                                                                                                                             |
 |---------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -55,7 +55,7 @@ Pep has many options. Here they are in their entirety, with their defaults.
 
 
 
-### API
+## API
 ```javascript
 // Toggle functionality of all Pep objects on the page
 $.pep.toggleAll()
@@ -73,38 +73,40 @@ $.pep.unbind( $pep );     // unbind
 $pep.pep();               // bind
 ````
 
-### Class Applications
+## Class Applications
 The following classes are applied corresponding to events that are happening on the pep object:
 
   - `pep-active` -- applied when initiate event is triggered; removed when ease has finished
   - `pep-start` -- applied when start event is triggered; removed when stop event occurs
   - `pep-ease` -- applied when stop event is triggered; removed when ease has finished
 
-### Installation
-Grab Pep via bower:
+## Installation
+__Via Bower__
 
 ```shell
 bower install jquery.pep
 ````
 
-or grab from CDN:
+__From CDN__
+
+Guaranteed to be up-to-date:
 
 ````
-// Guaranteed to be up-to-date
-//rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
-````
-````
-// This is likely to get out of sync from master
-//cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
+http://rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
 ````
 
-### Examples
+This is likely to get out of sync from master:
+````
+http://cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
+````
+
+## Examples
 Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/ (which can also be found in more detail on Codepen: http://codepen.io/briangonzalez/tag/pep-demo)
 
-### On the web
+## On the web
 Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzalez](https://twitter.com/brianmgonzalez).
 
-### Support
+## Support
 
 | IE6 | IE7 | IE8 | IE9 | IE10 | Chrome | Firefox | Opera | Safari |
 |---|---|---|---|---|---|---|---|---|
@@ -112,13 +114,13 @@ Visit us at http://pep.briangonzalez.org or follow me on Twitter: [@brianmgonzal
 
 See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be), [IE7](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be), [IE8](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be), and [IE9](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be).
 
-### Milestones
-  - 08/08/13  -   Now with 100% IE coverage! That is, Pep now supports MSPointerEvents!
+## Milestones
+  - 08/08/13  -   Now with 100% IE coverage! That is, Pep now supports MSPointerEvents (IE10+)!
   - 08/06/13  -   Added in user-provided `initiate` function, which is fired during touchstart or mousedown; `start` is now called after object has moved past threshold    
   - 05/01/13  -   Added in `droppable` functionality
   - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
   - 05/30/12  -   Initial version
 
-### License
+## License
 
 Pep is licensed under the [MIT License](http://www.tldrlegal.com/license/mit-license)
