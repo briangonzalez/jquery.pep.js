@@ -1,7 +1,6 @@
-<img src="http://s.cdpn.io/4629/pep-with-circles.svg" width=600 alt='jquery.pep.js' onclick="alert('Hello')"> 
+<img src="http://s.cdpn.io/4629/pep-with-circles.svg" width=600 alt='jquery.pep.js'> 
 ----
 *kinetic drag for mobile & desktop; more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)*
-
 
 
 ## Getting Started
