@@ -74,8 +74,7 @@
     this.$el = $(el);
 
     //  merge in defaults
-    this.defaults   = defaults;
-    this.options    = $.extend( {}, this.defaults, options) ;
+    this.options    = $.extend( {}, defaults, options) ;
 
     // store document/body so we don't need to keep grabbing them
     // throughout the code
