@@ -58,7 +58,8 @@
     place:                          true,                                        
     deferPlacement:                 false,                                       
     axis:                           null,                                        
-    forceNonCSS3Movement:           false                                       
+    forceNonCSS3Movement:           false,
+    elementsWithInteraction:        'input'
   };
 
   //  ---------------------------------
@@ -90,9 +91,6 @@
     this.moveTriggerArray   = this.moveTrigger.split(' ');
     this.stopTriggerArray   = this.stopTrigger.split(' ');
     this.stopEvents         = [ this.stopTrigger, this.options.stopEvents ].join(' ');
-
-    // selector for elements within the Pep target that should allow user iteraction
-    this.elementsWithInteraction = "input";
 
     if ( this.options.constrainTo === 'parent' ) {
       this.$container = this.$el.parent();
@@ -150,7 +148,7 @@
     });
 
     // Prevent start events from being gobbled by elements that should allow user interaction
-    this.$el.on( this.startTrigger, this.elementsWithInteraction, function(ev){
+    this.$el.on( this.startTrigger, this.options.elementsWithInteraction, function(ev){
       ev.stopPropagation();
     });
 
