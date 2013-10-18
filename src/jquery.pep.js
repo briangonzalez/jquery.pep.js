@@ -91,6 +91,9 @@
     this.stopTriggerArray   = this.stopTrigger.split(' ');
     this.stopEvents         = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
+    // selector for elements within the Pep target that should allow user iteraction
+    this.elementsWithInteraction = "input";
+
     if ( this.options.constrainTo === 'parent' ) {
       this.$container = this.$el.parent();
     } else if ( this.options.constrainTo === 'window' ) {
@@ -146,7 +149,12 @@
       self.handleStart(ev);
     });
 
-    // Subscribe to our stop event  
+    // Prevent start events from being gobbled by elements that should allow user interaction
+    this.$el.on( this.startTrigger, this.elementsWithInteraction, function(ev){
+      ev.stopPropagation();
+    });
+
+    // Subscribe to our stop event
     this.$document.on( this.stopEvents, function(ev) {
       self.handleStop(ev);
     });
