@@ -13,9 +13,10 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.peppable').pep({  constrainTo: 'parent', useCSSTranslation: false });
-        $('.peppable2').pep({ constrainTo: 'window', useCSSTranslation: false });
+        $('.peppable').pep({  constrainTo: 'parent' });
+        $('.peppable2').pep({ constrainTo: 'window' });
         $('.peppable3').pep({ constrainTo: 'window' });
+        $('.peppable4').pep({ constrainTo: 'parent' });
       });
     </script>
 
@@ -26,6 +27,7 @@
       .peppable   { margin: 10px; }
       .peppable2  { position: absolute; top: 40px; left: 300px; background: rgb(120, 200, 200); }
       .peppable3  { position: absolute; top: 40px; left: 600px; background: rgb(243, 120, 200); }
+      .peppable4  { position: absolute; top: 40px; left: 600px; background: rgb(143, 120, 200); }
     </style>
 
 
@@ -36,10 +38,11 @@
 
     <div id="parent">
       <div class="pep peppable">constrained to parent</div>
+      <div class="pep peppable4">constrained to parent, translation movement </div>
     </div>
 
     <div class="pep peppable2">constrained to window</div>
-    <div class="pep peppable3">===BUGGY=== </br> constrained to window, translation movement </div>
+    <div class="pep peppable3">constrained to window, translation movement </div>
   </body>
 
 

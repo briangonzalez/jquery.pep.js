@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>jquery.pep demo - force JS animate everywhere </title>
+    <title>jquery.pep custom constraint demo</title>
 
     <!-- Load local jQuery.  -->
     <script src="../libs/jquery/jquery.js"></script>
@@ -13,25 +13,24 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.pep').pep({ 
-          forceNonCSS3Movement: true 
-        });
+
+          $('.pep').pep({
+            axis: 'y',
+            constrainTo: [100, false, $(window).innerHeight() - 100, false]
+          })
+
       });
     </script>
 
     <style type="text/css">
-      .pep{ width: 200px; height: 200px; background: blue; }
+      html, body{ overflow: hidden; }
+      .pep{ height: 1000px; width: 100%; position: absolute; top: 100px; left: 0; background: blue }
     </style>
-
 
   </head>
 
-
-  <body>
-
-    <div class="pep"></div>
+    <div class='pep'></div>
 
   </body>
-
 
 </html>

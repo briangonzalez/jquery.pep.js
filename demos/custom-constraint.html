@@ -16,18 +16,15 @@
 
           $('.pep-horizontal').pep({
             axis: 'x',
-            useCSSTranslation: false,
             constrainTo: [0, 0, 0, ($('.pep-horizontal').width() - $('.pep-container-horizontal').width()) * -1]
           });
 
           $('.pep-vertical').pep({
             axis: 'y',
-            useCSSTranslation: false,
             constrainTo: [($('.pep-vertical').height() - $('.pep-container-vertical').height()) * -1, 0, 0, 0]
           });
 
           $('.pep').pep({
-            useCSSTranslation: false,
             constrainTo: [300, 600, 600, 300]
           })
 

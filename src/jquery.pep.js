@@ -83,15 +83,13 @@
     this.$body      = this.$document.find('body'); 
 
     //  Create our triggers based on touch/click device 
-    this.moveTrigger  = "MSPointerMove touchmove mousemove";
-    this.startTrigger = "MSPointerDown touchstart mousedown";
-    this.stopTrigger  = "MSPointerUp touchend mouseup";
-
+    this.moveTrigger        = "MSPointerMove touchmove mousemove";
+    this.startTrigger       = "MSPointerDown touchstart mousedown";
+    this.stopTrigger        = "MSPointerUp touchend mouseup";
     this.startTriggerArray  = this.startTrigger.split(' ');
     this.moveTriggerArray   = this.moveTrigger.split(' ');
     this.stopTriggerArray   = this.stopTrigger.split(' ');
-
-    this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
+    this.stopEvents         = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
     if ( this.options.constrainTo === 'parent' ) {
       this.$container = this.$el.parent();
@@ -320,6 +318,11 @@
                 dx = (hash.x === false) ? dx : 0 ;
                 dy = (hash.y === false) ? dy : 0 ;
               }
+
+              // only move along single axis, if necessary
+              if ( this.options.axis  === 'x' ) dy = 0;
+              if ( this.options.axis  === 'y' ) dx = 0;
+
               this.moveToUsingTransforms( dx, dy );
             }
   };
@@ -347,14 +350,14 @@
               this.calculateActiveDropRegions();
             }
 
-            // ease the object, if necessary
-            if (this.options.shouldEase)
-              this.ease(ev, this.started);
-
             // fire user's stop event.
             if ( this.started || (!this.started &&  $.inArray('stop', this.options.callIfNotStarted) > -1 ) ) {
               this.options.stop.call(this, ev, this);
             } 
+
+            // ease the object, if necessary.
+            if (this.options.shouldEase)
+              this.ease(ev, this.started);
 
             // this must be set to false after 
             // the user's stop event is called, so the dev
@@ -377,7 +380,7 @@
             var x         = (vel.x/this.scale) * this.options.multiplier;
             var y         = (vel.y/this.scale) * this.options.multiplier;
 
-            var hash      = this.handleConstraint(x, y);
+            var hash      = this.handleConstraint(x, y, true);
 
             // ✪  Apply the CSS3 animation easing magic  ✪
             if ( this.cssAnimationsSupported() )
@@ -391,9 +394,12 @@
               yOp = (hash.y !== false) ? hash.y : yOp;
             }
 
+            if ( this.options.axis  === 'x' ) yOp = "+=0";
+            if ( this.options.axis  === 'y' ) xOp = "+=0";
+
             // ease it via JS, the last true tells it to animate.
             var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
-                   this.moveTo(xOp, yOp, jsAnimateFallback);
+            this.moveTo(xOp, yOp, jsAnimateFallback);
 
             // when the rest occurs, remove active class and call
             // user's rest event.
@@ -431,7 +437,6 @@
           ev.pep.y      = ev.originalEvent.pageY;
         }
 
-
         ev.pep.type   = ev.type;
 
       } 
@@ -456,17 +461,6 @@
   //    .css({top: "+=20", left: "-=30"}) syntax
   Pep.prototype.moveTo = function(x,y, animate) {
 
-    animate = ( animate === false || typeof(animate) === 'undefined' ) ? 
-      false : true; 
-
-    if ( this.options.axis  === 'x' ){
-      y = "+=0";
-    } 
-    else if ( this.options.axis  === 'y' ){
-      x = "+=0";
-    }
-
-    var animateDuration = 5000;
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
       this.$el.animate({ top: y, left: x }, this.options.cssEaseDuration/2, 'easeOutQuad', {queue: false});
@@ -480,20 +474,13 @@
   //    move the object to an x and/or y value
   Pep.prototype.moveToUsingTransforms = function(x,y) {
 
-    // only move along single axis, if necessary
-    if ( this.options.axis  === 'x' )
-      y = 0;
-    
-    if ( this.options.axis  === 'y' )
-      x = 0;
-
     // Check for our initial values if we don't have them.
     var matrixArray  = this.matrixToArray( this.matrixString() );
     if ( !this.cssX )
-      this.cssX = parseInt(matrixArray[4], 10);
+      this.cssX = this.xTranslation( matrixArray );
 
     if ( !this.cssY )
-      this.cssY = parseInt(matrixArray[5], 10);
+      this.cssY = this.yTranslation( matrixArray );
 
     // CSS3 transforms are additive from current position
     this.cssX = this.cssX + x;
@@ -505,14 +492,28 @@
     matrixArray[5]    = this.cssY;
     
     this.translation  = this.arrayToMatrix( matrixArray );
-
-    this.$el.css({ 
-        '-webkit-transform': this.translation,
-           '-moz-transform': this.translation,
-            '-ms-transform': this.translation,
-             '-o-transform': this.translation,
-                'transform': this.translation  });
+    this.transform( this.translation );
   };
+
+  Pep.prototype.transform = function(value) {
+    this.$el.css({ 
+        '-webkit-transform': value,
+           '-moz-transform': value,
+            '-ms-transform': value,
+             '-o-transform': value,
+                'transform': value  });
+  };
+
+  Pep.prototype.xTranslation = function(matrixArray) {
+    matrixArray  = matrixArray || this.matrixToArray( this.matrixString() );
+    return parseInt(matrixArray[4], 10);
+  };
+
+  Pep.prototype.yTranslation = function(matrixArray) {
+    matrixArray  = matrixArray || this.matrixToArray( this.matrixString() );
+    return parseInt(matrixArray[5], 10);
+  };
+
 
   // 3 helper functions for working with the 
   // objects CSS3 transforms
@@ -608,7 +609,8 @@
     // make `relative` parent if necessary
     if ( this.options.constrainTo === 'parent' ) {
       this.$container.css({ position: 'relative' });
-    } else if ( this.options.constrainTo === 'window' && this.$container.get(0).nodeName !== "#document" &&
+    } else if ( this.options.constrainTo === 'window'             && 
+                this.$container.get(0).nodeName !== "#document"   &&
                 this.$container.css('position') !== 'static' )
     {
       this.$container.css({ position: 'static' });
@@ -695,10 +697,11 @@
   //  handleConstraint();
   //    returns a hash of where to move to
   //    when we constrain to parent/window
-  Pep.prototype.handleConstraint = function(dx, dy) {
+  Pep.prototype.handleConstraint = function(dx, dy, accountForTranslation) {
     var pos               = this.$el.position();
     this.pos.x            = pos.left;
     this.pos.y            = pos.top;
+
     var hash              = { x: false, y: false };
 
     var upperYLimit, upperXLimit, lowerXLimit, lowerYLimit;
@@ -709,12 +712,12 @@
     if ( $.isArray( this.options.constrainTo ) ) {
 
       if ( this.options.constrainTo[3] !== undefined && this.options.constrainTo[1] !== undefined ) { 
-        upperXLimit     = this.options.constrainTo[1];
-        lowerXLimit     = this.options.constrainTo[3];
+        upperXLimit     = this.options.constrainTo[1] === false ?  Infinity : this.options.constrainTo[1];
+        lowerXLimit     = this.options.constrainTo[3] === false ? -Infinity : this.options.constrainTo[3];
       }
       if ( this.options.constrainTo[0] !== false && this.options.constrainTo[2] !== false ) { 
-        upperYLimit       = this.options.constrainTo[2];
-        lowerYLimit       = this.options.constrainTo[0];
+        upperYLimit       = this.options.constrainTo[2] === false ?  Infinity : this.options.constrainTo[2];
+        lowerYLimit       = this.options.constrainTo[0] === false ? -Infinity : this.options.constrainTo[0];
       }
 
       // is our object trying to move outside lower X & Y limits?
@@ -722,16 +725,28 @@
       if ( this.pos.y + dy < lowerYLimit)     hash.y = lowerYLimit;
 
     } else if ( typeof this.options.constrainTo === 'string' ) {
+      lowerXLimit       = 0;
+      lowerYLimit       = 0;
       upperXLimit       = this.$container.width()  - this.$el.outerWidth();
       upperYLimit       = this.$container.height() - this.$el.outerHeight();
+
       // is our object trying to move outside lower X & Y limits?
       if ( this.pos.x + dx < 0 )              hash.x = 0; 
       if ( this.pos.y + dy < 0 )              hash.y = 0;
     }
-  
+
     // is our object trying to move outside upper X & Y limits?
     if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
     if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
+
+    // Account for translation, which makes movement a little tricky.
+    if ( this.shouldUseCSSTranslation() && accountForTranslation ){
+      if (hash.x === lowerXLimit && this.xTranslation() ) hash.x = lowerXLimit - this.xTranslation();
+      if (hash.x === upperXLimit && this.xTranslation() ) hash.x = upperXLimit - this.xTranslation();
+
+      if (hash.y === lowerYLimit && this.yTranslation() ) hash.y = lowerYLimit - this.yTranslation();
+      if (hash.y === upperYLimit && this.yTranslation() ) hash.y = upperYLimit - this.yTranslation();
+    }
 
     return hash;
   };
