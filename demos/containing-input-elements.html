@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo  - using minified version</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep();
+      });
+    </script>
+
+    <style type="text/css">
+      .pep {
+        background: #bbb;
+        width: 200px;
+      }
+      .pep form {
+        margin: 20px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="pep">
+      <form>
+        <label>Draggable has an input:</label>
+        <input type="text"></input>
+      </form>
+    </div>
+  </body>
+
+</html>

@@ -27,7 +27,7 @@ Pep has many options. Here they are in their entirety, with their defaults. This
 | overlapFunction                 | `false`                                         | override pep's default overlap function; takes two args: a & b and returns true if they overlap                                                         |
 | cssEaseString                   | *cubic-bezier(0.190, 1.000, 0.220, 1.000)*      | get more css ease params from [ http://matthewlein.com/ceaser/ ]                                                                                        |
 | cssEaseDuration                 | `750`                                           | how long should it take (in ms) for the object to get from stop to rest?                                                                                |
-| constrainTo                     | `false`                                         | constrain object to `'window'` or `'parent'` or `[top, right, bottom, left]`; works best w/ useCSSTranslation set to false                                    |
+| constrainTo                     | `false`                                         | constrain object to `'window'` or `'parent'` or `[top, right, bottom, left]`; works best w/ useCSSTranslation set to false                              |
 | axis                            | `null`                                          | constrain object to either 'x' or 'y' axis                                                                                                              |
 | debug                           | `false `                                        | show debug values and events in the lower-righthand corner of page                                                                                      |
 | activeClass                     | `'pep-active'`                                  | class to add to the pep element while dragging                                                                                                          |
@@ -44,6 +44,7 @@ Pep has many options. Here they are in their entirety, with their defaults. This
 | place                           | `true`                                          | bypass pep's object placement logic                                                                                                                     |
 | deferPlacement                  | `false`                                         | defer object placement until start event occurs                                                                                                         |
 | forceNonCSS3Movement            | `false`                                         | DO NOT USE: this is subject to come/go. Use at your own risk                                                                                            |
+| elementsWithInteraction         | `input`                                         | selector for elements within the Pep target that should allow user iteraction                                                                           |
 
 
 

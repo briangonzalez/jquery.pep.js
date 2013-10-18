@@ -58,7 +58,8 @@
     place:                          true,                                        
     deferPlacement:                 false,                                       
     axis:                           null,                                        
-    forceNonCSS3Movement:           false                                       
+    forceNonCSS3Movement:           false,
+    elementsWithInteraction:        'input'
   };
 
   //  ---------------------------------
@@ -146,7 +147,12 @@
       self.handleStart(ev);
     });
 
-    // Subscribe to our stop event  
+    // Prevent start events from being gobbled by elements that should allow user interaction
+    this.$el.on( this.startTrigger, this.options.elementsWithInteraction, function(ev){
+      ev.stopPropagation();
+    });
+
+    // Subscribe to our stop event
     this.$document.on( this.stopEvents, function(ev) {
       self.handleStop(ev);
     });
