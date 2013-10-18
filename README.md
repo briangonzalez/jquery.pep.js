@@ -4,7 +4,7 @@
 
 
 ## Getting Started
-Getting started is simple: include jquery, include pep, then do some binding.
+Getting started is simple: include jQuery, include pep, then:
 ```javascript
 $('.pep').pep(); // yup, that simple.
 ```
