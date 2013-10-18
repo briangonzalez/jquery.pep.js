@@ -13,8 +13,10 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.pep.x').pep({ axis: 'x', debug: true });
-        $('.pep.y').pep({ axis: 'y', debug: true });
+        $('.pep.x').pep({ axis: 'x', debug: true, useCSSTranslation: false });
+        $('.pep.y').pep({ axis: 'y', debug: true, useCSSTranslation: false });
+        $('.pep.x.trans').pep({ axis: 'x', debug: true, useCSSTranslation: true });
+        $('.pep.y.trans').pep({ axis: 'y', debug: true, useCSSTranslation: true });
         $('.pep.noease').pep({ axis: 'y', shouldEase: false, debug: true });
       });
     </script>
@@ -27,13 +29,14 @@
       .noease   { position: absolute; top: 80px; left: 50px; background: rgb(243, 80, 100);  opacity: 0.8;}
     </style>
 
-
   </head>
 
 
   <body>
     <div class="pep x">X</div>
     <div class="pep y">Y</div>
+    <div class="pep x trans">X translation</div>
+    <div class="pep y trans">Y translation</div>
     <div class="pep noease">Y </br> ease disabled</div>
   </body>
 

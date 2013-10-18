@@ -312,6 +312,10 @@
                 yOp = (hash.y !== false) ? hash.y : yOp;
               }
 
+              // only move along single axis, if necessary
+              if ( this.options.axis  === 'x' ) yOp = hash.y;
+              if ( this.options.axis  === 'y' ) xOp = hash.x;
+
               this.moveTo(xOp, yOp);
             }
             else {
