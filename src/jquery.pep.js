@@ -35,30 +35,30 @@
     stop:                           function(){},                                
     rest:                           function(){},
     callIfNotStarted:               ['stop', 'rest'],
-    startThreshold:                 [0,0],        
-    grid:                           [1,1],                                                               
-    debug:                          false,                                       
-    activeClass:                    'pep-active',                                
-    multiplier:                     1,                                           
-    velocityMultiplier:             1.9,                                         
-    shouldPreventDefault:           true,                                        
-    allowDragEventPropagation:      true,                                        
-    stopEvents:                     '',                                          
-    hardwareAccelerate:             true,                                        
-    useCSSTranslation:              true,                                        
-    disableSelect:                  true,                                        
-    cssEaseString:                  "cubic-bezier(0.190, 1.000, 0.220, 1.000)",  
-    cssEaseDuration:                750,                                         
-    shouldEase:                     true,                                        
-    droppable:                      false,                                       
-    droppableActiveClass:           'pep-dpa',                                   
-    overlapFunction:                false,                                       
-    constrainTo:                    false,                                       
-    removeMargins:                  true,                                        
-    place:                          true,                                        
-    deferPlacement:                 false,                                       
-    axis:                           null,                                        
-    forceNonCSS3Movement:           false                                       
+    startThreshold:                 [0,0],
+    grid:                           [1,1],
+    debug:                          false,
+    activeClass:                    'pep-active',
+    multiplier:                     1,
+    velocityMultiplier:             1.9,
+    shouldPreventDefault:           true,
+    allowDragEventPropagation:      true,
+    stopEvents:                     '',
+    hardwareAccelerate:             true,
+    useCSSTranslation:              true,
+    disableSelect:                  true,
+    cssEaseString:                  "cubic-bezier(0.190, 1.000, 0.220, 1.000)",
+    cssEaseDuration:                750,
+    shouldEase:                     true,
+    droppable:                      false,
+    droppableActiveClass:           'pep-dpa',
+    overlapFunction:                false,
+    constrainTo:                    'parent',
+    removeMargins:                  true,
+    place:                          true,
+    deferPlacement:                 false,
+    axis:                           null,
+    forceNonCSS3Movement:           false
   };
 
   //  ---------------------------------
@@ -92,11 +92,12 @@
 
     this.stopEvents   = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
-    if ( this.options.constrainTo === 'parent' ) {
-      this.$container = this.$el.parent();
-    } else if ( this.options.constrainTo === 'window' ) {
+    if ( this.options.constrainTo === 'window' )
       this.$container = this.$document;
-    }
+    else if ( this.options.constrainTo !== 'parent' )
+      this.$container = $(this.options.constrainTo);
+    else
+      this.$container = this.$el.parent();
 
     // IE need this
     if ( this.isPointerEventCompatible() )
@@ -116,7 +117,6 @@
   //    you already have access to the DOM el and the options via the instance, 
   //    e.g., this.el and this.options
   Pep.prototype.init = function () {
-    var self = this;
 
     if ( this.options.debug )
       this.buildDebugDiv();
