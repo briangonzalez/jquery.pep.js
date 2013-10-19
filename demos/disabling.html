@@ -19,12 +19,11 @@
                  .toggleClass('disabled')
                  .data('plugin_pep')
                  .toggle();
-
-          ev.preventDefault();
         });
 
         $('.pep').pep({ 
-          debug: true
+          debug: true,
+          elementsWithInteraction:        'button'
         });
       });
     </script>
