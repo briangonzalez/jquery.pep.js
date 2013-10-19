@@ -91,11 +91,12 @@
     this.stopTriggerArray   = this.stopTrigger.split(' ');
     this.stopEvents         = [ this.stopTrigger, this.options.stopEvents ].join(' ');
 
-    if ( this.options.constrainTo === 'parent' ) {
-      this.$container = this.$el.parent();
-    } else if ( this.options.constrainTo === 'window' ) {
+    if ( this.options.constrainTo === 'window' )
       this.$container = this.$document;
-    }
+    else if ( this.options.constrainTo && (this.options.constrainTo !== 'parent') )
+      this.$container = $(this.options.constrainTo);
+    else
+      this.$container = this.$el.parent();
 
     // IE need this
     if ( this.isPointerEventCompatible() )
@@ -115,7 +116,6 @@
   //    you already have access to the DOM el and the options via the instance, 
   //    e.g., this.el and this.options
   Pep.prototype.init = function () {
-    var self = this;
 
     if ( this.options.debug )
       this.buildDebugDiv();
