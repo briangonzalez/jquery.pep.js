@@ -53,7 +53,7 @@
     droppable:                      false,
     droppableActiveClass:           'pep-dpa',
     overlapFunction:                false,
-    constrainTo:                    'parent',
+    constrainTo:                    false,
     removeMargins:                  true,
     place:                          true,
     deferPlacement:                 false,
@@ -94,7 +94,7 @@
 
     if ( this.options.constrainTo === 'window' )
       this.$container = this.$document;
-    else if ( this.options.constrainTo !== 'parent' )
+    else if ( this.options.constrainTo && (this.options.constrainTo !== 'parent') )
       this.$container = $(this.options.constrainTo);
     else
       this.$container = this.$el.parent();
