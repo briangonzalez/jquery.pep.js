@@ -44,7 +44,7 @@ Pep has many options. Here they are in their entirety, with their defaults. This
 | place                           | `true`                                          | bypass pep's object placement logic                                                                                                                     |
 | deferPlacement                  | `false`                                         | defer object placement until start event occurs                                                                                                         |
 | forceNonCSS3Movement            | `false`                                         | DO NOT USE: this is subject to come/go. Use at your own risk                                                                                            |
-| elementsWithInteraction         | `input`                                         | selector for elements within the Pep target that should allow user iteraction                                                                           |
+| elementsWithInteraction         | `input`                                         | valid CSS/jQuery selector for elements within the Pep object that should allow user interaction, and thus propagate to allow movement                                                                           |
 
 
 
