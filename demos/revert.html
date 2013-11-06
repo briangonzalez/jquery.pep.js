@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="../libs/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.pep.transform').pep({
+                revert: true
+            });
+
+            $('.pep.no-transform').pep({
+                useCSSTranslation: false,
+                hardwareAccelerate: false,
+                revert: true
+            });
+        });
+    </script>
+
+    <style type="text/css">
+        .pep { width: 200px; height: 200px; }
+        .transform { left: 8px; top: 8px; background: blue; }
+        .no-transform { left: 8px; top: 216px;  background: yellow; }
+    </style>
+
+</head>
+
+<body>
+<div class="pep transform"> CSS3 Transform </div>
+<div class="pep no-transform"> No CSS3 Transform </div>
+
+</body>
+
+</html>
