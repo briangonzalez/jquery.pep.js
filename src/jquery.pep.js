@@ -423,7 +423,11 @@
 
             // ease it via JS, the last true tells it to animate.
             var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
-            this.moveTo(xOp, yOp, jsAnimateFallback);
+            if (typeof this.options.moveTo == 'function') {
+              this.options.moveTo.call(this, xOp, yOp);
+            } else {
+              this.moveTo(xOp, yOp, jsAnimateFallback);
+            }
 
             // when the rest occurs, remove active class and call
             // user's rest event.
