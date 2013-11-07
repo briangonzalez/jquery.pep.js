@@ -302,11 +302,12 @@
             this.log({ type: 'velocity' });
 
             var hash = this.handleConstraint(dx, dy);
+            var xOp, yOp;
 
             // if using not using CSS transforms, move object via absolute position
-            if ( typeof this.options.moveTo == 'function') {
-              var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
-              var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
+            if ( typeof this.options.moveTo === 'function') {
+              xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+              yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
               if ( this.options.constrainTo ) {
                 xOp = (hash.x !== false) ? hash.x : xOp;
@@ -319,8 +320,8 @@
 
               this.options.moveTo.call(this, xOp, yOp);
             } else if ( !this.shouldUseCSSTranslation() ){
-              var xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
-              var yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
+              xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
+              yOp     = ( dy >= 0 ) ? "+=" + Math.abs(dy/this.scale)*this.options.multiplier : "-=" + Math.abs(dy/this.scale)*this.options.multiplier;
 
               if ( this.options.constrainTo ) {
                 xOp = (hash.x !== false) ? hash.x : xOp;
@@ -423,7 +424,7 @@
 
             // ease it via JS, the last true tells it to animate.
             var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
-            if (typeof this.options.moveTo == 'function') {
+            if (typeof this.options.moveTo === 'function') {
               this.options.moveTo.call(this, xOp, yOp);
             } else {
               this.moveTo(xOp, yOp, jsAnimateFallback);
