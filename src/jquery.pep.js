@@ -360,33 +360,24 @@
             }
 
             if ( this.options.revert ) {
-              var self = this,
-                  x = 0,
-                  y = 0,
-              //revert the clone back to the original DOM element
-                cb = function() {
-                  self.$el.remove();
-                  self.$el = $(self.el);
-                  self.cssX = 0;
-                  self.cssY = 0;
-                };
+                var self = this,
+                    x = 0,
+                    y = 0, cb;
 
-              if ( !this.shouldUseCSSTranslation() || this.options.shouldEase ) {
+                //revert the clone back to the original DOM element
+                if( this.options.helper === 'clone' ) {
+                    cb = function() {
+                        self.$el.remove();
+                        self.$el = $(self.el);
+                        self.cssX = 0;
+                        self.cssY = 0;
+                    };
+                }
+
                 var position = this.$el.position();
                 x = position.left - this.origin.left;
                 y = position.top - this.origin.top;
-
                 this.moveTo( '-=' + x, '-=' + y, this.options.shouldEase, cb );
-              }
-              else {
-               var matrixArray  = this.matrixToArray( this.matrixString() );
-               x = parseInt(matrixArray[4], 10);
-               y = parseInt(matrixArray[5], 10);
-               this.moveToUsingTransforms( -x, -y );
-
-                if ( !this.options.shouldEase )
-                  cb();
-              }
             }
 
             // ease the object, if necessary
@@ -514,6 +505,8 @@
       this.$el.animate({ top: y, left: x, queue: false }, this.options.cssEaseDuration/2, 'easeOutQuad', callback);
     } else{
       this.$el.stop(true, false).css({ top: y , left: x });
+      if ( callback )
+        callback();
     } 
 
   };
