@@ -186,6 +186,13 @@
                       this.placeObject();
                     }
 
+                    // clone the DOM element and replace $el with the clone
+                    if( this.options.helper === 'clone' ){
+                      var clone = this.$el.clone();
+                      this.$el.parent().append(clone);
+                      this.$el = clone;
+                    }
+
                     // log it
                     this.log({ type: 'event', event: ev.type });
 
@@ -352,20 +359,33 @@
               this.calculateActiveDropRegions();
             }
 
-            if ( this.options.revert ){
-              var x = 0,
-                  y = 0;
-              if ( !this.shouldUseCSSTranslation() ){
-                  var position = this.$el.position();
-                  x = position.left - this.origin.left;
-                  y = position.top - this.origin.top;
-                this.moveTo( '-=' + x, '-=' + y );
+            if ( this.options.revert ) {
+              var self = this,
+                  x = 0,
+                  y = 0,
+              //revert the clone back to the original DOM element
+                cb = function() {
+                  self.$el.remove();
+                  self.$el = $(self.el);
+                  self.cssX = 0;
+                  self.cssY = 0;
+                };
+
+              if ( !this.shouldUseCSSTranslation() || this.options.shouldEase ) {
+                var position = this.$el.position();
+                x = position.left - this.origin.left;
+                y = position.top - this.origin.top;
+
+                this.moveTo( '-=' + x, '-=' + y, this.options.shouldEase, cb );
               }
               else {
                var matrixArray  = this.matrixToArray( this.matrixString() );
                x = parseInt(matrixArray[4], 10);
                y = parseInt(matrixArray[5], 10);
                this.moveToUsingTransforms( -x, -y );
+
+                if ( !this.options.shouldEase )
+                  cb();
               }
             }
 
@@ -476,7 +496,7 @@
   //    move the object to an x and/or y value
   //    using jQuery's .css function -- this fxn uses the 
   //    .css({top: "+=20", left: "-=30"}) syntax
-  Pep.prototype.moveTo = function(x,y, animate) {
+  Pep.prototype.moveTo = function(x,y, animate, callback) {
 
     animate = ( animate === false || typeof(animate) === 'undefined' ) ? 
       false : true; 
@@ -491,7 +511,7 @@
     var animateDuration = 5000;
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$el.animate({ top: y, left: x }, this.options.cssEaseDuration/2, 'easeOutQuad', {queue: false});
+      this.$el.animate({ top: y, left: x, queue: false }, this.options.cssEaseDuration/2, 'easeOutQuad', callback);
     } else{
       this.$el.stop(true, false).css({ top: y , left: x });
     } 
@@ -527,13 +547,16 @@
     matrixArray[5]    = this.cssY;
     
     this.translation  = this.arrayToMatrix( matrixArray );
+    this.transform( this.translation );
+  };
 
-    this.$el.css({ 
-        '-webkit-transform': this.translation,
-           '-moz-transform': this.translation,
-            '-ms-transform': this.translation,
-             '-o-transform': this.translation,
-                'transform': this.translation  });
+  Pep.prototype.transform = function(value) {
+    this.$el.css({
+      '-webkit-transform': value,
+      '-moz-transform': value,
+      '-ms-transform': value,
+      '-o-transform': value,
+      'transform': value  });
   };
 
   // 3 helper functions for working with the 
