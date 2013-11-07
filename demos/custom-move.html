@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep custom move demo</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="../libs/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var dragger = $('<div class="dragging"></div>');
+        var peper = $('.pep').find('.dragger').pep({
+          place: false,
+          deferPlacement: true,
+          velocityMultiplier: 0,
+          moveTo:function(x, y) {
+            dragger.css({
+              left: x,
+              top: y
+            });
+          },
+          initiate: function(e, pep) {
+            dragger.css({
+              top: peper.offset().top,
+              left: peper.offset().left,
+              width: peper.width(),
+              height: peper.height()
+            }).hide().appendTo(window.document.body).fadeIn(250);
+          },
+          stop: function(e, pep) {
+            peper.fadeOut({
+              queue: false,
+              duration: 250,
+              complete: function() {
+                peper.stop(1, 1).show();
+                dragger.fadeOut(150, function(){
+                  dragger.remove();
+                });
+              }
+            }).animate({
+              top: dragger.offset().top,
+              left: dragger.offset().left
+            }, 500);
+          }
+        }).end();
+      });
+    </script>
+    <style type="text/css">
+      .pep{ width: 200px; height: 200px; background: blue; position:absolute; margin:0; top:0; left:0;}
+      .pep > .dragger {
+        width:10px; height:10px;
+        background:red;
+        position:absolute;
+        top:0;
+        right:0;
+      }
+      .dragging {
+        background:#333;
+        border-radius:5px;
+        position:absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pep">
+      <div class='dragger'>
+      </div>
+    </div>
+  </body>
+</html>
