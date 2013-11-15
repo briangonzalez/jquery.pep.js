@@ -13,27 +13,15 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $('.pep.transform').pep({
-                shouldEase: false,
-                revert: true
-            });
-
-            $('.pep.no-transform').pep({
-                useCSSTranslation: false,
-                hardwareAccelerate: false,
-                shouldEase: false,
-                revert: true
-            });
-
             $('.pep.ease').pep({
-                useCSSTranslation: false,
-                hardwareAccelerate: false,
+                debug: true,
                 shouldEase: true,
                 revert: true
             });
 
-            $('.pep.clone').pep({
-                helper: 'clone',
+            $('.pep.no-ease').pep({
+                debug: true,
+                shouldEase: false,
                 revert: true
             });
         });
@@ -41,19 +29,15 @@
 
     <style type="text/css">
         .pep { width: 200px; height: 200px; }
-        .transform { left: 8px; top: 8px; background: blue; }
-        .no-transform { left: 8px; top: 216px;  background: yellow; }
-        .ease { left: 8px; top: 424px;  background: orange; }
-        .clone { left: 8px; top: 632px;  background: red; }
+        .ease { left: 8px; top: 8px; background: blue; }
+        .no-ease { left: 8px; top: 216px;  background: yellow; }
     </style>
 
 </head>
 
 <body>
-<div class="pep transform"> CSS3 Transform </div>
-<div class="pep no-transform"> No CSS3 Transform </div>
-<div class="pep ease"> No CSS3 Transform with Ease</div>
-<div class="pep clone"> CSS3 Transform Clone</div>
+<div class="pep ease"> Revert with ease</div>
+<div class="pep no-ease"> Revert without ease</div>
 
 </body>
 
