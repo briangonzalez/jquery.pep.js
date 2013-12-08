@@ -60,7 +60,9 @@
     deferPlacement:                 false,
     axis:                           null,
     forceNonCSS3Movement:           false,
-    elementsWithInteraction:        'input'
+    elementsWithInteraction:        'input',
+    revert:                         false,
+    revertAfter:                    'stop'
   };
 
   //  ---------------------------------
@@ -206,9 +208,12 @@
                     this.$el.addClass( this.options.activeClass );
                     this.removeCSSEasing();
 
-                    // store x & y values for later use
+                    // store event's x & y values for later use
                     this.startX = this.ev.x = ev.pep.x;
                     this.startY = this.ev.y = ev.pep.y;
+
+                    // store initial offset.
+                    this.initialPosition = this.$el.position();
 
                     // store the initial touch/click event, used to calculate the inital delta values.
                     this.startEvent = this.moveEvent = ev;
@@ -387,6 +392,10 @@
               this.removeActiveClass();
             }
 
+            if ( this.options.revert && (this.options.revertAfter === 'stop' || !this.options.shouldEase) ) {
+              this.revert();
+            }
+
             // this must be set to false after
             // the user's stop event is called, so the dev
             // has access to it.
@@ -446,6 +455,11 @@
               // call users rest event.
               if ( started || ( !started && $.inArray('rest', self.options.callIfNotStarted) > -1 ) ) {
                 self.options.rest.call(self, ev, self);
+              }
+
+              // revert thy self!
+              if ( self.options.revert && (self.options.revertAfter === 'ease') ) {
+                self.revert();
               }
 
               // remove active class
@@ -614,6 +628,14 @@
 
     // return velocity in each direction.
     return { x: sumX*this.options.velocityMultiplier, y: sumY*this.options.velocityMultiplier};
+  };
+
+  Pep.prototype.revert = function() {
+    if ( this.shouldUseCSSTranslation() ){
+      this.moveToUsingTransforms(-this.xTranslation(),-this.yTranslation())
+    } 
+    
+    this.moveTo(this.initialPosition.left, this.initialPosition.top);      
   };
 
   //  requestAnimationFrame();

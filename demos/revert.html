@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep base demo</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="../libs/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep.base').pep({
+          useCSSTranslation: false,
+          revert: true,
+          initiate: function(){ this.$el.removeClass('transition') },
+          stop:     function(){ this.$el.addClass('transition') }
+        });
+
+        $('.pep.revert-after-ease').pep({
+          revert: true,
+          revertAfter: 'ease'
+        });
+
+        $('.pep.revert-after-ease-no-translation').pep({
+          useCSSTranslation: false,
+          revert: true,
+          revertAfter: 'ease'
+        });
+
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 100px; height: 100px; background: yellow; position: absolute; top: 10px; left: 10px; padding: 10px; border: 1px solid black;}
+      .pep.revert-after-ease{ background: red; top: 140px; }
+      .pep.revert-after-ease-no-translation{ background: #ddd; top: 270px; }
+      .transition{ transition: all 200ms ease; -webkit-transition: all 200ms ease; }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="pep base">base</div>
+    <div class="pep revert-after-ease">revert after ease, css-translation</div>
+    <div class="pep revert-after-ease-no-translation">revert after ease, no css-translation</div>
+  </body>
+
+</html>
