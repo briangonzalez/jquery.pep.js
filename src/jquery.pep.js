@@ -886,12 +886,11 @@
 
   // applyMSDefaults();
   Pep.prototype.applyMSDefaults = function(first_argument) {
-    this.$body.css({
+    this.$el.css({
         '-ms-touch-action' :    'none',
         'touch-action' :        'none',
         '-ms-scroll-chaining':  'none',
-        '-ms-scroll-limit':     '0 0 0 0',
-        'overflow':             'hidden'
+        '-ms-scroll-limit':     '0 0 0 0'
     });
   };
 
