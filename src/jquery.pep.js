@@ -381,8 +381,11 @@
             }
 
             // ease the object, if necessary.
-            if (this.options.shouldEase)
+            if (this.options.shouldEase) {
               this.ease(ev, this.started);
+            } else {
+              this.removeActiveClass();
+            }
 
             // this must be set to false after
             // the user's stop event is called, so the dev
@@ -446,7 +449,7 @@
               }
 
               // remove active class
-              self.$el.removeClass( [self.options.activeClass, 'pep-ease'].join(' ') );
+              self.removeActiveClass();
 
             }, this.options.cssEaseDuration );
 
@@ -721,6 +724,12 @@
                 'user-select' : 'none'
     });
 
+  };
+
+  // removeActiveClass()
+  //  Removes the active class.
+  Pep.prototype.removeActiveClass = function() {
+    this.$el.removeClass( [this.options.activeClass, 'pep-ease'].join(' ') );
   };
 
   //  handleConstraint();

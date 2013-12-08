@@ -13,12 +13,15 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('.pep').pep();
+        $('.pep.ease').pep();
+        $('.pep.no-ease').pep({
+          shouldEase: false
+        });
       });
     </script>
 
     <style type="text/css">
-      .pep        { width: 200px; height: 200px; background: blue; border-radius: 200px}
+      .pep        { width: 200px; height: 200px; background: blue; border-radius: 200px; text-align: center;}
       .pep-active { border: 10px solid green; }
       .pep-start  { background: red }
       .pep-ease   { background: yellow }
@@ -31,7 +34,8 @@
     green border = 'pep-active' class applied </br>
     red background = 'pep-start' class applied </br>
     yellow background = 'pep-ease' class applied
-    <div class="pep"></div>
+    <div class="pep ease"></div>
+    <div class="pep no-ease">no-ease</div>
 
   </body>
 
