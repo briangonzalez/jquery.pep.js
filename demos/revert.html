@@ -31,6 +31,17 @@
           revertAfter: 'ease'
         });
 
+        var a = 0;
+        $('.pep.revert-if').pep({
+          useCSSTranslation: false,
+          revert: true,
+          revertAfter: 'stop',
+          revertIf: function(){ 
+            a ++;
+            return (a % 2) == 0;
+          }
+        });
+
       });
     </script>
 
@@ -38,6 +49,7 @@
       .pep{ width: 100px; height: 100px; background: yellow; position: absolute; top: 10px; left: 10px; padding: 10px; border: 1px solid black;}
       .pep.revert-after-ease{ background: red; top: 140px; }
       .pep.revert-after-ease-no-translation{ background: #ddd; top: 270px; }
+      .pep.revert-if{ background: green; top: 400px; }
       .transition{ transition: all 200ms ease; -webkit-transition: all 200ms ease; }
     </style>
 
@@ -47,6 +59,7 @@
     <div class="pep base">base</div>
     <div class="pep revert-after-ease">revert after ease, css-translation</div>
     <div class="pep revert-after-ease-no-translation">revert after ease, no css-translation</div>
+    <div class="pep revert-if">conditionally revert object every other time</div>
   </body>
 
 </html>

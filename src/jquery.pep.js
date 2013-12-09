@@ -62,7 +62,8 @@
     forceNonCSS3Movement:           false,
     elementsWithInteraction:        'input',
     revert:                         false,
-    revertAfter:                    'stop'
+    revertAfter:                    'stop',
+    revertIf:                       function(){ return true; }
   };
 
   //  ---------------------------------
@@ -201,6 +202,7 @@
                     if ( shouldContinue === false )
                       return;
 
+
                     // cancel the rest timeout
                     clearTimeout( this.restTimeout );
 
@@ -213,7 +215,7 @@
                     this.startY = this.ev.y = ev.pep.y;
 
                     // store initial offset.
-                    this.initialPosition = this.$el.position();
+                    this.initialPosition = this.initialPosition || this.$el.position();
 
                     // store the initial touch/click event, used to calculate the inital delta values.
                     this.startEvent = this.moveEvent = ev;
@@ -392,7 +394,7 @@
               this.removeActiveClass();
             }
 
-            if ( this.options.revert && (this.options.revertAfter === 'stop' || !this.options.shouldEase) ) {
+            if ( this.options.revert && (this.options.revertAfter === 'stop' || !this.options.shouldEase) && ( this.options.revertIf && this.options.revertIf() ) ) {
               this.revert();
             }
 
@@ -458,7 +460,8 @@
               }
 
               // revert thy self!
-              if ( self.options.revert && (self.options.revertAfter === 'ease') ) {
+              // if ( this.options.revert && this.options.revertIf() && (this.options.revertAfter === 'stop' || !this.options.shouldEase) ) {
+              if ( self.options.revert && (self.options.revertAfter === 'ease' && self.options.shouldEase) && ( self.options.revertIf && self.options.revertIf() ) ) {
                 self.revert();
               }
 
@@ -632,7 +635,7 @@
 
   Pep.prototype.revert = function() {
     if ( this.shouldUseCSSTranslation() ){
-      this.moveToUsingTransforms(-this.xTranslation(),-this.yTranslation())
+      this.moveToUsingTransforms(-this.xTranslation(),-this.yTranslation());
     } 
     
     this.moveTo(this.initialPosition.left, this.initialPosition.top);      
