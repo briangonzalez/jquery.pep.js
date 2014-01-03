@@ -423,7 +423,7 @@
             var hash      = this.handleConstraint(x, y, true);
 
             // ✪  Apply the CSS3 animation easing magic  ✪
-            if ( this.cssAnimationsSupported() && this.	useCustomCSSEase)
+            if ( this.cssAnimationsSupported() && !this.options.useCustomCSSEase)
               this.$el.css( this.getCSSEaseHash() );
 
             var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
