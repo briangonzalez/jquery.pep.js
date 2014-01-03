@@ -50,6 +50,7 @@
     disableSelect:                  true,
     cssEaseString:                  "cubic-bezier(0.190, 1.000, 0.220, 1.000)",
     cssEaseDuration:                1000,
+    useCustomCSSEase:               false,
     shouldEase:                     true,
     droppable:                      false,
     droppableActiveClass:           'pep-dpa',
@@ -422,7 +423,7 @@
             var hash      = this.handleConstraint(x, y, true);
 
             // ✪  Apply the CSS3 animation easing magic  ✪
-            if ( this.cssAnimationsSupported() )
+            if ( this.cssAnimationsSupported() && this.useCSSTranslation)
               this.$el.css( this.getCSSEaseHash() );
 
             var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
