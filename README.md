@@ -108,11 +108,8 @@ Checkout the examples in the `demos` folder, which cover a wide array of test ca
 
 ## Support
 
-| IE6 | IE7 | IE8 | IE9 | IE10/11 | Chrome | Firefox | Opera | Safari |
-|---|---|---|---|---|---|---|---|---|
-| <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie6/ie6_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie7-8/ie7-8_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie7-8/ie7-8_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie/ie_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/ie-tile/ie-tile_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/chrome/chrome_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/firefox/firefox_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/opera/opera_64x64.png"></a> | <img width=64 src="https://raw.github.com/paulirish/browser-logos/master/safari/safari_64x64.png"></a>
+Pep includes at least partial support for most browsers, dating back to IE6. 
 
-See it in action in [IE6](http://www.youtube.com/watch?v=acc92L-Lhes&feature=youtu.be), [IE7](http://www.youtube.com/watch?v=8Qxo4q4ofVU&feature=youtu.be), [IE8](http://www.youtube.com/watch?v=WWKq3ovMbOQ&feature=youtu.be), and [IE9](http://www.youtube.com/watch?v=xYxQdkyzDnI&feature=youtu.be).
 
 ## Milestones
   - 08/08/13  -   Now with 100% IE coverage! That is, Pep now supports MSPointerEvents (IE10+)!
