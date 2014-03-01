@@ -460,7 +460,6 @@
               }
 
               // revert thy self!
-              // if ( this.options.revert && this.options.revertIf() && (this.options.revertAfter === 'stop' || !this.options.shouldEase) ) {
               if ( self.options.revert && (self.options.revertAfter === 'ease' && self.options.shouldEase) && ( self.options.revertIf && self.options.revertIf() ) ) {
                 self.revert();
               }
