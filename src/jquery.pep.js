@@ -63,7 +63,8 @@
     elementsWithInteraction:        'input',
     revert:                         false,
     revertAfter:                    'stop',
-    revertIf:                       function(){ return true; }
+    revertIf:                       function(){ return true; },
+    ignoreRightClick:               true
   };
 
   //  ---------------------------------
@@ -175,6 +176,8 @@
             // only continue chugging if our start event is a valid move event.
             if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
+              if( !(this.options.ignoreRightClick && ev.which == 3) ) {
+
                     // IE10 Hack. Me not happy.
                     if ( this.isPointerEventCompatible() && ev.preventManipulation )
                       ev.preventManipulation();
@@ -238,7 +241,7 @@
                         self.handleMove();
                         self.requestAnimationFrame( watchMoveLoop );
                     })($, self);
-
+              }
             }
   };
 
