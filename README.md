@@ -49,7 +49,7 @@ Pep has many options. Here they are in their entirety, with their defaults. This
 | deferPlacement                  | `false`                                         | defer object placement until start event occurs                                                                                                     |
 | forceNonCSS3Movement            | `false`                                         | DO NOT USE: this is subject to come/go. Use at your own risk                                                                                        |
 | elementsWithInteraction         | `'input'`                                       | valid CSS/jQuery selector for elements within the Pep object that should allow user interaction, and thus propagate to allow movement               |
-| ignoreRightClick				  | `true` 											| pep object will ignore the event with ignore event if triggered by a right click																	  |
+| ignoreRightClick				  | `true` 											| start event will be ignored if triggered by a right click																							  |
 
 
 
