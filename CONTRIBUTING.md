@@ -5,9 +5,10 @@ First and foremost, if you've made it this far: __you are awesome__. Thanks for 
 Here's how you can contribute to this repo:
 
 ```bash
-# 1. Make your edits, check them, and commit.
+# 1. Make your edits.
 
-# 2. Views the demos in your browser, and test.
+# 2. Views the demos in your browser, and test your changes thoroughly.
+#    Create new demos as needed.
 grunt serve --port=8000
 
 # 3. Hint, test, and compile.
@@ -21,6 +22,10 @@ git commit -am "fixes #30 - my awesome fix"
 git tag -a v0.5.12 -m 'my awesome version v0.5.12'
 
 # 6. Create pull request with changes.
+# or....
+# 6. If you have privileges, push changes and tags:
+git push origin master
+git push origin --tags
 ````
 
 ## Need help?
