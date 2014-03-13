@@ -46,7 +46,6 @@ module.exports = function(grunt) {
       src: ['src/**/*.js'],
       all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
     },
-    uglify: {}
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
