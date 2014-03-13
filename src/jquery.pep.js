@@ -176,7 +176,7 @@
             // only continue chugging if our start event is a valid move event.
             if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
-              if( !(this.options.ignoreRightClick && ev.which == 3) ) {
+              if( !(this.options.ignoreRightClick && ev.which === 3) ) {
 
                     // IE10 Hack. Me not happy.
                     if ( this.isPointerEventCompatible() && ev.preventManipulation )
@@ -638,9 +638,9 @@
   Pep.prototype.revert = function() {
     if ( this.shouldUseCSSTranslation() ){
       this.moveToUsingTransforms(-this.xTranslation(),-this.yTranslation());
-    } 
-    
-    this.moveTo(this.initialPosition.left, this.initialPosition.top);      
+    }
+
+    this.moveTo(this.initialPosition.left, this.initialPosition.top);
   };
 
   //  requestAnimationFrame();
