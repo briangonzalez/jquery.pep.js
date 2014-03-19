@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep droppable w/ consuming parent</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        $('.pep').pep({
+          droppable: '.droppable',
+          overlapFunction: false,
+          useCSSTranslation: false,
+          start: function(ev, obj){
+            obj.noCenter = false;
+          },
+          drag: function(ev, obj){
+            var vel = obj.velocity();
+            var rot = (vel.x)/5;
+            rotate(obj.$el, rot);
+          },
+          stop: function(ev, obj){
+            rotate(obj.$el, 0);
+          },
+          rest: handleCentering
+        });
+
+        function handleCentering(ev, obj){
+          console.log(obj.activeDropRegions.length);
+          if ( obj.activeDropRegions.length > 0 ) {
+            centerWithin(obj);
+          }
+        }
+
+        function centerWithin(obj){
+          var $parent = obj.activeDropRegions[0];
+          var pTop    = $parent.position().top;
+          var pLeft   = $parent.position().left;
+          var pHeight = $parent.outerHeight();
+          var pWidth  = $parent.outerWidth();
+
+          var oTop    = obj.$el.position().top;
+          var oLeft   = obj.$el.position().left;
+          var oHeight = obj.$el.outerHeight();
+          var oWidth  = obj.$el.outerWidth();
+
+          var cTop    = pTop + (pHeight/2);
+          var cLeft   = pLeft + (pWidth/2);
+
+          if ( !obj.noCenter ) {
+            if ( !obj.shouldUseCSSTranslation() ) {
+              var moveTop = cTop - (oHeight/2);
+              var moveLeft = cLeft - (oWidth/2);
+              obj.$el.animate({ top: moveTop, left: moveLeft }, 50);
+            } else{
+              var moveTop   = (cTop - oTop) - oHeight/2;
+              var moveLeft  = (cLeft - oLeft) - oWidth/2;
+              obj.moveToUsingTransforms( moveTop, moveLeft );
+            }
+
+            obj.noCenter = true;
+            return;
+          }
+
+          obj.noCenter = false;
+        }
+
+        function rotate($obj, deg){
+          $obj.css({
+              "-webkit-transform": "rotate("+ deg +"deg)",
+                 "-moz-transform": "rotate("+ deg +"deg)",
+                  "-ms-transform": "rotate("+ deg +"deg)",
+                   "-o-transform": "rotate("+ deg +"deg)",
+                      "transform": "rotate("+ deg +"deg)"
+            });
+        }
+
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 80px; height: 80px; background: blue; z-index: 10; }
+      .droppable{   width: 100px; height: 100px;
+                    position: absolute;
+                    border: 5px solid #ccc; }
+
+      .droppable.tr { right:  100px; bottom:  100px; }
+      .droppable.br { top:    100px; right:   100px;}
+      .droppable.bl { top:    100px; left:    100px;}
+      .droppable.tl { bottom: 100px; left:    100px;}
+      .pep-dpa      { border-color: blue; background: yellow }
+    </style>
+
+  </head>
+
+
+  <body>
+    <div class="pep"></div>
+    <div class="droppable tr"></div>
+    <div class="droppable br"></div>
+    <div class="droppable bl"></div>
+    <div class="droppable tl"></div>
+  </body>
+
+
+</html>
