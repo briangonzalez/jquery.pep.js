@@ -397,7 +397,7 @@
               this.removeActiveClass();
             }
 
-            if ( this.options.revert && (this.options.revertAfter === 'stop' || !this.options.shouldEase) && ( this.options.revertIf && this.options.revertIf() ) ) {
+            if ( this.options.revert && (this.options.revertAfter === 'stop' || !this.options.shouldEase) && ( this.options.revertIf && this.options.revertIf.call(this) ) ) {
               this.revert();
             }
 
@@ -463,7 +463,7 @@
               }
 
               // revert thy self!
-              if ( self.options.revert && (self.options.revertAfter === 'ease' && self.options.shouldEase) && ( self.options.revertIf && self.options.revertIf() ) ) {
+              if ( self.options.revert && (self.options.revertAfter === 'ease' && self.options.shouldEase) && ( self.options.revertIf && self.options.revertIf.call(self) ) ) {
                 self.revert();
               }
 
