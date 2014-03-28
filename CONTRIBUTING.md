@@ -17,7 +17,7 @@ grunt
 # 4. Commit your changes, closing issues as appropriate.
 git commit -am "fixes #30 - my awesome fix"
 
-# 5. Tag the commit so bower can get the latest and greatest.
+# 5. If you're changing Pep's source code (not readmes/demos/etc), tag the commit so Bower can get the latest and greatest.
 #    Be sure to increment the version appropriately.
 git tag -a v0.5.12 -m 'my awesome version v0.5.12'
 
