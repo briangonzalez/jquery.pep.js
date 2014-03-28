@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep droppable revertIf</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep({
+          droppable: ".droppable",
+          revert: true,
+          revertIf: function(){
+            return !this.activeDropRegions.length;
+          },
+          drag: function(ev, obj){
+            console.log( obj.activeDropRegions);
+          }
+        });
+
+      });
+    </script>
+
+    <style type="text/css">
+      .pep{ width: 90px; height: 90px; background: blue; z-index: 10; }
+      .droppable{   width: 100px; height: 100px;
+                    position: absolute;
+                    border: 5px solid #ccc;
+                    z-index: -1;
+                  }
+
+      .droppable.m  { top: 50%; left:50%; margin-left: -50px; margin-top: -50px; }
+      .droppable.tr { right:  30px; bottom:  30px; }
+      .droppable.br { top:    30px; right:   30px;}
+      .droppable.bl { top:    30px; left:    30px;}
+      .droppable.tl { bottom: 30px; left:    30px;}
+      .pep-dpa{ border-color: blue; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="pep"></div>
+    <div class="droppable m"></div>
+    <div class="droppable tr"></div>
+    <div class="droppable br"></div>
+    <div class="droppable bl"></div>
+    <div class="droppable tl"></div>
+  </body>
+
+
+</html>
