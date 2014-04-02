@@ -111,6 +111,7 @@
     this.scale          = 1;
     this.started        = false;
     this.disabled       = false;
+    this.activeDropRegions = [];
     this.resetVelocityQueue();
 
     this.init();
@@ -844,7 +845,7 @@
   //    sets parent droppables of this.
   Pep.prototype.calculateActiveDropRegions = function() {
     var self = this;
-    this.activeDropRegions = [];
+    this.activeDropRegions.length = 0;
 
     $.each( $(this.options.droppable), function(idx, el){
       var $el = $(el);
