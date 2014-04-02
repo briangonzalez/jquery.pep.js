@@ -69,5 +69,13 @@
     $.pep.toggleAll()
     strictEqual($el.first().data('plugin_pep').disabled, false, 'this.disable variable should be false when toggled twice');
   });
-  
+
+  test('activeDropRegions initially declared', 2, function() {
+    var $el = $( '#qunit-fixture span' );
+    $el.pep();
+
+    ok($el.data('plugin_pep').activeDropRegions, '`activeDropRegions` property is defined');
+    equal($el.data('plugin_pep').activeDropRegions.length, 0, '`activeDropRegions` property is initialized with length 0');
+  });
+
 }(jQuery));
