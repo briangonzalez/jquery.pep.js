@@ -312,6 +312,10 @@
             this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
             this.log({ type: 'velocity' });
 
+            this.doMoveTo(dx, dy);
+  };
+
+  Pep.prototype.doMoveTo = function(dx, dy) {
             var hash = this.handleConstraint(dx, dy);
             var xOp, yOp;
 
