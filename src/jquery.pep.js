@@ -544,8 +544,11 @@
 
     this.log({ type: 'delta', x: x, y: y });
 
-    matrixArray[4]    = this.cssX;
-    matrixArray[5]    = this.cssY;
+    matrixArray[12]    = this.cssX;
+    matrixArray[13]    = this.cssY;
+
+    // console.log(matrixArray);
+    // console.log(this.arrayToMatrix( matrixArray ) );
 
     this.translation  = this.arrayToMatrix( matrixArray );
     this.transform( this.translation );
@@ -562,12 +565,12 @@
 
   Pep.prototype.xTranslation = function(matrixArray) {
     matrixArray  = matrixArray || this.matrixToArray( this.matrixString() );
-    return parseInt(matrixArray[4], 10);
+    return parseInt(matrixArray[13], 10);
   };
 
   Pep.prototype.yTranslation = function(matrixArray) {
     matrixArray  = matrixArray || this.matrixToArray( this.matrixString() );
-    return parseInt(matrixArray[5], 10);
+    return parseInt(matrixArray[14], 10);
   };
 
 
@@ -582,7 +585,9 @@
       return !( !o || o === 'none' || o.indexOf('matrix') < 0  );
     };
 
-    var matrix = "matrix(1, 0, 0, 1, 0, 0)";
+    // var matrix = "matrix(1, 0, 0, 1, 0, 0)";
+    var baseMatrix = "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1)";
+    var matrix;
 
     if ( validMatrix( this.$el.css('-webkit-transform') ) )
       matrix = this.$el.css('-webkit-transform');
@@ -599,15 +604,24 @@
     if ( validMatrix( this.$el.css('transform') ) )
       matrix = this.$el.css('transform');
 
-    return matrix;
+    if ( matrix && matrix.search('matrix3d') === -1 ) {
+      var newMatrix = this.matrixToArray(baseMatrix);
+      newMatrix[13] = this.matrixToArray(matrix)[4];
+      newMatrix[14] = this.matrixToArray(matrix)[3];
+      matrix = this.arrayToMatrix(newMatrix);
+    }
+
+    console.log(matrix, baseMatrix)
+    return matrix || baseMatrix;
   };
 
   Pep.prototype.matrixToArray = function(str) {
+
       return str.split('(')[1].split(')')[0].split(',');
   };
 
   Pep.prototype.arrayToMatrix = function(array) {
-      return "matrix(" +  array.join(',')  + ")";
+      return "matrix3d(" +  array.join(',')  + ")";
   };
 
   //  addToLIFO();
