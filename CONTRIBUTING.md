@@ -19,6 +19,8 @@ git commit -am "fixes #30 - my awesome fix"
 
 # 5. If you're changing Pep's source code (not readmes/demos/etc), tag the commit so Bower can get the latest and greatest.
 #    Be sure to increment the version appropriately.
+#    Also change the version in package.json
+vi package.json
 git tag -a v0.5.12 -m 'my awesome version v0.5.12'
 
 # 6. Create pull request with changes.
