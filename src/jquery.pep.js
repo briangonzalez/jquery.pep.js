@@ -111,6 +111,7 @@
     this.scale          = 1;
     this.started        = false;
     this.disabled       = false;
+    this.activeDropRegions = [];
     this.resetVelocityQueue();
 
     this.init();
@@ -311,6 +312,10 @@
             this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
             this.log({ type: 'velocity' });
 
+            this.doMoveTo(dx, dy);
+  };
+
+  Pep.prototype.doMoveTo = function(dx, dy) {
             var hash = this.handleConstraint(dx, dy);
             var xOp, yOp;
 
@@ -844,7 +849,7 @@
   //    sets parent droppables of this.
   Pep.prototype.calculateActiveDropRegions = function() {
     var self = this;
-    this.activeDropRegions = [];
+    this.activeDropRegions.length = 0;
 
     $.each( $(this.options.droppable), function(idx, el){
       var $el = $(el);
