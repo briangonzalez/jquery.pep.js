@@ -148,25 +148,38 @@
     var self = this;
 
     // Subscribe to our start event
-    this.$el.on( this.startTrigger, function(ev){
-      self.handleStart(ev);
-    });
+    var onStartEvent = function(ev){ self.handleStart(ev); };
+    this.$el.on( this.startTrigger, onStartEvent );
 
     // Prevent start events from being gobbled by elements that should allow user interaction
-    this.$el.on( this.startTrigger, this.options.elementsWithInteraction, function(ev){
-      ev.stopPropagation();
-    });
+    var onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
+    this.$el.on( 
+      this.startTrigger, 
+      this.options.elementsWithInteraction, 
+      onStartEventOnElementsWithInteraction
+    );
 
     // Subscribe to our stop event
-    this.$document.on( this.stopEvents, function(ev) {
-      self.handleStop(ev);
-    });
+    var onStopEvents = function(ev) { self.handleStop(ev); };
+    this.$document.on( this.stopEvents, onStopEvents);
 
     // Subscribe to our move event
-    this.$document.on( this.moveTrigger, function(ev){
-      self.moveEvent = ev;
-    });
+    var onMoveEvents = function(ev){ self.moveEvent = ev; };
+    this.$document.on( this.moveTrigger, onMoveEvents);
+
+    // Add Unsubscribe function
+    this.unsubscribe = function() {
+      this.$el.off( this.startTrigger, onStartEvent );
+      this.$el.off( 
+        this.startTrigger, 
+        this.options.elementsWithInteraction, 
+        onStartEventOnElementsWithInteraction
+      );
+      this.$document.off( this.stopEvents, onStopEvents);
+      this.$document.off( this.moveTrigger, onMoveEvents);
+    };
   };
+
 
   //  handleStart();
   //    once this.startTrigger occurs, handle all of the logic
@@ -1127,7 +1140,9 @@
       return;
 
     pep.toggle(false);
+    pep.unsubscribe();
     $obj.removeData('plugin_' + pluginName);
+
   };
 
 }(jQuery, window));
