@@ -908,7 +908,7 @@
   //    returns true if we're on a non-touch device -- or --
   //    if the event is **single** touch event on a touch device
   Pep.prototype.isValidMoveEvent = function(ev){
-    return ( !this.isTouch(ev) || ( this.isTouch(ev) && ev.originalEvent.touches && ev.originalEvent.touches.length === 1 ) );
+    return ( !this.isTouch(ev) || ( this.isTouch(ev) && ev.originalEvent && ev.originalEvent.touches && ev.originalEvent.touches.length === 1 ) );
   };
 
   //  shouldUseCSSTranslation();
