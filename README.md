@@ -128,14 +128,6 @@ Checkout the examples in the `demos` folder, which cover a wide array of test ca
 
 Pep includes at least partial support for most browsers, dating back to IE6.
 
-
-## Milestones
-  - 08/08/13  -   Now with 100% IE coverage! That is, Pep now supports MSPointerEvents (IE10+)!
-  - 08/06/13  -   Added in user-provided `initiate` function, which is fired during touchstart or mousedown; `start` is now called after object has moved past threshold
-  - 05/01/13  -   Added in `droppable` functionality
-  - 12/02/12  -   Complete rewrite with support for movement using CSS3 Transforms (`translate()` function)
-  - 05/30/12  -   Initial version
-
 ## License
 
 Pep is licensed under the [MIT License](http://www.tldrlegal.com/license/mit-license)
