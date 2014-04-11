@@ -530,7 +530,7 @@
 
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$el.animate({ top: y, left: x }, this.options.cssEaseDuration/2, 'easeOutQuad', {queue: false});
+      this.$el.animate({ top: y, left: x }, 0, 'easeOutQuad', {queue: false});
     } else{
       this.$el.stop(true, false).css({ top: y , left: x });
     }
@@ -926,6 +926,9 @@
   //    return true if we should use CSS transforms for move the object
   Pep.prototype.shouldUseCSSTranslation = function() {
 
+    if ( this.options.forceNonCSS3Movement )
+      return false;
+
     if ( typeof(this.useCSSTranslation) !== "undefined" )
       return this.useCSSTranslation;
 
@@ -938,7 +941,7 @@
       useCSSTranslation = true;
     }
 
-    this.useCSSTranslation = useCSSTranslation;
+    this.useCSSTranslation =  useCSSTranslation;
     return useCSSTranslation;
   };
 
