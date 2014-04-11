@@ -148,24 +148,35 @@
     var self = this;
 
     // Subscribe to our start event
-    this.$el.on( this.startTrigger, function(ev){
-      self.handleStart(ev);
-    });
+    this.onStartEvent = function(ev){ self.handleStart(ev); };
+    this.$el.on(this.startTrigger, this.onStartEvent);
 
     // Prevent start events from being gobbled by elements that should allow user interaction
-    this.$el.on( this.startTrigger, this.options.elementsWithInteraction, function(ev){
-      ev.stopPropagation();
-    });
+    this.onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
+    this.$el.on(
+      this.startTrigger,
+      this.options.elementsWithInteraction,
+      this.onStartEventOnElementsWithInteraction
+    );
 
     // Subscribe to our stop event
-    this.$document.on( this.stopEvents, function(ev) {
-      self.handleStop(ev);
-    });
+    this.onStopEvents = function(ev) { self.handleStop(ev); };
+    this.$document.on(this.stopEvents, this.onStopEvents);
 
     // Subscribe to our move event
-    this.$document.on( this.moveTrigger, function(ev){
-      self.moveEvent = ev;
-    });
+    this.onMoveEvents = function(ev){ self.moveEvent = ev; };
+    this.$document.on(this.moveTrigger, this.onMoveEvents);
+  };
+
+  Pep.prototype.unsubscribe = function() {
+    this.$el.off(this.startTrigger, this.onStartEvent);
+    this.$el.off(
+      this.startTrigger,
+      this.options.elementsWithInteraction,
+      this.onStartEventOnElementsWithInteraction
+    );
+    this.$document.off(this.stopEvents, this.onStopEvents);
+    this.$document.off(this.moveTrigger, this.onMoveEvents);
   };
 
   //  handleStart();
@@ -1127,7 +1138,9 @@
       return;
 
     pep.toggle(false);
+    pep.unsubscribe();
     $obj.removeData('plugin_' + pluginName);
+
   };
 
 }(jQuery, window));
