@@ -115,6 +115,7 @@
     this.resetVelocityQueue();
 
     this.init();
+    return this;
   }
 
   //  init();
