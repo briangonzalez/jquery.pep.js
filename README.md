@@ -115,6 +115,13 @@ $('.pep').pep({
 })
 ```
 
+## Having an issue?
+
+Before filing an issue, be sure to read the docs and search previous issues. If you're still not having any luck, be sure to fork the following CodePen, demonstrating the issue that you're having.
+
+#### [→ Fork me and modify before filing issue](http://codepen.io/briangonzalez/pen/wqmIJ)
+
+
 ## Examples
 Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/ (which can also be found in more detail on Codepen: http://codepen.io/briangonzalez/tag/pep-demo)
 
