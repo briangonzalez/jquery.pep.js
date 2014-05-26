@@ -9,7 +9,7 @@
  *        http://pep.briangonzalez.org
  *        Kinetic drag for mobile/desktop.
  *
- *        Copyright (c) 2013 Brian Gonzalez
+ *        Copyright (c) 2014 Brian Gonzalez
  *        Licensed under the MIT license.
  *
  *        Title generated using "Speed" @
