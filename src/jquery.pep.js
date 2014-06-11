@@ -33,6 +33,7 @@
     start:                          function(){},
     drag:                           function(){},
     stop:                           function(){},
+    easing:                         function(){},
     rest:                           function(){},
     moveTo:                         false,
     callIfNotStarted:               ['stop', 'rest'],
@@ -252,7 +253,12 @@
                         if ( !self.active ) return;
                         self.handleMove();
                         self.requestAnimationFrame( watchMoveLoop );
-                    })($, self);
+                    })(self);
+
+                    (function watchEasingLoop(){
+                        if ( self.easing ) self.options.easing.call(self, null, self);
+                        self.requestAnimationFrame( watchEasingLoop );
+                    })(self);
               }
             }
   };
@@ -392,6 +398,9 @@
             // make object inactive, so watchMoveLoop returns
             this.active = false;
 
+            // make object easing.
+            this.easing = true;
+
             // remove our start class
             this.$el.removeClass('pep-start')
                     .addClass('pep-ease');
@@ -472,6 +481,8 @@
               if ( self.options.droppable ) {
                 self.calculateActiveDropRegions();
               }
+
+              self.easing = false;
 
               // call users rest event.
               if ( started || ( !started && $.inArray('rest', self.options.callIfNotStarted) > -1 ) ) {
