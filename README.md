@@ -88,15 +88,10 @@ bower install jquery.pep
 
 __From CDN__
 
-Guaranteed to be up-to-date:
+Bleeding edge, development version:
 
 ````
 http://rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
-````
-
-This is likely to get out of sync from master:
-````
-http://cdnjs.cloudflare.com/ajax/libs/jquery.pep/0.4.0/jquery.pep.min.js
 ````
 
 ## A note on `droppable` option
