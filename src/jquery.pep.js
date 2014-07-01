@@ -33,7 +33,7 @@
     start:                          function(){},
     drag:                           function(){},
     stop:                           function(){},
-    easing:                         function(){},
+    easing:                         null,
     rest:                           function(){},
     moveTo:                         false,
     callIfNotStarted:               ['stop', 'rest'],
@@ -254,9 +254,10 @@
                         if ( !self.active ) return;
                         self.handleMove();
                         self.requestAnimationFrame( watchMoveLoop );
-                    })(self);
+                    })();
 
                     (function watchEasingLoop(){
+                        if ( !self.options.easing ) return;
                         if ( self.easing ) self.options.easing.call(self, null, self);
                         self.requestAnimationFrame( watchEasingLoop );
                     })(self);
