@@ -260,7 +260,7 @@
                         if ( !self.options.easing ) return;
                         if ( self.easing ) self.options.easing.call(self, null, self);
                         self.requestAnimationFrame( watchEasingLoop );
-                    })(self);
+                    })();
               }
             }
   };
