@@ -6,19 +6,6 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
     },
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.title %> // <%= pkg.author.name %> - <%= pkg.author.twitter %> // v<%= pkg.version %> // ' +
-                '<%= grunt.template.today("yyyy-mm-dd") %> */' + "\n",
-        mangle: true,
-        compress: false
-      },
-      dist: {
-        files: {
-          'dist/jquery.pep.min.js':   'src/jquery.pep.js',
-        }
-      }
-    },
     qunit: {
       files: ['test/**/*.html']
     },
@@ -49,12 +36,10 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task.
-  grunt.registerTask('default', ['jshint:src', 'qunit', 'uglify']);
+  grunt.registerTask('default', ['jshint:src', 'qunit']);
 
   // Server Task
   grunt.registerTask('serve', 'Serves any directory on given port', function (env) {
