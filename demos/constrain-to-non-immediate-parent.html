@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery.pep demo - constrained objects</title>
+
+    <!-- Load local jQuery.  -->
+    <script src="../libs/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+    <!-- Load local lib and tests. -->
+    <script src="../src/jquery.pep.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.pep').pep({  constrainTo: '.parent-2' });
+      });
+    </script>
+
+    <style type="text/css">
+      body         { padding: 0; margin: 0; }
+      .parent-1     { width: 300px; height: 300px; margin: 0; background: blue; }
+      .parent-2     { width: 800px; height: 500px; background: yellow; }
+      .pep          { width: 100px; height: 100px; background: red; color: white; }
+    </style>
+
+
+  </head>
+
+
+  <body>
+    <div class="parent-2">
+      <div class="parent-1">
+        <div class="pep">constrained to parent</div>
+      </div>
+    </div>
+  </body>
+
+</html>
