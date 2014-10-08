@@ -83,8 +83,7 @@
     // and it's jQuery equivalent.
     this.el       = el;
     this.$el      = $(el);
-    this.$target  = this.options.handle ? $(this.options.handle) : this.$el;
-    this.$movable = this.options.handle ? this.$el.add( this.$target ) : this.$el;
+    this.$handle  = this.options.handle ? this.$el.find(this.options.handle) : this.$el;
 
     // store document/body so we don't need to keep grabbing them
     // throughout the code
@@ -154,7 +153,7 @@
 
     // Subscribe to our start event
     this.onStartEvent = function(ev){ self.handleStart(ev); };
-    this.$target.on(this.startTrigger, this.onStartEvent);
+    this.$handle.on(this.startTrigger, this.onStartEvent);
 
     // Prevent start events from being gobbled by elements that should allow user interaction
     this.onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
@@ -456,7 +455,7 @@
 
             // ✪  Apply the CSS3 animation easing magic  ✪
             if ( this.cssAnimationsSupported() )
-              this.$movable.css( this.getCSSEaseHash() );
+              this.$el.css( this.getCSSEaseHash() );
 
             var xOp = ( vel.x > 0 ) ? "+=" + x : "-=" + Math.abs(x);
             var yOp = ( vel.y > 0 ) ? "+=" + y : "-=" + Math.abs(y);
@@ -546,9 +545,9 @@
 
     this.log({ type: 'delta', x: x, y: y });
     if ( animate ) {
-      this.$movable.animate({ top: y, left: x }, 0, 'easeOutQuad', {queue: false});
+      this.$el.animate({ top: y, left: x }, 0, 'easeOutQuad', {queue: false});
     } else{
-      this.$movable.stop(true, false).css({ top: y , left: x });
+      this.$el.stop(true, false).css({ top: y , left: x });
     }
 
   };
@@ -579,7 +578,7 @@
   };
 
   Pep.prototype.transform = function(value) {
-    this.$movable.css({
+    this.$el.css({
         '-webkit-transform': value,
            '-moz-transform': value,
             '-ms-transform': value,
@@ -766,7 +765,7 @@
   //    remove CSS easing properties, if necessary
   Pep.prototype.removeCSSEasing = function() {
     if ( this.cssAnimationsSupported() )
-      this.$movable.css( this.getCSSEaseHash(true) );
+      this.$el.css( this.getCSSEaseHash(true) );
   };
 
   //  disableSelect();

@@ -6,48 +6,51 @@
 
     <!-- Load local jQuery.  -->
     <script src="../libs/jquery/jquery.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
     <!-- Load local lib and tests. -->
     <script src="../src/jquery.pep.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('input').pep({
-          handle: '.pep-handle'
+        $('.peppable').pep({
+          handle: '.pep-handle',
+          constrainTo: 'parent'
         });
       });
     </script>
 
     <style type="text/css">
-      .pep-handle{ 
-        background: #ccc; 
-        position: absolute;
-        top: 10px; left: 10px;
-        padding: 5px 9px;
-        font-size: 20px;
-        border-radius: 2px;
+      .pep-handle {
+        height: 10px; width: 10px;
         cursor: move;
       }
 
-      .pep-handle:hover{
-        background: #eee;
-      }
+      .peppable { height: 200px; width: 200px; }
 
-      input{
+      .peppable.green {
+        background-color: lightgreen;
         position: absolute;
-        top: 20px; left: 60px;
+        left: 205px;
       }
+      
+      .peppable.blue { background-color: lightblue; }
+
+      #parent { position:relative; border: 5px solid #666; width: 800px; height: 500px; margin: 30px; }
     </style>
 
   </head>
 
   <body>
 
-    
-    <input type="range" name="points" min="1" max="10">
-    <div class="pep-handle">
-      &#9776;
+    <div id="parent">
+      <div class="peppable blue">
+        <span class="pep-handle">&#9776;</span>
+      </div>
+
+      <div class="peppable green">
+        <span class="pep-handle">&#9776;</span>
+      </div>
     </div>
 
   </body>
