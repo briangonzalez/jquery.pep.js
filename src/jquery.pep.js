@@ -60,7 +60,7 @@
     place:                          true,
     deferPlacement:                 false,
     axis:                           null,
-    handle:                         false,
+    handle:                         null,
     forceNonCSS3Movement:           false,
     elementsWithInteraction:        'input',
     revert:                         false,
