@@ -131,7 +131,9 @@
       this.buildDebugDiv();
 
     if ( this.options.disableSelect )
-      this.disableSelect();
+      this.disableSelect(this.$el);
+    else if ( this.options.handle )
+      this.disableSelect(this.$handle);
 
     // position the parent & place the object, if necessary.
     if ( this.options.place && !this.options.deferPlacement ) {
@@ -771,9 +773,10 @@
   //  disableSelect();
   //    add the property which causes the object
   //    to not be selected user drags over text areas
-  Pep.prototype.disableSelect = function() {
+  Pep.prototype.disableSelect = function(el) {
+    if ( typeof(el) === 'undefined' ) el = this.$el;
 
-    this.$el.css({
+    el.css({
       '-webkit-touch-callout' : 'none',
         '-webkit-user-select' : 'none',
          '-khtml-user-select' : 'none',
