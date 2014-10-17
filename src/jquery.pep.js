@@ -197,6 +197,9 @@
 
               if( !(this.options.ignoreRightClick && ev.which === 3) ) {
 
+                    // Disables select globally when pep is moved regardless of setting
+                    this.disableSelect($("body"));
+
                     // IE10 Hack. Me not happy.
                     if ( this.isPointerEventCompatible() && ev.preventManipulation )
                       ev.preventManipulation();
@@ -440,6 +443,9 @@
 
             // reset the velocity queue
             this.resetVelocityQueue();
+
+            // resets select to default when pep has finished moving
+            this.enableSelect($("body"));
 
   };
 
@@ -784,6 +790,23 @@
            '-moz-user-select' : 'none',
             '-ms-user-select' : 'none',
                 'user-select' : 'none'
+    });
+
+  };
+
+  //  enableSelect();
+  //    remove the property which causes the object
+  //    to not be selected user drags over text areas
+  Pep.prototype.enableSelect = function(el) {
+    if ( typeof(el) === 'undefined' ) el = this.$el;
+
+    el.css({
+      '-webkit-touch-callout' : '',
+        '-webkit-user-select' : '',
+         '-khtml-user-select' : '',
+           '-moz-user-select' : '',
+            '-ms-user-select' : '',
+                'user-select' : ''
     });
 
   };
