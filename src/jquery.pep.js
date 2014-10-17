@@ -159,7 +159,7 @@
 
     // Prevent start events from being gobbled by elements that should allow user interaction
     this.onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
-    this.$el.on(
+    this.$handle.on(
       this.startTrigger,
       this.options.elementsWithInteraction,
       this.onStartEventOnElementsWithInteraction
@@ -172,11 +172,12 @@
     // Subscribe to our move event
     this.onMoveEvents = function(ev){ self.moveEvent = ev; };
     this.$document.on(this.moveTrigger, this.onMoveEvents);
+
   };
 
   Pep.prototype.unsubscribe = function() {
-    this.$el.off(this.startTrigger, this.onStartEvent);
-    this.$el.off(
+    this.$handle.off(this.startTrigger, this.onStartEvent);
+    this.$handle.off(
       this.startTrigger,
       this.options.elementsWithInteraction,
       this.onStartEventOnElementsWithInteraction
