@@ -14,6 +14,7 @@
     <script type="text/javascript">
       $(document).ready(function(){
         $('.peppable').pep({
+          disableSelect: false,
           handle: '.pep-handle',
           constrainTo: 'parent'
         });
@@ -26,7 +27,8 @@
         cursor: move;
       }
 
-      .peppable { height: 200px; width: 200px; }
+      .peppable { height: 200px; width: 200px; text-align: right; }
+      .peppable .content { text-align: center; }
 
       .peppable.green {
         background-color: lightgreen;
@@ -46,11 +48,26 @@
     <div id="parent">
       <div class="peppable blue">
         <span class="pep-handle">&#9776;</span>
+        <div class="content">
+          <h1>Title</h2>
+          <input />
+          <textarea></textarea>
+          <span>some text</span>
+          <button>Button</button>
+        </div>
       </div>
 
       <div class="peppable green">
         <span class="pep-handle">&#9776;</span>
+        <div class="content">
+          <button>OK!</button>
+        </div>
       </div>
+
+      <h1>Lorem Ipsum</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque eleifend turpis, dapibus luctus nisi accumsan eget. Phasellus a blandit turpis, sed rhoncus massa. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent accumsan turpis facilisis nisi laoreet, dictum rutrum urna rutrum. Nulla eleifend, orci in hendrerit ullamcorper, erat orci commodo augue, at pellentesque lacus turpis a ex. Nulla rutrum sagittis urna, quis tincidunt eros feugiat quis. Praesent pellentesque, ante a interdum fringilla, diam erat sagittis lectus, nec ultrices purus tellus iaculis lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis tortor et urna aliquam porttitor a a tortor. Vestibulum a augue sit amet tortor condimentum consectetur.
+      </p>
     </div>
 
   </body>
