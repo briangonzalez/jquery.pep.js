@@ -10,7 +10,7 @@ $('.pep').pep(); // yup, that simple.
 ```
 
 ## Usage
-Pep has many options. Here they are in their entirety, with their defaults. This list can be a little daunting, but most of Pep's options are comparable to jQueryUI. Need a little help? [Just ask](http://twitter.com/brianmgonzalez).
+Pep has many options. Here they are in their entirety, with their defaults. Need a little help? [Just ask](http://twitter.com/brianmgonzalez).
 
 | Name                            | Default                                         | Description                                                                                                                                                           |
 |---------------------------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------                  |
