@@ -65,7 +65,11 @@
     revert:                         false,
     revertAfter:                    'stop',
     revertIf:                       function(){ return true; },
-    ignoreRightClick:               true
+    ignoreRightClick:               true,
+    startPos:                       {
+        left:                           null,
+        top:                            null
+    }
   };
 
   //  ---------------------------------
@@ -723,8 +727,14 @@
     if ( parseInt( this.$el.css('left'), 10 ) )
       this.offset.left = this.$el.css('left');
 
+    if (typeof this.options.startPos.left === "number")
+        this.offset.left = this.options.startPos.left;
+
     if ( parseInt( this.$el.css('top'), 10 ) )
       this.offset.top = this.$el.css('top');
+
+    if (typeof this.options.startPos.top === "number")
+        this.offset.top = this.options.startPos.top;
 
     if ( this.options.removeMargins )
       this.$el.css({margin: 0});
@@ -1160,7 +1170,3 @@
   };
 
 }(jQuery, window));
-
-
-
-
