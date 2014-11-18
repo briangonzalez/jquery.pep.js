@@ -93,9 +93,9 @@
     this.$body      = this.$document.find('body');
 
     //  Create our triggers based on touch/click device
-    this.moveTrigger        = "MSPointerMove touchmove mousemove";
-    this.startTrigger       = "MSPointerDown touchstart mousedown";
-    this.stopTrigger        = "MSPointerUp touchend mouseup";
+    this.moveTrigger        = "MSPointerMove pointermove touchmove mousemove";
+    this.startTrigger       = "MSPointerDown pointerdown touchstart mousedown";
+    this.stopTrigger        = "MSPointerUp pointerup touchend mouseup";
     this.startTriggerArray  = this.startTrigger.split(' ');
     this.moveTriggerArray   = this.moveTrigger.split(' ');
     this.stopTriggerArray   = this.stopTrigger.split(' ');
