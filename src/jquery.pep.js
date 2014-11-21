@@ -60,6 +60,7 @@
     place:                          true,
     deferPlacement:                 false,
     axis:                           null,
+    handle:                         null,
     forceNonCSS3Movement:           false,
     elementsWithInteraction:        'input',
     revert:                         false,
@@ -79,13 +80,14 @@
 
     this.name = pluginName;
 
-    // reference to our DOM object
-    // and it's jQuery equivalent.
-    this.el  = el;
-    this.$el = $(el);
-
     //  merge in defaults
     this.options    = $.extend( {}, defaults, options) ;
+
+    // reference to our DOM object
+    // and it's jQuery equivalent.
+    this.el       = el;
+    this.$el      = $(el);
+    this.$handle  = this.options.handle ? this.$el.find(this.options.handle) : this.$el;
 
     // store document/body so we don't need to keep grabbing them
     // throughout the code
@@ -133,7 +135,9 @@
       this.buildDebugDiv();
 
     if ( this.options.disableSelect )
-      this.disableSelect();
+      this.disableSelect(this.$el);
+    else if ( this.options.handle )
+      this.disableSelect(this.$handle);
 
     // position the parent & place the object, if necessary.
     if ( this.options.place && !this.options.deferPlacement ) {
@@ -155,11 +159,11 @@
 
     // Subscribe to our start event
     this.onStartEvent = function(ev){ self.handleStart(ev); };
-    this.$el.on(this.startTrigger, this.onStartEvent);
+    this.$handle.on(this.startTrigger, this.onStartEvent);
 
     // Prevent start events from being gobbled by elements that should allow user interaction
     this.onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
-    this.$el.on(
+    this.$handle.on(
       this.startTrigger,
       this.options.elementsWithInteraction,
       this.onStartEventOnElementsWithInteraction
@@ -172,11 +176,12 @@
     // Subscribe to our move event
     this.onMoveEvents = function(ev){ self.moveEvent = ev; };
     this.$document.on(this.moveTrigger, this.onMoveEvents);
+
   };
 
   Pep.prototype.unsubscribe = function() {
-    this.$el.off(this.startTrigger, this.onStartEvent);
-    this.$el.off(
+    this.$handle.off(this.startTrigger, this.onStartEvent);
+    this.$handle.off(
       this.startTrigger,
       this.options.elementsWithInteraction,
       this.onStartEventOnElementsWithInteraction
@@ -195,6 +200,9 @@
             if ( this.isValidMoveEvent(ev) && !this.disabled ){
 
               if( !(this.options.ignoreRightClick && ev.which === 3) ) {
+
+                    // Disables select globally when pep is moved regardless of setting
+                    this.disableSelect($("body"));
 
                     // IE10 Hack. Me not happy.
                     if ( this.isPointerEventCompatible() && ev.preventManipulation )
@@ -439,6 +447,9 @@
 
             // reset the velocity queue
             this.resetVelocityQueue();
+
+            // resets select to default when pep has finished moving
+            this.enableSelect($("body"));
 
   };
 
@@ -779,15 +790,33 @@
   //  disableSelect();
   //    add the property which causes the object
   //    to not be selected user drags over text areas
-  Pep.prototype.disableSelect = function() {
+  Pep.prototype.disableSelect = function(el) {
+    if ( typeof(el) === 'undefined' ) el = this.$el;
 
-    this.$el.css({
+    el.css({
       '-webkit-touch-callout' : 'none',
         '-webkit-user-select' : 'none',
          '-khtml-user-select' : 'none',
            '-moz-user-select' : 'none',
             '-ms-user-select' : 'none',
                 'user-select' : 'none'
+    });
+
+  };
+
+  //  enableSelect();
+  //    remove the property which causes the object
+  //    to not be selected user drags over text areas
+  Pep.prototype.enableSelect = function(el) {
+    if ( typeof(el) === 'undefined' ) el = this.$el;
+
+    el.css({
+      '-webkit-touch-callout' : '',
+        '-webkit-user-select' : '',
+         '-khtml-user-select' : '',
+           '-moz-user-select' : '',
+            '-ms-user-select' : '',
+                'user-select' : ''
     });
 
   };
