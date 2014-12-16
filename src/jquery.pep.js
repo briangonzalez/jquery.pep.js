@@ -511,7 +511,14 @@
   Pep.prototype.normalizeEvent = function(ev) {
       ev.pep        = {};
 
-      if ( this.isPointerEventCompatible() || !this.isTouch(ev) ) {
+      if ( this.isTouch(ev) ) {
+
+        ev.pep.x      = ev.originalEvent.touches[0].pageX;
+        ev.pep.y      = ev.originalEvent.touches[0].pageY;
+        ev.pep.type   = ev.type;
+      
+      }
+      else if ( this.isPointerEventCompatible() || !this.isTouch(ev) ) {
 
         if ( ev.pageX  ) {
           ev.pep.x      = ev.pageX;
@@ -524,13 +531,8 @@
         ev.pep.type   = ev.type;
 
       }
-      else {
-        ev.pep.x      = ev.originalEvent.touches[0].pageX;
-        ev.pep.y      = ev.originalEvent.touches[0].pageY;
-        ev.pep.type   = ev.type;
-      }
-
-       return ev;
+     
+      return ev;
    };
 
   // resetVelocityQueue()
