@@ -316,6 +316,9 @@
               this.$el.addClass('pep-start');
               this.options.start.call(this, this.startEvent, this);
             }
+            
+            // Move before calculate position and fire events
+            this.doMoveTo(dx, dy);
 
             // Calculate our drop regions
             if ( this.options.droppable ) {
@@ -334,8 +337,6 @@
             this.log({ type: 'event', event: ev.type });
             this.log({ type: 'event-coords', x: this.ev.x, y: this.ev.y });
             this.log({ type: 'velocity' });
-
-            this.doMoveTo(dx, dy);
   };
 
   Pep.prototype.doMoveTo = function(dx, dy) {
