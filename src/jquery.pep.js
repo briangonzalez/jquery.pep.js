@@ -676,7 +676,9 @@
       this.moveToUsingTransforms(-this.xTranslation(),-this.yTranslation());
     }
 
-    this.moveTo(this.initialPosition.right, this.initialPosition.bottom);
+    if (this.options.place) {
+      this.moveTo(this.initialPosition.top, this.initialPosition.left);
+    }
   };
 
   //  requestAnimationFrame();
