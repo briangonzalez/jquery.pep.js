@@ -69,7 +69,8 @@
     startPos:                       {
         left:                           null,
         top:                            null
-    }
+    },
+    useBoundingClientRect:          false
   };
 
   //  ---------------------------------
@@ -834,8 +835,8 @@
     } else if ( typeof this.options.constrainTo === 'string' ) {
       lowerXLimit       = 0;
       lowerYLimit       = 0;
-      upperXLimit       = this.$container.width()  - this.$el.outerWidth();
-      upperYLimit       = this.$container.height() - this.$el.outerHeight();
+      upperXLimit       = this.$container.width()  - (this.options.useBoundingClientRect ? this.$el[0].getBoundingClientRect().width : this.$el.outerWidth());
+      upperYLimit       = this.$container.height() - (this.options.useBoundingClientRect ? this.$el[0].getBoundingClientRect().height : this.$el.outerHeight());
 
       // is our object trying to move outside lower X & Y limits?
       if ( this.pos.x + dx < 0 )              hash.x = 0;
