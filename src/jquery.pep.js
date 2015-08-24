@@ -158,8 +158,9 @@
     this.onStartEvent = function(ev){ self.handleStart(ev); };
     this.$el.on(this.startTrigger, this.onStartEvent);
 
-    // Prevent start events from being gobbled by elements that should allow user interaction
-    this.onStartEventOnElementsWithInteraction = function(ev){ ev.stopPropagation(); };
+    // Add a flag to events that start on elements that should allow interaction
+    // so handleStart() can ignore them but allow them to bubble up through the DOM
+    this.onStartEventOnElementsWithInteraction = function(ev){ ev.ignorePropagation = true; };
     this.$el.on(
       this.startTrigger,
       this.options.elementsWithInteraction,
@@ -190,6 +191,11 @@
   //    once this.startTrigger occurs, handle all of the logic
   //    that must go on. This is where Pep's heavy lifting is done.
   Pep.prototype.handleStart = function(ev) {
+
+    // ignorePropagation is set to true if the event originates from an element
+    // listed in this.options.elementsWithInteraction
+    if (ev.ignorePropagation) return;
+
     var self = this;
 
             // only continue chugging if our start event is a valid move event.
@@ -317,7 +323,7 @@
               this.$el.addClass('pep-start');
               this.options.start.call(this, this.startEvent, this);
             }
-            
+
             // Move before calculate position and fire events
             this.doMoveTo(dx, dy);
 
@@ -518,7 +524,7 @@
         ev.pep.x      = ev.originalEvent.touches[0].pageX;
         ev.pep.y      = ev.originalEvent.touches[0].pageY;
         ev.pep.type   = ev.type;
-      
+
       }
       else if ( this.isPointerEventCompatible() || !this.isTouch(ev) ) {
 
@@ -533,7 +539,7 @@
         ev.pep.type   = ev.type;
 
       }
-     
+
       return ev;
    };
 
