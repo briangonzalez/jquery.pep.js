@@ -302,6 +302,9 @@
             this.ev.x = curX;
             this.ev.y = curY;
 
+            // Move before calculate position and fire events
+            this.doMoveTo(dx, dy);
+
             // no movement in either direction -- so return
             if (dx === 0 && dy === 0){
               this.log({ type: 'event', event: '** stopped **' });
@@ -317,9 +320,6 @@
               this.$el.addClass('pep-start');
               this.options.start.call(this, this.startEvent, this);
             }
-            
-            // Move before calculate position and fire events
-            this.doMoveTo(dx, dy);
 
             // Calculate our drop regions
             if ( this.options.droppable ) {
