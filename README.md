@@ -52,7 +52,7 @@ Pep has many options. Here they are in their entirety, with their defaults. Need
 | elementsWithInteraction         | `'input'`                                       | valid CSS/jQuery selector for elements within the Pep object that should allow user interaction, and thus propagate to allow movement                                                                                                                   |
 | ignoreRightClick                | `true`                                          | start event will be ignored if triggered by a right click                                                                                                                                                                                               |
 | startPos                        | `{ left: null, top: null }`                     | set the default left/top coordinate to position the object with on load                                                                                                                                                                                 |
-| useBoundingClientRect           | `false`                                         | use (getBoundingClientRect())[https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect] to retrieve element dimensions instead of jQuery's .outerWidth() & .outerHeight() (useful when your element is scaled via CSS transforms) |
+| useBoundingClientRect           | `false`                                         | use [getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) to retrieve element dimensions instead of jQuery's .outerWidth() & .outerHeight() (useful when your element is scaled via CSS transforms) |
 
 
 
