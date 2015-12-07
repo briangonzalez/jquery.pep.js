@@ -815,8 +815,8 @@
   //    when we constrain to parent/window
   Pep.prototype.handleConstraint = function(dx, dy, accountForTranslation) {
     var pos               = this.$el.position();
-    this.pos.x            = pos.left;
-    this.pos.y            = pos.top;
+    this.pos.x            = pos.left / this.scale;
+    this.pos.y            = pos.top / this.scale;
 
     var hash              = { x: false, y: false };
 
