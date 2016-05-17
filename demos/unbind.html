@@ -21,9 +21,9 @@
           var newtext   = '';
           var val       = 0;
 
-          if ( $this.data('bound') == 1 ){ 
+          if ( $this.data('bound') == 1 ){
             newtext   = 'Bind';
-            val       = 0; 
+            val       = 0;
             $.pep.unbind( $pep );
           }
           else {
@@ -41,7 +41,9 @@
     </script>
 
     <style type="text/css">
-      .pep{ width: 200px; height: 200px; background: blue; }
+      .pep{ width: 200px; height: 200px; }
+      .pep1{ background: blue; }
+      .pep2{ background: red; }
     </style>
 
 
@@ -49,7 +51,8 @@
 
   <body>
     <button class='toggle-bind' data-bound=1>Unbind</button>
-    <div class="pep"></div>
+    <div class="pep pep1"></div>
+    <div class="pep pep2"></div>
   </body>
 
 </html>
