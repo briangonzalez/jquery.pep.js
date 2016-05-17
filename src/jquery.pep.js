@@ -1171,7 +1171,7 @@
 
   $.pep.unbind = function($obj){
     $.each($obj, function(index, pepObj) {
-      pepObj = $(pepObj)
+      pepObj = $(pepObj);
       var pep = pepObj.data('plugin_' + pluginName);
 
       if ( typeof pep === 'undefined' )
