@@ -1170,15 +1170,17 @@
   };
 
   $.pep.unbind = function($obj){
-    var pep = $obj.data('plugin_' + pluginName);
+    $.each($obj, function(index, pepObj) {
+      pepObj = $(pepObj)
+      var pep = pepObj.data('plugin_' + pluginName);
 
-    if ( typeof pep === 'undefined' )
-      return;
+      if ( typeof pep === 'undefined' )
+        return;
 
-    pep.toggle(false);
-    pep.unsubscribe();
-    $obj.removeData('plugin_' + pluginName);
-
+      pep.toggle(false);
+      pep.unsubscribe();
+      pepObj.removeData('plugin_' + pluginName);
+    });
   };
 
 }(jQuery, window));
