@@ -117,6 +117,7 @@
     this.scale          = 1;
     this.started        = false;
     this.disabled       = false;
+    this.autoAxis       = false;
     this.activeDropRegions = [];
     this.resetVelocityQueue();
 
@@ -350,6 +351,19 @@
             var hash = this.handleConstraint(dx, dy);
             var xOp, yOp;
 
+            // if using the "auto" axis, determine which axis to use based on
+            // whether the user has dragged more along the x or the y axis
+            if ( this.options.axis === 'auto' && !this.autoAxis) {
+              if ( Math.abs(dx) > Math.abs(dy) ) this.autoAxis = 'x';
+              else
+              if ( Math.abs(dx) < Math.abs(dy) ) this.autoAxis = 'y';
+              // don't move at all if the axis can't be determined
+              else {
+                dy = 0;
+                dx = 0;
+              }
+            }
+
             // if using not using CSS transforms, move object via absolute position
             if ( typeof this.options.moveTo === 'function') {
               xOp     = ( dx >= 0 ) ? "+=" + Math.abs(dx/this.scale)*this.options.multiplier : "-=" + Math.abs(dx/this.scale)*this.options.multiplier;
@@ -361,8 +375,8 @@
               }
 
               // only move along single axis, if necessary
-              if ( this.options.axis  === 'x' ) yOp = hash.y;
-              if ( this.options.axis  === 'y' ) xOp = hash.x;
+              if ( this.options.axis === 'x' || this.autoAxis === 'x' ) yOp = hash.y;
+              if ( this.options.axis === 'y' || this.autoAxis === 'y' ) xOp = hash.x;
 
               this.options.moveTo.call(this, xOp, yOp);
             } else if ( !this.shouldUseCSSTranslation() ){
@@ -375,8 +389,8 @@
               }
 
               // only move along single axis, if necessary
-              if ( this.options.axis  === 'x' ) yOp = hash.y;
-              if ( this.options.axis  === 'y' ) xOp = hash.x;
+              if ( this.options.axis === 'x' || this.autoAxis === 'x' ) yOp = hash.y;
+              if ( this.options.axis === 'y' || this.autoAxis === 'y' ) xOp = hash.x;
 
               this.moveTo(xOp, yOp);
             }
@@ -391,8 +405,8 @@
               }
 
               // only move along single axis, if necessary
-              if ( this.options.axis  === 'x' ) dy = 0;
-              if ( this.options.axis  === 'y' ) dx = 0;
+              if ( this.options.axis === 'x' || this.autoAxis === 'x' ) dy = 0;
+              if ( this.options.axis === 'y' || this.autoAxis === 'y' ) dx = 0;
 
               this.moveToUsingTransforms( dx, dy );
             }
@@ -445,6 +459,9 @@
             // has access to it.
             this.started = false;
 
+            // reset the auto-axis
+            if ( this.autoAxis ) this.autoAxis = false;
+
             // reset the velocity queue
             this.resetVelocityQueue();
 
@@ -475,8 +492,8 @@
               yOp = (hash.y !== false) ? hash.y : yOp;
             }
 
-            if ( this.options.axis  === 'x' ) yOp = "+=0";
-            if ( this.options.axis  === 'y' ) xOp = "+=0";
+            if ( this.options.axis === 'x' || this.autoAxis === 'x' ) yOp = "+=0";
+            if ( this.options.axis === 'y' || this.autoAxis === 'y' ) xOp = "+=0";
 
             // ease it via JS, the last true tells it to animate.
             var jsAnimateFallback = !this.cssAnimationsSupported() || this.options.forceNonCSS3Movement;
