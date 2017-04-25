@@ -1,7 +1,22 @@
 <img src="http://s.cdpn.io/4629/pep-with-circles.svg" width=600 alt='jquery.pep.js'>
-----
-*kinetic drag for mobile & desktop; more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org)*
 
+> Kinetic drag for mobile & desktop.
+
+Demos and more at [http://pep.briangonzalez.org](http://pep.briangonzalez.org).
+
+## Installation
+
+### NPM (recommended)
+
+```sh
+npm install jquery.pep.js --save
+```
+
+### Bower
+
+```sh
+bower install jquery.pep
+````
 
 ## Getting Started
 Getting started is simple: include jQuery, include pep, then:
@@ -74,33 +89,20 @@ $.pep.unbind( $pep );     // unbind
 $pep.pep();               // bind
 ````
 
-## Class Applications
+## Class applications
 The following classes are applied corresponding to events that are happening on the pep object:
 
   - `pep-active` -- applied when initiate event is triggered; removed when ease has finished
   - `pep-start` -- applied when start event is triggered; removed when stop event occurs
   - `pep-ease` -- applied when stop event is triggered; removed when ease has finished
 
-## Installation
-__Via Bower__
-
-```shell
-bower install jquery.pep
-````
-
-__From CDN__
-
-Bleeding edge, development version:
-
-````
-http://rawgithub.com/briangonzalez/jquery.pep.js/master/src/jquery.pep.js
-````
 
 ## A note on `droppable` option
 There is a convenience object within the context of each function pep makes available (drag, rest, ease, etc.) called `activeDropRegions`, which is an array of jQuery objects that the pep object is currently "over".
 
-__Example:__
-```javascript
+### Example:
+
+```js
 $('.pep').pep({
   droppable:   '.drop-target',
   drag: function(ev, obj){
@@ -113,21 +115,10 @@ $('.pep').pep({
 })
 ```
 
-## Having an issue?
-
-Before filing an issue, be sure to read the docs and search previous issues. If you're still not having any luck, be sure to fork the following CodePen, demonstrating the issue that you're having.
-
-#### [→ Fork me and modify before filing issue](http://codepen.io/briangonzalez/pen/wqmIJ)
-
-
-## Examples
-Checkout the examples in the `demos` folder, which cover a wide array of test cases and options. Or you can check out other examples at http://pep.briangonzalez.org/ (which can also be found in more detail on Codepen: http://codepen.io/briangonzalez/tag/pep-demo)
-
 ## Author
 | ![twitter/brianmgonzalez](http://gravatar.com/avatar/f6363fe1d9aadb1c3f07ba7867f0e854?s=70](http://twitter.com/brianmgonzalez "Follow @brianmgonzalez on Twitter") |
 |---|
 | [Brian Gonzalez](http://briangonzalez.org) |
-
 
 ## Support
 
