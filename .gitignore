@@ -1,2 +1,3 @@
 dist/jquery.pep.min.js.gz
 node_modules
+.vscode
