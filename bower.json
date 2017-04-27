@@ -1,0 +1,8 @@
+{
+  "name": "pep",
+  "version": "0.6.10",
+  "main": "src/jquery.pep.js",
+  "ignore": [],
+  "dependencies": {
+  }
+}
