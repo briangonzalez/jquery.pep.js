@@ -41,6 +41,8 @@
     grid:                           [1,1],
     debug:                          false,
     activeClass:                    'pep-active',
+    startClass:                     'pep-start',
+    easeClass:                      'pep-ease',
     multiplier:                     1,
     velocityMultiplier:             2.5,
     shouldPreventDefault:           true,
@@ -321,7 +323,7 @@
             var initialDy  = Math.abs(this.startY - curY);
             if ( !this.started && ( initialDx > this.options.startThreshold[0] || initialDy > this.options.startThreshold[1] ) ){
               this.started = true;
-              this.$el.addClass('pep-start');
+              this.$el.addClass(this.options.startClass);
               this.options.start.call(this, this.startEvent, this);
             }
 
@@ -430,8 +432,8 @@
             this.easing = true;
 
             // remove our start class
-            this.$el.removeClass('pep-start')
-                    .addClass('pep-ease');
+            this.$el.removeClass(this.options.startClass)
+                    .addClass(this.options.easeClass);
 
             // Calculate our drop regions
             if ( this.options.droppable ) {
@@ -824,7 +826,7 @@
   // removeActiveClass()
   //  Removes the active class.
   Pep.prototype.removeActiveClass = function() {
-    this.$el.removeClass( [this.options.activeClass, 'pep-ease'].join(' ') );
+    this.$el.removeClass( [this.options.activeClass, this.options.easeClass].join(' ') );
   };
 
   //  handleConstraint();
