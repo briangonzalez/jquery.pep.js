@@ -866,13 +866,13 @@
       upperYLimit       = this.$container.height() - (this.options.useBoundingClientRect ? this.$el[0].getBoundingClientRect().height : this.$el.outerHeight());
 
       // is our object trying to move outside lower X & Y limits?
-      if ( this.pos.x + dx < 0 )              hash.x = 0;
-      if ( this.pos.y + dy < 0 )              hash.y = 0;
+      if ( this.pos.x + dx < 0 )              hash.x = -this.xTranslation();
+      if ( this.pos.y + dy < 0 )              hash.y = -this.yTranslation();
     }
 
     // is our object trying to move outside upper X & Y limits?
-    if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit;
-    if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit;
+    if ( this.pos.x + dx > upperXLimit )    hash.x = upperXLimit - this.xTranslation();
+    if ( this.pos.y + dy > upperYLimit )    hash.y = upperYLimit - this.yTranslation();
 
     // Account for translation, which makes movement a little tricky.
     if ( this.shouldUseCSSTranslation() && accountForTranslation ){
