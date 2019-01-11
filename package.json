@@ -22,9 +22,6 @@
       "url": "pep.briangonzalez.org/blob/master/LICENSE-MIT"
     }
   ],
-  "dependencies": {
-    "jquery": "*"
-  },
   "keywords": [
     "drag",
     "touch",
